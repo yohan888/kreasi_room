@@ -72,10 +72,33 @@
             </div>
         </div>
         </span>
-        <center><button onclick="myFunction()" id="myBtn" class='btn btn-primary' style=" color:white; border-radius: 10px;">Read more</button></center>
+        <center><button v-on:click="myFunction()" id="myBtn" class='btn btn-primary' style=" color:white; border-radius: 10px;">Read more</button></center>
         <br><br><br>
     </div>
 </template>
+
+<script>
+export default ({
+    methods:{
+        myFunction() {
+          var dots = document.getElementById("dots");
+          var moreText = document.getElementById("more");
+          var btnText = document.getElementById("myBtn");
+
+          if (dots.style.display === "none") {
+              dots.style.display = "inline";
+              btnText.innerHTML = "Read more"; 
+              moreText.style.display = "none";
+          } else {
+              dots.style.display = "none";
+              btnText.innerHTML = "Show less"; 
+              moreText.style.display = "inline";
+          }
+      }
+    }
+})
+</script>
+
 
 <style scoped>
     #more {display: none;}
