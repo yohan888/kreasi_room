@@ -20,7 +20,7 @@
               <!-- Copywrite Text-->
  
                 <!-- Footer Social Area-->
-                <div class="footer_social_area mt-4" style="text-align: left">
+                <div class="footer_social_area mt-4">
                     <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
@@ -100,6 +100,7 @@
 webkit-box-shadow: 0 8px 48px 8px rgba(47, 91, 234, 0.175);
     box-shadow: 0 8px 48px 8px rgba(47, 91, 234, 0.175);
     padding:60px;
+    text-align: left
 }
 .footer_area .row {
     margin-left: -25px;
@@ -267,4 +268,20 @@ ol, ul {
     margin: 0;
     padding: 0;
 }
+
+  @media screen and (max-width: 768px) {
+    .footer_area{
+      text-align: center;
+    }
+    .single-footer-widget .widget-title {
+      text-align: center;
+    }
+    .single-footer-widget .footer_menu li a{
+      text-align: center;
+    }
+    .footer_social_area a{
+      text-align: center;
+    }
+  }
+
 </style>
