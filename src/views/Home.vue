@@ -2,7 +2,7 @@
   <div>
     <Navbar/>
     <Jumbotron/>
-    <Populer/>
+    <EventTerbaru/>
     <Tentang/>
     <Footer/>
   </div>
@@ -11,14 +11,14 @@
 <script>
 import Navbar from '../components/home/NavbarGuest.vue'
 import Jumbotron from '../components/home/Jumbotron.vue'
-import Populer from '../components/home/Populer.vue'
+import EventTerbaru from '../components/home/EventTerbaru.vue'
 import Tentang from '../components/home/Tentang.vue'
 import Footer from '../components/Footer.vue'
 export default({
   components:{
     Navbar,
     Jumbotron,
-    Populer,
+    EventTerbaru,
     Tentang,
     Footer
   }
