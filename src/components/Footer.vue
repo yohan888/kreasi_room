@@ -1,11 +1,11 @@
 <template>
     <footer class="footer_area section_padding_130_0 mt-5" style="background-color: #f5f5f5">
       <div class="container">
-          <h5 style="font-weight: bold">Dapat lebih banyak event</h5>
+          <center><h5 style="font-weight: bold">Dapat lebih banyak event</h5>
           <h6 style="font-weight: bold" class="mb-3">dengan bergabung di sini!</h6>
           <span><router-link class="btn btn-primary" style="background-color: #0A3D62; border-color: #0A3D62" to="/masuk">Masuk</router-link>&emsp;</span>
           <span><router-link class="btn btn-primary" style="background-color: transparent; color: #0A3D62; border-color: #0A3D62" to="/daftar">Daftar Sekarang</router-link></span>
-            <br><br>
+          </center><br><br>
         <div class="row">
           <!-- Single Widget-->
           <div class="col-12 col-sm-6 col-lg-4">
@@ -87,7 +87,7 @@
           </div>
         </div>
         <hr>
-        <span style="font-size: 10pt; color: #0A3D62">Copyright & Design @KreasiX</span>
+        <center><span style="font-size: 10pt; color: #0A3D62">Copyright & Design @KreasiX</span></center>
       </div>
     </footer>
 </template>
