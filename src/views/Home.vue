@@ -2,7 +2,7 @@
   <div>
     <Navbar/>
     <Jumbotron/>
-    <EventTerbaru/>
+    <event-terbaru/>
     <Tentang/>
     <Footer/>
   </div>
