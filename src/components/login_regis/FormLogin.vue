@@ -79,7 +79,14 @@
                 </div>
 
             </div>
-            <button type="submit" class="btn mt-4">Register</button>
+            <div class="row">
+                <div class="col">
+                    <router-link to="/"><button class="btn mt-4" style="background-color: transparent; color: #0A3D62; border: 1px solid #0A3D62">Kembali</button></router-link>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn mt-4">Masuk</button>
+                </div>
+            </div>
         </form>
     </div>
 </template>
@@ -100,6 +107,14 @@ export default {
 </script>
 
 <style scoped>
+    a{
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .btn-secondary{
+        background-color: transparent;
+    }
     .syarat_ketentuan{
         background-color: transparent;
         border: none;

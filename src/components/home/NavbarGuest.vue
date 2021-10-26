@@ -18,13 +18,17 @@
             <a class="nav-link" href="#">Kontak</a>
           </li>
       </ul>
-      <button class="btn btn-outline-light me-2">Masuk</button>
-      <button class="btn btn-outline-light daftar">Daftar Sekarang</button>
+      <button class="btn btn-outline-light me-2"><router-link to="/masuk">Masuk</router-link></button>
+      <button class="btn btn-outline-light daftar"><router-link to="/daftar">Daftar Sekarang</router-link></button>
     </div>
   </div>
 </nav>
 </template>
 <style scoped>
+a{
+  text-decoration: none;
+  color: inherit;
+}
 .daftar {
   background-color:white;
   color:black;
