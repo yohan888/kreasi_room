@@ -13,17 +13,17 @@
             &ensp;
             <span style="width: 100%"><hr style="border: 1px solid gray;"></span>
         </div>
-        <form style="">
+        <form @submit.prevent="login">
             <label for="email" class="mb-2">Alamat Email</label>
             <div class="input-container">
                 
                 <i class="fas fa-envelope icon"></i>
-                <input class="input-field" id="email" type="text" placeholder="Email" name="email">
+                <input class="input-field" id="email" v-model="form.email" type="text" placeholder="Email" name="email">
             </div>
             <label for="password" class="mt-2 mb-2">Kata Sandi</label>
             <div class="input-container">
                 <i class="fas fa-lock icon"></i>
-                <input class="password-field" id="password" type="password" placeholder="Password" name="psw">
+                <input class="password-field" id="password" v-model="form.password" type="password" placeholder="Password" name="psw">
                 <label class="custom-checkbox show-password">
                     <input type="checkbox" v-on:click="showPassword" style="display: none">
                     <i class="fas fa-eye-slash unchecked"></i>
@@ -92,7 +92,17 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
+    data(){
+        return{
+            form: {
+                email: '',
+                password: '',
+            }
+        }
+    },
     methods: {
         showPassword(){
             var x = document.getElementById("password");
@@ -101,6 +111,21 @@ export default {
             }else{
                 x.type = "password";
             }
+        },
+
+        login(){
+            firebase
+            .auth()
+            .signInWithEmailAndPassword(this.form.email, this.form.password)
+            .then(data => {
+                console.log(data);
+                // alert("Bisa login");
+                this.$router.push({ name: 'Home', query: { redirect: '/' } });
+            })  
+            .catch(err => {
+                console.log(err.message);
+                alert("Gagal login");
+            });
         }
     },
 }

@@ -4,12 +4,12 @@
         <h1 style="font-weight: bold">Hai, Selamat Datang!</h1>
         <p style="color: gray">Silahkan buat akun Anda!</p>
         
-        <form class="scroll" @submit.prevent="register">
+        <form class="scroll" action="#" @submit.prevent="register">
             <div class="row">
                 <div class="col">
                     <div class="mb-4 form-group">
                         <label for="namaDepan" class="form-label">Nama Depan</label>
-                        <input type="text" class="form-control" id="namaDepan" required>
+                        <input type="text" class="form-control" id="namaDepan" v-model="form.namaDepan" required>
                         <!-- <div class="invalid-feedback"></div> -->
                     </div>
                     <div class="mb-4">
@@ -29,25 +29,25 @@
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" required>
+                        <input type="email" class="form-control" id="email" v-model="form.email" required>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" required>
+                        <input type="password" class="form-control" id="password" v-model="form.password" required>
                     </div>
                     <div class="mb-4">
                         <label for="phone" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="phone" required>
+                        <input type="text" class="form-control" id="phone">
                     </div>
                 </div>
                 <div class="col">
                     <div class="mb-4">
                         <label for="namaBelakang" class="form-label">Nama Belakang</label>
-                        <input type="text" class="form-control" id="namaBelakang" required>
+                        <input type="text" class="form-control" id="namaBelakang" v-model="form.namaBelakang" required>
                     </div>
                     <div class="mb-4">
                         <label for="tanggalLahir" class="form-label">Tanggal Lahir</label>
-                        <input type="date" class="form-control" id="tanggalLahir" required>      
+                        <input type="date" class="form-control" id="tanggalLahir">      
                     </div>
                     <div class="mb-4">
                         <label for="kota" class="form-label">Kota</label>
@@ -57,11 +57,11 @@
                     </div>
                     <div class="mb-4">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" required>
+                        <input type="text" class="form-control" id="username" >
                     </div>
                     <div class="mb-4">
                         <label for="confirmPassword" class="form-label">Ulangi Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" required>
+                        <input type="password" class="form-control" id="confirmPassword">
                     </div>
                 </div>
             </div>
@@ -80,6 +80,8 @@
 
 <script>
 import axios from "axios";
+import firebase from "firebase";
+
 
 export default {
     data(){
@@ -89,6 +91,12 @@ export default {
             kota: [],
             password: '',
             confirmPassword: '',
+            form:{
+                email: '',
+                password: '',
+                namaDepan: '',
+                namaBelakang: '',
+            }
         }
     },
     
@@ -103,7 +111,19 @@ export default {
         },
 
         register(){
-            
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(this.form.email, this.form.password)
+                .then(data => {
+                    data.user 
+                        .updateProfile({
+                            displayName: this.form.namaDepan
+                        })
+                        .then(() => {})
+                })
+                .catch(err => {
+                    console.log(err.message);
+                });
         },
 
         setProvinsi(provinsi){
