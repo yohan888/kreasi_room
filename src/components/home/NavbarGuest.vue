@@ -9,22 +9,27 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
           <li class="nav-item me-5">
-            <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+            <a class="nav-link active" aria-current="page" href="/">Beranda</a>
           </li>
           <li class="nav-item me-5">
-            <a class="nav-link" href="#">Tentang</a>
+            <a class="nav-link" href="/tentang">Tentang</a>
           </li>
           <li class="nav-item me-5">
-            <a class="nav-link" href="#">Kontak</a>
+            <a class="nav-link" href="/kontak">Kontak</a>
           </li>
+          <template v-if="user.loggedIn">
+            <li class="nav-item me-5">
+              <a class="nav-link" href="/dashboard">Dashboard</a>
+            </li>
+          </template>
       </ul>
       <template v-if="user.loggedIn">
-        <button class="btn btn-outline-light me-2"><router-link to="/masuk">{{user.data.displayName}}</router-link></button>
-        <button class="btn btn-outline-light daftar"><a @click.prevent="signOut">Keluar</a></button>
+        <router-link to="/profile"><button class="btn btn-outline-light me-2">Profile</button></router-link>
+        <a @click.prevent="signOut"><button class="btn btn-outline-light daftar">Keluar</button></a>
       </template>
       <template v-else>
-        <button class="btn btn-outline-light me-2"><router-link to="/masuk">Masuk</router-link></button>
-        <button class="btn btn-outline-light daftar"><router-link to="/daftar">Daftar Sekarang</router-link></button>
+        <router-link to="/masuk"><button class="btn btn-outline-light me-2">Masuk</button></router-link>
+        <router-link to="/daftar"><button class="btn btn-outline-light daftar">Daftar Sekarang</button></router-link>
       </template>
       
     </div>
@@ -37,10 +42,19 @@ import { mapGetters } from "vuex";
 import firebase from "firebase";
 
 export default {
+  data(){
+    return{
+      userID: ''
+    }
+  },
   computed: {
     ...mapGetters({
       user: "user"
-    })
+    }),
+    
+  },
+  mounted(){
+    
   },
   methods: {
     signOut() {

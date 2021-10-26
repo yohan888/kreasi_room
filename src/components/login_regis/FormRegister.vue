@@ -35,10 +35,7 @@
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" v-model="form.password" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="phone" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="phone">
-                    </div>
+                    
                 </div>
                 <div class="col">
                     <div class="mb-4">
@@ -60,8 +57,8 @@
                         <input type="text" class="form-control" id="username" >
                     </div>
                     <div class="mb-4">
-                        <label for="confirmPassword" class="form-label">Ulangi Password</label>
-                        <input type="password" class="form-control" id="confirmPassword">
+                        <label for="phone" class="form-label">Nomor Telepon</label>
+                        <input type="text" class="form-control" id="phone">
                     </div>
                 </div>
             </div>
@@ -81,7 +78,7 @@
 <script>
 import axios from "axios";
 import firebase from "firebase";
-
+import Swal from 'sweetalert2'
 
 export default {
     data(){
@@ -117,9 +114,18 @@ export default {
                 .then(data => {
                     data.user 
                         .updateProfile({
-                            displayName: this.form.namaDepan
+                            displayName: this.form.namaDepan + " " + this.form.namaBelakang
                         })
-                        .then(() => {})
+                        .then(() => {});
+                    
+                    const user = firebase.auth().currentUser;
+                    user.sendEmailVerification();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Daftar',
+                        text: 'Cek email untuk link verifikasi!',
+                    });
+                    
                 })
                 .catch(err => {
                     console.log(err.message);

@@ -33,10 +33,10 @@
                         <img src="../../assets/images/img-tentang.jpg" class="d-block w-100 " alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../assets/images/img-tentang.jpg" class="d-block w-100" alt="...">
+                        <img src="../../assets/images/img-tentang-2.png" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="../../assets/images/img-tentang.jpg" class="d-block w-100" alt="...">
+                        <img src="../../assets/images/img-tentang-3.jpg" class="d-block w-100" alt="...">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -52,6 +52,23 @@
     </center>
     </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+// import firebase from "firebase";
+export default {
+    computed: {
+        ...mapGetters({
+        user: "user"
+        })
+    },
+    mounted(){
+            
+        
+    }
+}
+</script>
+
 <style scoped>
 .judul {
     text-align: left;
