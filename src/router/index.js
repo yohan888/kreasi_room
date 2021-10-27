@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
@@ -32,7 +33,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/Profile.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/Profile.vue'),
+    meta:{
+      requiresAuth: true
+    }
   },
   {
     path: '/dashboard',
@@ -40,7 +44,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/Dashboard.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/Dashboard.vue'),
+    meta:{
+      requiresAuth: true
+    }
   },
   {
     path: '/detail',
@@ -48,12 +55,26 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/DetailEvent.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/after_login/DetailEvent.vue'),
+    meta:{
+      requiresAuth: true
+    }
   },
 ]
+
+
 
 const router = new VueRouter({
   routes
 })
+
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if(requiresAuth && !await firebase.getCurrentUser()){
+    next('masuk');
+  }else{
+    next();
+  }
+});
 
 export default router
