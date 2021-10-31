@@ -11,7 +11,7 @@ import Navbar from '../../components/after_login/Navbar.vue'
 export default({
   components:{
     Dashboard,
-    Navbar
+    Navbar,
   }
 })
 </script>

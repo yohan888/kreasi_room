@@ -44,4 +44,11 @@ export default {
                 background-size: cover;
                 height: 90vh;
             }
+
+    @media screen and (max-width: 768px) {
+    .hero{
+        width: 98vw;
+        margin-top: 1vh;
+    }
+}
 </style>

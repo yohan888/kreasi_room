@@ -15,8 +15,7 @@
         </div>
         <form @submit.prevent="login">
             <label for="email" class="mb-2">Alamat Email</label>
-            <div class="input-container">
-                
+            <div class="input-container"> 
                 <i class="fas fa-envelope icon"></i>
                 <input class="input-field" id="email" v-model="form.email" type="text" placeholder="Email" name="email">
             </div>
@@ -157,11 +156,11 @@ export default {
         display: none;
     }
     .input-container {
-  display: -ms-flexbox; /* IE10 */
-  display: flex;
-  width: 100%;
-  margin-bottom: 15px;
-}
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+    }
 .show-password{
     /* display: none; */
     border-top-right-radius: 15px;

@@ -9,17 +9,17 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
           <li class="nav-item me-5">
-            <a class="nav-link active" aria-current="page" href="/">Beranda</a>
+            <router-link class="nav-link active" aria-current="page" to="/">Beranda</router-link>
           </li>
           <li class="nav-item me-5">
-            <a class="nav-link" href="/tentang">Tentang</a>
+            <router-link class="nav-link" to="/tentang">Tentang</router-link>
           </li>
           <li class="nav-item me-5">
-            <a class="nav-link" href="/kontak">Kontak</a>
+            <router-link class="nav-link" to="/kontak">Kontak</router-link>
           </li>
           <template v-if="user.loggedIn">
             <li class="nav-item me-5">
-              <a class="nav-link" href="/dashboard">Dashboard</a>
+              <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
             </li>
           </template>
       </ul>
