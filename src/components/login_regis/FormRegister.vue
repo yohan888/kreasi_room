@@ -8,58 +8,50 @@
             <div class="row">
                 <div class="col">
                     <div class="mb-4 form-group">
-                        <label for="namaDepan" class="form-label">Nama Depan</label>
-                        <input type="text" class="form-control" id="namaDepan" v-model="form.namaDepan" required>
+                        <label for="namaDepan" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="namaDepan" v-model="form.namaLengkap" required>
                         <!-- <div class="invalid-feedback"></div> -->
                     </div>
                     <div class="mb-4">
                         <label for="jenisKelamin" class="form-label">Jenis Kelamin</label>
-                        <select id="jenisKelamin" class="form-select">
+                        <select id="jenisKelamin" class="form-select" v-model="form.jenisKelamin" required>
                             <option value="Pria">Pria</option>
                             <option value="Wanita">Wanita</option>
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="provinsi" class="form-label">Provinsi</label>
-                        <select id="provinsi" class="form-select" v-model="idProvinsi" @change="getKota">
-                            
+                        <select id="provinsi" class="form-select" v-model="idProvinsi" @change="getKota" required>
                             <option v-for="p in provinsi" :key="p.id" :value="p.id" >{{ p.nama }}</option>      
-                            
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" v-model="form.email" required>
                     </div>
+                    
+                    
+                </div>
+                <div class="col">
+                    <div class="mb-4">
+                        <label for="tanggalLahir" class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control" id="tanggalLahir" v-model="form.tanggalLahir" required>      
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="form-label">Nomor Telepon</label>
+                        <input type="text" class="form-control" id="phone" v-model="form.telp" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="kota" class="form-label">Kota</label>
+                        <select id="kota" class="form-select" v-model="form.kotaUser" required>
+                            <option v-for="k in kota" :key="k.id" :value="k.nama" >{{ k.nama }}</option>      
+                        </select>
+                    </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" v-model="form.password" required>
                     </div>
                     
-                </div>
-                <div class="col">
-                    <div class="mb-4">
-                        <label for="namaBelakang" class="form-label">Nama Belakang</label>
-                        <input type="text" class="form-control" id="namaBelakang" v-model="form.namaBelakang" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="tanggalLahir" class="form-label">Tanggal Lahir</label>
-                        <input type="date" class="form-control" id="tanggalLahir">      
-                    </div>
-                    <div class="mb-4">
-                        <label for="kota" class="form-label">Kota</label>
-                        <select id="kota" class="form-select">
-                            <option v-for="k in kota" :key="k.id" :value="k.id" >{{ k.nama }}</option>      
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" >
-                    </div>
-                    <div class="mb-4">
-                        <label for="phone" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="phone">
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -83,6 +75,7 @@ import Swal from 'sweetalert2'
 export default {
     data(){
         return{
+            userID: '',
             idProvinsi: '',
             provinsi: [],
             kota: [],
@@ -91,13 +84,20 @@ export default {
             form:{
                 email: '',
                 password: '',
-                namaDepan: '',
-                namaBelakang: '',
+                namaLengkap: '',
+                jenisKelamin: '',
+                provinsiUser: '',
+                kotaUser: '',
+                telp: '',
+                tanggalLahir: ''
             }
         }
     },
     
     methods: {
+        test(){
+            alert(this.form.jenisKelamin);
+        },
         showPassword(){
             var x = document.getElementById("password");
             if(x.type === "password"){
@@ -114,31 +114,56 @@ export default {
                 .then(data => {
                     data.user 
                         .updateProfile({
-                            displayName: this.form.namaDepan + " " + this.form.namaBelakang
+                            displayName: this.form.namaLengkap
                         })
                         .then(() => {});
                     
                     const user = firebase.auth().currentUser;
                     user.sendEmailVerification();
+                    this.userID = user.uid;
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil Daftar',
                         text: 'Cek email untuk link verifikasi!',
                     });
-                    
+
+                    this.createUserAfterRegister();
+                    this.$router.push({ name: 'Login', query: { redirect: '/masuk' } });
                 })
                 .catch(err => {
                     console.log(err.message);
-                });
+                }); 
         },
-
+        createUserAfterRegister(){
+            firebase
+                .firestore()
+                .collection("users")
+                .add({
+                    userID: this.userID,
+                    email: this.form.email,
+                    nama_lengkap: this.form.namaLengkap,
+                    jenis_kelamin: this.form.jenisKelamin,
+                    provinsi: this.form.provinsiUser,
+                    kota: this.form.kotaUser,
+                    telfon: this.form.telp,
+                    tanggal_lahir: this.form.tanggalLahir
+                })
+        },
         setProvinsi(provinsi){
             this.provinsi = provinsi;
         },
         setKota(kota){
             this.kota = kota;
         },
+        setNamaProvinsi(provinsi){
+            this.form.provinsiUser = provinsi;
+        },
         getKota(){
+            axios
+            .get('https://dev.farizdotid.com/api/daerahindonesia/provinsi/'+this.idProvinsi)
+            .then((response) => this.setNamaProvinsi(response.data.nama))
+            .catch((error) => console.log(error));
+
             axios
             .get('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + this.idProvinsi)
             .then((response) => this.setKota(response.data.kota_kabupaten))
