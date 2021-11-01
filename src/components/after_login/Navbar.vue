@@ -11,13 +11,14 @@
                   <li class="nav-item me-5" style="padding-top: 0.5rem" >
                     <router-link class="nav-link" aria-current="page" to="/dashboard">Event</router-link>
                   </li>
-                   
-                  <li class="nav-item me-5" style="padding-top: 0.5rem" >
-                    <router-link class="nav-link" aria-current="page" to="/analitik">Analitik</router-link>
-                  </li>
-                  <li class="nav-item me-5" style="padding-top: 0.5rem" >
-                    <router-link class="nav-link"  aria-current="page" to="/buat-event">Buat Event</router-link>
-                  </li>
+                  <template v-if="role === 'EVENT_ORGANIZER'">
+                    <li class="nav-item me-5" style="padding-top: 0.5rem" >
+                      <router-link class="nav-link" aria-current="page" to="/analitik">Analitik</router-link>
+                    </li>
+                    <li class="nav-item me-5" style="padding-top: 0.5rem" >
+                      <router-link class="nav-link"  aria-current="page" to="/buat-event">Buat Event</router-link>
+                    </li>
+                  </template>
                   <!-- <li class="nav-item me-5">
                     
                   </li> -->
@@ -39,7 +40,9 @@ import firebase from "firebase";
 export default {
   data(){
     return{
-      userID: ''
+      userID: '',
+      role: '',
+      profile_picture: ''
     }
   },
   computed: {
@@ -49,7 +52,16 @@ export default {
     
   },
   mounted(){
-    
+    const user = firebase.auth().currentUser;
+    firebase
+      .firestore()
+      .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, ' => ', doc.data())
+          this.role = doc.data().role
+          
+        })
+      })
   },
   methods: {
     signOut() {
