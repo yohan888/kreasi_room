@@ -146,7 +146,9 @@ export default {
                     provinsi: this.form.provinsiUser,
                     kota: this.form.kotaUser,
                     telfon: this.form.telp,
-                    tanggal_lahir: this.form.tanggalLahir
+                    tanggal_lahir: this.form.tanggalLahir,
+                    role: 'USER',
+                    profile_picture: '',
                 })
         },
         setProvinsi(provinsi){

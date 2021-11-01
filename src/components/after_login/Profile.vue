@@ -7,7 +7,7 @@
         <div class="row d-flex align-items-end" style="text-align: left;">
           <div class="col" >
             <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
-            <h5 class="card-title mt-2">Mario Wijaya</h5>
+            <h5 class="card-title mt-2">{{ namaLengkap }}</h5>
             <p class="card-text">{{ email }}</p>
           </div>
           <div class="col-sm-auto">
@@ -103,21 +103,29 @@ export default {
         return{
             userID: '',
             email: '',
-
+            namaLengkap: ''
         }
     },
     mounted(){
-        firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      this.userID = user.uid;
-      this.email = user.email;
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.userID = user.uid;
+          this.email = user.email;
+          firebase
+            .firestore()
+            .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                console.log(doc.id, ' => ', doc.data())
+                this.namaLengkap = doc.data().nama_lengkap
+                // this.lastname = doc.data().lastname
+                // this.emailaddress = doc.data().emailaddress
+                // this.phonenumber = doc.data().phonenumber
+              })
+            })
+        } else {
+          //
+        }
+      });
     }
 }
 </script>
