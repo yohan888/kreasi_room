@@ -24,9 +24,18 @@
                   </li> -->
                 </ul>
                 <ul class="navbar-nav ms-auto">
-                  <li class="nav-item">
-                    <router-link class="nav-link" to="/profile"><img class="profile-picture" src="../../assets/images/img-tentang.jpg" alt=""></router-link>
-                  </li>
+                  <template v-if="profile_picture == ''">
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/profile"><img class="profile-picture" src="../../assets/images/img-tentang.jpg" alt=""></router-link>
+                    </li>
+                  </template>
+                  <template v-else>
+                    <li class="nav-item">
+                      <router-link class="nav-link" to="/profile"><img class="profile-picture" :src="profile_picture"></router-link>
+                    </li>
+                    
+                  </template>
+                  
                 </ul>
             </div>
         </div>
@@ -53,15 +62,26 @@ export default {
   },
   mounted(){
     const user = firebase.auth().currentUser;
-    firebase
-      .firestore()
-      .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, ' => ', doc.data())
-          this.role = doc.data().role
-          
-        })
-      })
+      console.log(user.providerData[0]);
+      if(user.providerData[0].providerId == 'google.com'){
+        this.isLoginWithGoogle = true;
+      }
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.userID = user.uid;
+          this.email = user.email;
+          firebase
+          .firestore()
+          .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.id, ' => ', doc.data())
+              this.namaLengkap = doc.data().nama_lengkap
+              this.profile_picture = doc.data().profile_picture
+            })
+          })
+        }
+      });
   },
   methods: {
     signOut() {

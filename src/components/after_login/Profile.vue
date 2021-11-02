@@ -6,7 +6,12 @@
         <center>
         <div class="row d-flex align-items-end" style="text-align: left;">
           <div class="col" >
-            <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
+            <template v-if="profile_picture == ''">
+              <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
+            </template>
+            <template v-else>
+              <img class="profile-picture" :src="profile_picture">
+            </template>
             <h5 class="card-title mt-2">{{ namaLengkap }}</h5>
             <p class="card-text">{{ email }}</p>
           </div>
@@ -103,27 +108,31 @@ export default {
         return{
             userID: '',
             email: '',
-            namaLengkap: ''
+            namaLengkap: '',
+            profile_picture: '',
+            isLoginWithGoogle: false
         }
     },
     mounted(){
+      const user = firebase.auth().currentUser;
+      console.log(user.providerData[0]);
+      if(user.providerData[0].providerId == 'google.com'){
+        this.isLoginWithGoogle = true;
+      }
+
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           this.userID = user.uid;
           this.email = user.email;
           firebase
-            .firestore()
-            .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                console.log(doc.id, ' => ', doc.data())
-                this.namaLengkap = doc.data().nama_lengkap
-                // this.lastname = doc.data().lastname
-                // this.emailaddress = doc.data().emailaddress
-                // this.phonenumber = doc.data().phonenumber
-              })
+          .firestore()
+          .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.id, ' => ', doc.data())
+              this.namaLengkap = doc.data().nama_lengkap
+              this.profile_picture = doc.data().profile_picture
             })
-        } else {
-          //
+          })
         }
       });
     }
