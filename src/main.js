@@ -9,6 +9,8 @@ import '@fortawesome/fontawesome-free/css/solid.css'
 import * as firebase from "firebase";
 import store from "./store/store";
 
+
+
 Vue.config.productionTip = false
 
 const firebaseConfig = {
@@ -19,6 +21,10 @@ const firebaseConfig = {
   messagingSenderId: "318959559721",
   appId: "1:318959559721:web:8c2979634ce519982f6838"
 };
+
+// Ini yang di tambahkan
+
+// Batas tambahan
 
 firebase.initializeApp(firebaseConfig);
 firebase.auth().onAuthStateChanged(user => {

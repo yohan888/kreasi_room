@@ -1,7 +1,7 @@
 <template>
  <center>
 <div class="container" >
-   
+
     <div class="row d-flex justify-content-center">
         <div class="col-md mt-3">
             <img class="imageTentang" src="../../assets/images/img-tentang.jpg">

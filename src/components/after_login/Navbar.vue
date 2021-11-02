@@ -11,7 +11,7 @@
                   <li class="nav-item me-5" style="padding-top: 0.5rem" >
                     <router-link class="nav-link" aria-current="page" to="/dashboard">Event</router-link>
                   </li>
-                  <template v-if="role === 'EVENT_ORGANIZER'">
+                  <template v-if="role == 'EVENT_ORGANIZER'">
                     <li class="nav-item me-5" style="padding-top: 0.5rem" >
                       <router-link class="nav-link" aria-current="page" to="/analitik">Analitik</router-link>
                     </li>
@@ -78,6 +78,7 @@ export default {
               console.log(doc.id, ' => ', doc.data())
               this.namaLengkap = doc.data().nama_lengkap
               this.profile_picture = doc.data().profile_picture
+              this.role=doc.data().role
             })
           })
         }
