@@ -6,14 +6,14 @@
         <center>
         <div class="row d-flex align-items-end" style="text-align: left;">
           <div class="col" >
-            <template v-if="profile_picture == ''">
+            <template v-if="this.data[0].profile_picture == ''">
               <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
             </template>
             <template v-else>
-              <img class="profile-picture" :src="profile_picture">
+              <img class="profile-picture" :src="this.data[0].profile_picture">
             </template>
-            <h5 class="card-title mt-2">{{ namaLengkap }}</h5>
-            <p class="card-text">{{ email }}</p>
+            <h5 class="card-title mt-2">{{ this.data[0].nama_lengkap }}</h5>
+            <p class="card-text">{{ this.data[0].email }}</p>
           </div>
           <div class="col-sm-auto">
             <router-link class="btn btn-custom" to="/edit-profile">Edit Profile</router-link>
@@ -110,14 +110,18 @@ export default {
             email: '',
             namaLengkap: '',
             profile_picture: '',
-            isLoginWithGoogle: false
+            isLoginWithGoogle: false,
+            data: null
         }
     },
     mounted(){
-      this.profile_picture = this.$store.state.user.profilePicture;
-      this.namaLengkap = this.$store.state.user.namaLengkap;
-      this.email = this.$store.state.user.email;
-      console.log(this.profile_picture);
+      // this.profile_picture = this.$store.state.user.profilePicture;
+      // this.namaLengkap = this.$store.state.user.namaLengkap;
+      // this.email = this.$store.state.user.email;
+      // console.log(this.profile_picture);
+
+      this.data = this.$store.getters.dataUser;
+      console.log(this.data[0]);
       // const user = firebase.auth().currentUser;
       // console.log(user.providerData[0]);
       // if(user.providerData[0].providerId == 'google.com'){
