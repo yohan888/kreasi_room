@@ -15,22 +15,22 @@
  
   <div class="row">
     <div class="col">
-      <div class="row">
-            <div class="col-sm-auto">
+      <div class="row d-flex justify-content-start">
+            <div class="" style="width: 60px">
               <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
             </div>
             <div class="col" style="text-align: left;">
                 <span style="color:#0A3D62;"><b> Michella</b></span> <br>
                 <span style="color:#B2B5B8;"> Michella@gmail.com</span>
             </div>
-            <div class="col">
+            <div class="col-auto ms-auto">
                 <div class="custom-btn">
-                    <button class="btn btn-lg me-2 btn-like">Like</button>
-                    <button class="btn btn-lg btn-bagikan">Bagikan</button>
+                    <button class="btn btn-lg me-2 btn-like"><i class="fas fa-thumbs-up"></i> Like</button>
+                    <button class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt"></i> Bagikan</button>
                 </div>
             </div>
 
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-auto custom-judulVideo">
                 <h5 style="color:#0A3D62;"><b>Judul Video</b></h5>
                     <p style="color:#B2B5B8;">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
@@ -44,13 +44,14 @@
         </div>  
       </div>
     </div>
+
     <div class="col-auto">
       <div class="card" style="width: auto;">
         <div class="card-body">
             <h5 class="card-title custom-title-card"><b>Pertanyaan</b></h5>
             <hr size="4">
-              <div class="row">
-                  <div class="col-sm-auto">
+              <div class="row d-flex align-items-center">
+                  <div class="" style="width: 60px">
                     <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
                   </div>
                   <div class="col" style="text-align: left;">
@@ -58,24 +59,7 @@
                     <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
                   </div>
               </div>
-              <div class="row" style="margin-top:10%;">
-                  <div class="col-sm-auto">
-                    <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-                  </div>
-                  <div class="col" style="text-align: left;">
-                    <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                    <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
-                  </div>
-              </div>
-              <div class="row" style="margin-top:10%;">
-                  <div class="col-sm-auto">
-                      <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-                  </div>
-                  <div class="col" style="text-align: left;">
-                      <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                      <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
-                  </div>
-              </div>
+           
               <div class="col" style="margin-top:30%"><hr>
                 <div class="form">
                   <input type="text" name="normal_input" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan">
@@ -198,6 +182,15 @@
 }
 .custom-title-card {
   text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+    .btn-like{
+      font-size: 12pt;
+    }
+    .btn-bagikan {
+        font-size: 12pt;
+    }
 }
 </style>
   
