@@ -16,7 +16,7 @@
             <p class="card-text">{{ email }}</p>
           </div>
           <div class="col-sm-auto">
-            <router-link class="btn btn-custom" to="/detail-profile">Edit Profile</router-link>
+            <router-link class="btn btn-custom" to="/edit-profile">Edit Profile</router-link>
           </div>
         </div>
         </center>
