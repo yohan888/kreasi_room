@@ -6,14 +6,14 @@
         <center>
         <div class="row d-flex align-items-end" style="text-align: left;">
           <div class="col" >
-            <template v-if="this.data[0].profile_picture == ''">
+            <template v-if="profile_picture == ''">
               <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
             </template>
             <template v-else>
-              <img class="profile-picture" :src="this.data[0].profile_picture">
+              <img class="profile-picture" :src="profile_picture">
             </template>
-            <h5 class="card-title mt-2">{{ this.data[0].nama_lengkap }}</h5>
-            <p class="card-text">{{ this.data[0].email }}</p>
+            <h5 class="card-title mt-2">{{ namaLengkap }}</h5>
+            <p class="card-text">{{ email }}</p>
           </div>
           <div class="col-sm-auto">
             <router-link class="btn btn-custom" to="/edit-profile">Edit Profile</router-link>
@@ -102,7 +102,7 @@
 </style>
 
 <script>
-// import firebase from 'firebase'
+import firebase from 'firebase'
 export default {
     data(){
         return{
@@ -115,34 +115,28 @@ export default {
         }
     },
     mounted(){
-      // this.profile_picture = this.$store.state.user.profilePicture;
-      // this.namaLengkap = this.$store.state.user.namaLengkap;
-      // this.email = this.$store.state.user.email;
-      // console.log(this.profile_picture);
+      const user = firebase.auth().currentUser;
+      console.log(user.providerData[0]);
+      if(user.providerData[0].providerId == 'google.com'){
+        this.isLoginWithGoogle = true;
+      }
 
-      this.data = this.$store.getters.dataUser;
-      console.log(this.data[0]);
-      // const user = firebase.auth().currentUser;
-      // console.log(user.providerData[0]);
-      // if(user.providerData[0].providerId == 'google.com'){
-      //   this.isLoginWithGoogle = true;
-      // }
-
-      // firebase.auth().onAuthStateChanged((user) => {
-      //   if (user) {
-      //     this.userID = user.uid;
-      //     this.email = user.email;
-      //     firebase
-      //     .firestore()
-      //     .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
-      //       querySnapshot.forEach((doc) => {
-      //         console.log(doc.id, ' => ', doc.data())
-      //         this.namaLengkap = doc.data().nama_lengkap
-      //         this.profile_picture = doc.data().profile_picture
-      //       })
-      //     })
-      //   }
-      // });
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.userID = user.uid;
+          this.email = user.email;
+          firebase
+          .firestore()
+          .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.id, ' => ', doc.data())
+              this.namaLengkap = doc.data().nama_lengkap
+              this.profile_picture = doc.data().profile_picture
+              this.email = doc.data().email
+            })
+          })
+        }
+      });
     }
 }
 </script>

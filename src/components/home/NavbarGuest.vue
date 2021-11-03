@@ -64,7 +64,8 @@ export default {
         .then(() => {
           this.$router.replace({
             name: "Home"
-          });
+          })
+        .catch(()=>{});
         });
     }
   }

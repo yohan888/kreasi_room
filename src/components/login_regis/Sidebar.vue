@@ -45,8 +45,6 @@ export default {
                     console.log(result);
                     this.$router.push({ name: 'Home', query: { redirect: '/' } });
                     this.isLoginWithGoogle = true;
-                    
-                    this.getUser(firebase.auth().currentUser.uid);
                 })
                 .catch((err) => {
                     console.log(err)
@@ -88,34 +86,6 @@ export default {
                 this.getUser(user.uid)
             }
         },
-        getUser(id){
-            
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                this.userID = user.uid;
-                this.email = user.email;
-                firebase
-                .firestore()
-                .collection('users').where('userID', '==', id).get().then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                    console.log(doc.id, ' => ', doc.data())
-                    //     this.$store.state.user.userID = id
-                    //     this.$store.state.user.namaLengkap = doc.data().nama_lengkap
-                    //     this.$store.state.user.profilePicture = doc.data().profile_picture
-                    //     this.$store.state.user.email = doc.data().email
-                    //     this.$store.state.user.jenisKelamin = doc.data().jenis_kelamin
-                    //     this.$store.state.user.kota = doc.data().kota
-                    //     this.$store.state.user.provinsi = doc.data().provinsi
-                    //     this.$store.state.user.role = doc.data().role
-                    //     this.$store.state.user.tanggalLahir = doc.data().tanggal_lahir
-                    //     this.$store.state.user.telfon = doc.data().telfon
-                        this.$store.dispatch('getUser');
-                    })
-                })
-                }
-            });
-            
-        }
     }
 }
 </script>
