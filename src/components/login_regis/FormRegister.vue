@@ -21,9 +21,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="provinsi" class="form-label">Provinsi</label>
-                        <select id="provinsi" class="form-select" v-model="idProvinsi" @change="getKota" required>
-                            <option v-for="p in provinsi" :key="p.id" :value="p.id" >{{ p.nama }}</option>      
-                        </select>
+                        <input type="text" class="form-control" id="provinsi" v-model="form.provinsi" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
@@ -43,9 +41,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="kota" class="form-label">Kota</label>
-                        <select id="kota" class="form-select" v-model="form.kotaUser" required>
-                            <option v-for="k in kota" :key="k.id" :value="k.nama" >{{ k.nama }}</option>      
-                        </select>
+                        <input type="text" class="form-control" id="kota" v-model="form.kota" required>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
@@ -76,9 +72,7 @@ export default {
     data(){
         return{
             userID: '',
-            idProvinsi: '',
-            provinsi: [],
-            kota: [],
+
             password: '',
             confirmPassword: '',
             form:{
@@ -86,8 +80,8 @@ export default {
                 password: '',
                 namaLengkap: '',
                 jenisKelamin: '',
-                provinsiUser: '',
-                kotaUser: '',
+                provinsi: '',
+                kota: '',
                 telp: '',
                 tanggalLahir: ''
             }
