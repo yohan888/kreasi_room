@@ -8,7 +8,16 @@ export default new Vuex.Store({
         user: {
             loggedIn: false,
             data: null,
-            userId: ''
+            userId: '',
+            namaLengkap: '',
+            jenisKelamin: '',
+            kota: '',
+            provinsi: '',
+            role: '',
+            tanggalLahir: '',
+            telfon: '',
+            profilePicture: '',
+            email: '',
         }
     },
     getters: {
