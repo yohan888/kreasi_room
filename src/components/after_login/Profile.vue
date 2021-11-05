@@ -46,8 +46,7 @@
 
 <style scoped>
 .card, .card-body{
-  border-bottom-right-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-radius: 15px;
 }
 .row{
   width: 75%;
@@ -121,22 +120,25 @@ export default {
         this.isLoginWithGoogle = true;
       }
 
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          this.userID = user.uid;
-          this.email = user.email;
-          firebase
-          .firestore()
-          .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log(doc.id, ' => ', doc.data())
-              this.namaLengkap = doc.data().nama_lengkap
-              this.profile_picture = doc.data().profile_picture
-              this.email = doc.data().email
-            })
-          })
-        }
-      });
+      this.namaLengkap = localStorage.getItem('namaLengkap');
+      this.profile_picture = localStorage.getItem('profilePicture');
+      this.email = localStorage.getItem('email');
+      // firebase.auth().onAuthStateChanged((user) => {
+      //   if (user) {
+      //     this.userID = user.uid;
+      //     this.email = user.email;
+      //     firebase
+      //     .firestore()
+      //     .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+      //       querySnapshot.forEach((doc) => {
+      //         console.log(doc.id, ' => ', doc.data())
+      //         this.namaLengkap = doc.data().nama_lengkap
+      //         this.profile_picture = doc.data().profile_picture
+      //         this.email = doc.data().email
+      //       })
+      //     })
+      //   }
+      // });
     }
 }
 </script>

@@ -67,22 +67,43 @@ export default {
         this.isLoginWithGoogle = true;
       }
 
+      // firebase.auth().onAuthStateChanged((user) => {
+      //   if (user) {
+      //     this.userID = user.uid;
+      //     this.email = user.email;
+      //     firebase
+      //     .firestore()
+      //     .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+      //       querySnapshot.forEach((doc) => {
+      //         console.log(doc.id, ' => ', doc.data())
+      //         this.namaLengkap = doc.data().nama_lengkap
+      //         this.profile_picture = doc.data().profile_picture
+      //         this.role=doc.data().role
+      //       })
+      //     })
+      //   }
+      // });
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          this.userID = user.uid;
-          this.email = user.email;
           firebase
           .firestore()
-          .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
+          .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              console.log(doc.id, ' => ', doc.data())
-              this.namaLengkap = doc.data().nama_lengkap
-              this.profile_picture = doc.data().profile_picture
-              this.role=doc.data().role
+                localStorage.setItem("docID", doc.id);
+                localStorage.setItem("namaLengkap", doc.data().nama_lengkap);
+                localStorage.setItem("profilePicture", doc.data().profile_picture);
+                localStorage.setItem("email", doc.data().email);
+                localStorage.setItem("jenisKelamin", doc.data().jenis_kelamin);
+                localStorage.setItem("provinsi", doc.data().provinsi);
+                localStorage.setItem("kota", doc.data().kota);
+                localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
+                localStorage.setItem("telpon", doc.data().telfon);
             })
-          })
+          })  
         }
-      });
+      }
+      );
+      this.profile_picture = localStorage.getItem('profilePicture');
   },
   methods: {
     signOut() {

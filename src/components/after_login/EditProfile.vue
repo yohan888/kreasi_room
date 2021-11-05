@@ -1,27 +1,20 @@
 <template>
-<div class="container bootstrap snippets bootdeys">
-<div class="row">
+<div class="container">
+
+<div class="row mt-3">
   <div class="col-xs-12 col-sm-9">
     <form class="form-horizontal" @submit.prevent="updateProfile">
-        <div class="panel panel-default">
-          <div class="panel-body text-center">
-            <template v-if="form.profilePicture == ''">
-              <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle profile-avatar" alt="User avatar">
-            </template>
-            <template v-else>
-              <img class="profile-picture" :src="form.profilePicture">
-            </template>
-           
-          </div>
-              <input type="file" id="image" v-on:change="showPicture">   
-             <button >Upload</button>
-        </div>
       <div class="panel panel-default">
         <div class="panel-heading">
-        <h4 class="panel-title">User info</h4>
+          <h2>Edit Profile</h2>
         </div>
         <div class="panel-body">
-
+          <div class="preview col-sm-10">
+              <img class="profile-avatar" v-if="newPicture" :src="newPicture">
+              <img v-else :src="form.profilePicture" class="img-circle profile-avatar" alt="User avatar">
+            </div>
+            <input type="file" id="image" @change="onFileChange"> 
+            
           <div class="form-group">
             <label class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
@@ -63,7 +56,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">Tanggal Lahir</label>
             <div class="col-sm-10">
-              <input type="date" v-model="form.tanggalLahir" class="form-control" required>
+              <input type="date" v-model="form.tanggalLahir"  class="form-control" required>
             </div>
           </div>
         </div>
@@ -76,15 +69,17 @@
           </div>  
 
           <div class="form-group">
-            <div class="col-sm-10 col-sm-offset-2">
+            <div class="col-sm-10 mt-3 col-sm-offset-2">
+              <router-link class="btn btn-default" to="/profile">Back</router-link>
+              <!-- <button type="reset" >Back</button> -->
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="reset" class="btn btn-default">Cancel</button>
+              
             </div>
           </div>
     </form>
   </div>
 </div>
-
+<br>
 </div>
 </template>
 
@@ -92,6 +87,17 @@
 body{
     margin-top:20px;
     background:#f5f5f5;
+}
+
+#preview{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#preview img{
+  max-width: 100%;
+  max-height: 500px;
 }
 /**
  * Panels
@@ -186,30 +192,15 @@ export default {
   },
 
   mounted(){
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          firebase
-          .firestore()
-          .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log(doc.id, ' => ', doc.data());
-              this.docID = doc.id;
-              this.form.namaLengkap = doc.data().nama_lengkap;
-              this.form.profilePicture = doc.data().profile_picture;
-              this.form.email = doc.data().email;
-              this.form.jenisKelamin = doc.data().jenis_kelamin;
-              this.form.provinsi = doc.data().provinsi;
-              this.form.kota = doc.data().kota;
-              this.form.tanggalLahir = doc.data().tanggal_lahir;
-              this.form.telpon = doc.data().telfon;
-            })
-          })
-          
-        }
-      }
-      );
-
-    
+    this.docID = localStorage.getItem('docID');
+    this.form.namaLengkap = localStorage.getItem('namaLengkap');
+    this.form.profilePicture = localStorage.getItem('profilePicture');
+    this.form.email = localStorage.getItem('email');
+    this.form.jenisKelamin = localStorage.getItem('jenisKelamin');
+    this.form.provinsi = localStorage.getItem('provinsi');
+    this.form.kota = localStorage.getItem('kota');
+    this.form.tanggalLahir = localStorage.getItem('tanggalLahir');
+    this.form.telpon = localStorage.getItem('telpon');    
   },
   methods:{
     updateProfile(){
@@ -230,20 +221,9 @@ export default {
 
     },
 
-    showPicture(e){
-      var files = e.target.files || e.dataTransfer.files;
-      if(!files.length) return;
-      this.createImage(files[0]);
-    },
-    createImage(file) {
-      this.newPicture = new Image();
-      var reader = new FileReader();
-      var vm = this;
-
-      reader.onload = (e) => {
-        vm.newPicture = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    onFileChange(e){
+      const file = e.target.files[0];
+      this.newPicture = URL.createObjectURL(file);
     }
   }
 }

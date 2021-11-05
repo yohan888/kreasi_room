@@ -118,7 +118,7 @@ export default {
             .signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(data => {
                 console.log(data);
-                // alert("Bisa login");
+                
                 this.$router.push({ name: 'Home', query: { redirect: '/' } });
             })  
             .catch(err => {

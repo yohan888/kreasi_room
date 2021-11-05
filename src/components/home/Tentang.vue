@@ -1,6 +1,6 @@
 <template>
  <center>
-<div class="container" >
+<div class="container" id="tentang">
 
     <div class="row d-flex justify-content-center">
         <div class="col-md mt-3">

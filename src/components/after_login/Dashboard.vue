@@ -124,6 +124,7 @@
 
 <script>
 import EventTerbaru from '../home/EventTerbaru.vue'
+// import firebase from 'firebase'
 export default {
     components:{
         EventTerbaru
@@ -131,10 +132,8 @@ export default {
     setup() {
         
     },
-    methods:{
-        searchEvent(){
-
-        }
+    mounted(){
+        
     }
 }
 </script>

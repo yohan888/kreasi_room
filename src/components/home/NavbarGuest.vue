@@ -12,10 +12,10 @@
             <router-link class="nav-link active" aria-current="page" to="/">Beranda</router-link>
           </li>
           <li class="nav-item me-5">
-            <router-link class="nav-link" to="/tentang">Tentang</router-link>
+            <a class="nav-link" href="#tentang">Tentang</a>
           </li>
           <li class="nav-item me-5">
-            <router-link class="nav-link" to="/kontak">Kontak</router-link>
+            <a class="nav-link" href="#kontak">Kontak</a>
           </li>
           <template v-if="user.loggedIn">
             <li class="nav-item me-5">

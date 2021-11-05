@@ -83,7 +83,6 @@ export default {
                     role: 'USER',
                     profile_picture: user.providerData[0].photoURL,
                 })
-                this.getUser(user.uid)
             }
         },
     }

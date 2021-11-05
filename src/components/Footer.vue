@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer_area section_padding_130_0 mt-5" style="background-color: #f5f5f5">
+    <footer id="kontak" class="footer_area section_padding_130_0 mt-5" style="background-color: #f5f5f5">
       <div class="container">
         <template v-if="user.loggedIn">
           
