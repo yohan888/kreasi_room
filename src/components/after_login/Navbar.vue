@@ -98,12 +98,14 @@ export default {
                 localStorage.setItem("kota", doc.data().kota);
                 localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
                 localStorage.setItem("telpon", doc.data().telfon);
+                localStorage.setItem('role', doc.data().role);
             })
           })  
         }
       }
       );
       this.profile_picture = localStorage.getItem('profilePicture');
+      this.role = localStorage.getItem('role');
   },
   methods: {
     signOut() {
