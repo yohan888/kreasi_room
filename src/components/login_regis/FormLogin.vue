@@ -118,7 +118,27 @@ export default {
             .signInWithEmailAndPassword(this.form.email, this.form.password)
             .then(data => {
                 console.log(data);
-                
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                    firebase
+                    .firestore()
+                    .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            localStorage.setItem("docID", doc.id);
+                            localStorage.setItem("namaLengkap", doc.data().nama_lengkap);
+                            localStorage.setItem("profilePicture", doc.data().profile_picture);
+                            localStorage.setItem("email", doc.data().email);
+                            localStorage.setItem("jenisKelamin", doc.data().jenis_kelamin);
+                            localStorage.setItem("provinsi", doc.data().provinsi);
+                            localStorage.setItem("kota", doc.data().kota);
+                            localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
+                            localStorage.setItem("telpon", doc.data().telfon);
+                            localStorage.setItem('role', doc.data().role);
+                        })
+                    })  
+                    }
+                }
+                );
                 this.$router.push({ name: 'Home', query: { redirect: '/' } });
             })  
             .catch(err => {

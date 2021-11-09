@@ -101,7 +101,7 @@
 </style>
 
 <script>
-import firebase from 'firebase'
+// import firebase from 'firebase'
 export default {
     data(){
         return{
@@ -114,11 +114,11 @@ export default {
         }
     },
     mounted(){
-      const user = firebase.auth().currentUser;
-      console.log(user.providerData[0]);
-      if(user.providerData[0].providerId == 'google.com'){
-        this.isLoginWithGoogle = true;
-      }
+      // const user = firebase.auth().currentUser;
+      // console.log(user.providerData[0]);
+      // if(user.providerData[0].providerId == 'google.com'){
+      //   this.isLoginWithGoogle = true;
+      // }
 
       this.namaLengkap = localStorage.getItem('namaLengkap');
       this.profile_picture = localStorage.getItem('profilePicture');

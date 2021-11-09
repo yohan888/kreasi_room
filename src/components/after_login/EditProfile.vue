@@ -10,22 +10,22 @@
         </div>
         <div class="panel-body">
           <div class="preview col-sm-10">
-              <img class="profile-avatar" v-if="newPicture" :src="newPicture">
-              <img v-else :src="form.profilePicture" class="img-circle profile-avatar" alt="User avatar">
+              <img class="profile-avatar" v-if="previewPicture" :src="previewPicture">
+              <img v-else :src="data.profilePicture" class="img-circle profile-avatar" alt="User avatar">
             </div>
-            <input type="file" id="image" @change="onFileChange"> 
+            <input type="file" id="image" accept=".jpg, .png" @change="onFileChange"> 
             
           <div class="form-group">
             <label class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :value="form.email" disabled>
+              <input type="text" class="form-control" v-model="data.email" disabled>
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-sm-2 control-label">jenis Kelamin</label>
             <div class="col-sm-10">
-              <select class="form-control" v-model="form.jenisKelamin">
+              <select class="form-control" v-model="data.jenisKelamin">
                 <option selected="" value="Pria">Pria</option>
                 <option value="Wanita">Wanita</option>
               </select>
@@ -35,20 +35,20 @@
            <div class="form-group">
             <label class="col-sm-2 control-label">Provinsi</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :value="form.provinsi" required>
+              <input type="text" class="form-control" v-model="data.provinsi" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">Kota</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :value="form.kota" required>
+              <input type="text" class="form-control" v-model="data.kota" required>
             </div>
           </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Nama Lengkap</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" :value="form.namaLengkap" required>
+              <input type="text" class="form-control" v-model="data.namaLengkap" required>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">Tanggal Lahir</label>
             <div class="col-sm-10">
-              <input type="date" v-model="form.tanggalLahir"  class="form-control" required>
+              <input type="date" v-model="data.tanggalLahir"  class="form-control" required>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">Telpon</label>
             <div class="col-sm-10">
-              <input type="text" :value="form.telpon" class="form-control" required>
+              <input type="text" v-model="data.telpon" class="form-control" required>
             </div>
           </div>  
 
@@ -72,7 +72,11 @@
             <div class="col-sm-10 mt-3 col-sm-offset-2">
               <router-link class="btn btn-default" to="/profile">Back</router-link>
               <!-- <button type="reset" >Back</button> -->
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary btn-kirim">  Edit</button>
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
               
             </div>
           </div>
@@ -170,6 +174,7 @@ form label {
 
 <script>
 import firebase from 'firebase'
+import Swal from 'sweetalert2'
 export default {
   data() {
     return{
@@ -177,8 +182,9 @@ export default {
       idProvinsi: '',
       provinsi: [],
       kota: [],
-      newPicture: '',
-      form:{
+      previewPicture: '',
+      newImage: null,
+      data:{
         namaLengkap: '',
         email: '',
         jenisKelamin: '',
@@ -187,44 +193,91 @@ export default {
         profilePicture: '',
         telpon: '',
         tanggalLahir: ''
-      }
+      },
+
     }
   },
 
-  mounted(){
+  beforeMount(){
     this.docID = localStorage.getItem('docID');
-    this.form.namaLengkap = localStorage.getItem('namaLengkap');
-    this.form.profilePicture = localStorage.getItem('profilePicture');
-    this.form.email = localStorage.getItem('email');
-    this.form.jenisKelamin = localStorage.getItem('jenisKelamin');
-    this.form.provinsi = localStorage.getItem('provinsi');
-    this.form.kota = localStorage.getItem('kota');
-    this.form.tanggalLahir = localStorage.getItem('tanggalLahir');
-    this.form.telpon = localStorage.getItem('telpon');    
+    this.data.namaLengkap = localStorage.getItem('namaLengkap');
+    this.data.profilePicture = localStorage.getItem('profilePicture');
+    this.data.email = localStorage.getItem('email');
+    this.data.jenisKelamin = localStorage.getItem('jenisKelamin');
+    this.data.provinsi = localStorage.getItem('provinsi');
+    this.data.kota = localStorage.getItem('kota');
+    this.data.tanggalLahir = localStorage.getItem('tanggalLahir');
+    this.data.telpon = localStorage.getItem('telpon');    
   },
   methods:{
-    updateProfile(){
-      firebase
-      .firestore()
-      .collection('users')
-      .doc(this.docID)
-      .update({
-        email: this.form.email,
-        jenis_kelamin: this.form.jenisKelamin,
-        kota: this.form.kota,
-        provinsi: this.form.provinsi,
-        nama_lengkap: this.form.namaLengkap,
-        profile_picture: this.form.profilePicture,
-        tanggal_lahir: this.form.tanggalLahir,
-        telfon: this.form.telpon
-      })
-
+    onFileChange(e){
+      this.newImage = e.target.files[0];
+      this.previewPicture = URL.createObjectURL(this.newImage);
     },
 
-    onFileChange(e){
-      const file = e.target.files[0];
-      this.newPicture = URL.createObjectURL(file);
-    }
+    updateProfile(){
+      const btnKirim = document.querySelector(".btn-kirim");
+      const btnLoding = document.querySelector(".btn-loading"); 
+      btnLoding.classList.toggle("d-none");
+      btnKirim.classList.toggle("d-none");
+
+      if(this.newImage !== null){
+        firebase.storage().ref(this.docID).delete();
+        const storageRef =
+        firebase
+        .storage()
+        .ref(this.docID)
+        .put(this.newImage);
+      
+        storageRef.on(
+            'state_changed', 
+            snapshot=>{ 
+              this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
+            }, 
+            error=>{
+              console.log(error.message)
+            },
+            ()=>{
+              storageRef.snapshot.ref.getDownloadURL()
+              .then((url)=>{
+                  this.data.profilePicture = url;
+                  firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(this.docID)
+                  .update({
+                      email: this.data.email,
+                      jenis_kelamin: this.data.jenisKelamin,
+                      kota: this.data.kota,
+                      provinsi: this.data.provinsi,
+                      nama_lengkap: this.data.namaLengkap,
+                      profile_picture: this.data.profilePicture,
+                      tanggal_lahir: this.data.tanggalLahir,
+                      telfon: this.data.telpon
+                  })
+                  
+                      localStorage.setItem("docID", this.docID);
+                      localStorage.setItem("namaLengkap", this.data.namaLengkap);
+                      localStorage.setItem("profilePicture", this.data.profilePicture);
+                      localStorage.setItem("email", this.data.email);
+                      localStorage.setItem("jenisKelamin", this.data.jenisKelamin);
+                      localStorage.setItem("provinsi", this.data.provinsi);
+                      localStorage.setItem("kota", this.data.kota);
+                      localStorage.setItem("tanggalLahir", this.data.tanggalLahir);
+                      localStorage.setItem("telpon", this.data.telpon);
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Berhasil Edit'
+                })  
+                  btnLoding.classList.toggle("d-none");
+                  btnKirim.classList.toggle("d-none");
+                  this.$router.push({ name: 'Profile', query: { redirect: '/profile' } });
+              });
+            }
+        );
+      }  
+    }, 
   }
 }
 </script>

@@ -61,11 +61,11 @@ export default {
     
   },
   mounted(){
-    const user = firebase.auth().currentUser;
-      console.log(user.providerData[0]);
-      if(user.providerData[0].providerId == 'google.com'){
-        this.isLoginWithGoogle = true;
-      }
+    // const user = firebase.auth().currentUser;
+    //   console.log(user.providerData[0]);
+    //   if(user.providerData[0].providerId == 'google.com'){
+    //     this.isLoginWithGoogle = true;
+    //   }
 
       // firebase.auth().onAuthStateChanged((user) => {
       //   if (user) {
@@ -83,27 +83,7 @@ export default {
       //     })
       //   }
       // });
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          firebase
-          .firestore()
-          .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                localStorage.setItem("docID", doc.id);
-                localStorage.setItem("namaLengkap", doc.data().nama_lengkap);
-                localStorage.setItem("profilePicture", doc.data().profile_picture);
-                localStorage.setItem("email", doc.data().email);
-                localStorage.setItem("jenisKelamin", doc.data().jenis_kelamin);
-                localStorage.setItem("provinsi", doc.data().provinsi);
-                localStorage.setItem("kota", doc.data().kota);
-                localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
-                localStorage.setItem("telpon", doc.data().telfon);
-                localStorage.setItem('role', doc.data().role);
-            })
-          })  
-        }
-      }
-      );
+      
       this.profile_picture = localStorage.getItem('profilePicture');
       this.role = localStorage.getItem('role');
   },
