@@ -5,19 +5,25 @@
             <p>Beri informasi dasar mengenai acara yang akan kalian buat!</p>
         </div>
         <div>
-            <form action="" style="text-align: left">
+            <img class="poster" v-if="previewPicture" :src="previewPicture">
+            <img v-else :src="form.gambarEvent" class="poster" >
+            <form @submit.prevent="createEvent" style="text-align: left">
+                <div class="mb-3">
+                    <label for="poster" class="form-label" >Poster Event</label>
+                    <input class="form-control" type="file" accept=".jpg, .png" name="poster" id="poster" @change="onFileChange">
+                </div>
                 <div class="mb-3">
                     <label for="judulEvent" class="form-label">Judul Event</label>
-                    <input type="email" class="form-control" id="judulEvent" v-model="form.judulEvent">
+                    <input type="text" class="form-control" id="judulEvent" v-model="form.judulEvent">
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="penyelenggara" class="form-label">Penyelenggara</label>
-                        <input type="text" class="form-control" id="penyelenggara">
+                        <input type="text" class="form-control" id="penyelenggara" v-model="form.penyelenggara">
                     </div>
                     <div class="col">
                        <label for="tipe" class="form-label">Topik</label>
-                        <select name="tipe" id="tipe" class="form-select">
+                        <select name="tipe" id="tipe" class="form-select" v-model="form.topik">
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="C">C</option>
@@ -27,9 +33,9 @@
                 <div class="mb-3">
                     <label for="lokasi" class="form-label">Lokasi Event</label>
                     <div class="wrapper">
-                        <input type="radio" name="lokasi" value="Luring" id="option-1" checked>
-                        <input type="radio" name="lokasi" value="Daring" id="option-2">
-                        <input type="radio" name="lokasi" value="Next" id="option-3">
+                        <input type="radio" name="lokasi" v-model="form.lokasi" value="Luring" id="option-1" checked>
+                        <input type="radio" name="lokasi" v-model="form.lokasi" value="Daring" id="option-2">
+                        <input type="radio" name="lokasi" v-model="form.lokasi" value="Next" id="option-3">
                         <label for="option-1" class="option option-1">
                             <!-- <div class="dot"></div> -->
                             <span>Luring</span>
@@ -48,30 +54,27 @@
                     <div class="row">
                         <div class="col">
                             <label for="mulaiEvent" class="form-label" >Tanggal dan Waktu Mulai</label>
-                            <input type="datetime-local" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent">
+                            <input type="datetime-local" v-model="form.mulai" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent">
                             <div id="mulaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                         <div class="col">
                             <label for="selesaiEvent" class="form-label" >Tanggal dan Waktu Selesai</label>
-                            <input type="datetime-local" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent">
+                            <input type="datetime-local" v-model="form.selesai" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent">
                             <div id="selesaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="poster" class="form-label" >Poster Event</label>
-                    <input class="form-control" type="file" accept=".jpg, .png" name="poster" id="poster">
-                </div>
+                
                 <div class="mb-3">
                     <label for="deskripsi" class="form-label" >Deskripsi Event</label>
-                    <textarea class="form-control" type="text" name="deskripsi" id="deskripsi"></textarea>
+                    <textarea class="form-control" v-model="form.deskripsi" type="text" name="deskripsi" id="deskripsi"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="mode" class="form-label" >Siapa yang akan melihat  postinganmu?</label>
                     <br>
                     <div class="wrapper">
-                        <input type="radio" name="mode" value="Privat" id="privat" checked>
-                        <input type="radio" name="mode" value="Umum" id="umum">
+                        <input type="radio" v-model="form.mode" name="mode" value="Privat" id="privat" checked>
+                        <input type="radio" v-model="form.mode" name="mode" value="Umum" id="umum">
                         <label for="privat" class="option privat">
                             <!-- <div class="dot"></div> -->
                             <span>Privat</span>
@@ -83,7 +86,11 @@
                     </div>
                 </div>
                 <div class="mb-3 d-flex justify-content-end">
-                    <input class="btn btn-primary" type="submit" value="Posting">
+                    <input class="btn btn-primary btn-kirim" type="submit" value="Posting">
+                    <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                    </button>
                 </div>
             </form>
        
@@ -94,25 +101,101 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+import firebase from 'firebase'
 export default {
     data(){
         return{
+            newImage: '',
+            previewPicture: '',
             form:{
+                eventID: '',
                 judulEvent: '',
-
+                penyelenggara: '',
+                topik: '',
+                lokasi: '',
+                mulai: '',
+                selesai: '',
                 gambarEvent: '',
-
-                
+                deskripsi: '',
+                mode: '',
+                video: ''
             }
         }
     },
     mounted(){
         if(localStorage.getItem("role") == "USER"){
             this.$router.push({ name: 'Home', query: { redirect: '/' } });
-        }
+        }  
     },
     methods:{
-     
+        onFileChange(e){
+            this.newImage = e.target.files[0];
+            this.previewPicture = URL.createObjectURL(this.newImage);
+        },
+        createEvent(){
+            const btnKirim = document.querySelector(".btn-kirim");
+            const btnLoding = document.querySelector(".btn-loading"); 
+            btnLoding.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+            firebase
+            .firestore()
+            .collection("events")
+            .add({
+                eventID: this.form.eventID,
+                userID: localStorage.getItem('userID'),
+                judulEvent: this.form.judulEvent,
+                penyelenggara: this.form.penyelenggara,
+                topik: this.form.topik,
+                lokasi: this.form.lokasi,
+                mulai: this.form.mulai,
+                selesai: this.form.selesai,
+                gambarEvent: this.form.gambarEvent,
+                deskripsi: this.form.deskripsi,
+                mode: this.form.mode,
+                video: this.form.video,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then((docRef) => {
+                if(this.newImage !== null){
+                    const storageRef =
+                    firebase
+                    .storage()
+                    .ref(docRef.id)
+                    .put(this.newImage);
+                
+                    storageRef.on(
+                        'state_changed', snapshot=>{ 
+                            this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
+                        }, error=>{
+                            console.log("Error di : " + error.message)
+                        }, ()=>{
+                            storageRef.snapshot.ref.getDownloadURL()
+                            .then((url)=>{
+                                firebase
+                                .firestore()
+                                .collection('events')
+                                .doc(docRef.id)
+                                .update({
+                                    eventID: docRef.id,
+                                    gambarEvent: url,
+                                })
+                                
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil Buat Event'
+                                })  
+                                btnLoding.classList.toggle("d-none");
+                                btnKirim.classList.toggle("d-none");
+                                this.$router.push({ name: 'Dashboard', query: { redirect: '/dashboard' } });
+                            });
+                        }
+                    );
+                } 
+            });
+            
+            
+        }
     }
 }
 </script>
@@ -120,6 +203,10 @@ export default {
 <style scoped>
 *{
     color: #0A3D62;
+}
+.poster{
+    width: 500px;
+    height: auto;
 }
 .wrapper{
   display: inline-flex;

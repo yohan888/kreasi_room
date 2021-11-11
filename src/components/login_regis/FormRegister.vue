@@ -129,6 +129,7 @@ export default {
                 }); 
         },
         createUserAfterRegister(){
+            const fieldValue = firebase.firestore.FieldValue;
             firebase
                 .firestore()
                 .collection("users")
@@ -143,6 +144,9 @@ export default {
                     tanggal_lahir: this.form.tanggalLahir,
                     role: 'USER',
                     profile_picture: '',
+                    savedEvent: fieldValue.arrayUnion(""),
+                    joinedEvent: fieldValue.arrayUnion(""),
+                    registeredEvent: fieldValue.arrayUnion(""),
                 })
         },
         setProvinsi(provinsi){

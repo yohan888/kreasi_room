@@ -124,7 +124,9 @@ export default {
                     .firestore()
                     .collection('users').where('userID', '==', user.uid).get().then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
+                            console.log(doc.id + " => " + doc.data())
                             localStorage.setItem("docID", doc.id);
+                            localStorage.setItem("userID", user.uid);
                             localStorage.setItem("namaLengkap", doc.data().nama_lengkap);
                             localStorage.setItem("profilePicture", doc.data().profile_picture);
                             localStorage.setItem("email", doc.data().email);
@@ -134,6 +136,10 @@ export default {
                             localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
                             localStorage.setItem("telpon", doc.data().telfon);
                             localStorage.setItem('role', doc.data().role);
+                            localStorage.setItem('savedEvent', doc.data().savedEvent);
+                            localStorage.setItem('joinedEvent', doc.data().joinedEvent);
+                            localStorage.setItem('registeredEvent', doc.data().registeredEvent);
+
                         })
                     })  
                     }

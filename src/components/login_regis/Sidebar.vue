@@ -41,8 +41,8 @@ export default {
         loginWithGoogle(){
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
-                .then((result) => {
-                    console.log(result);
+                .then(() => {
+                    this.createUserSession(firebase.auth().currentUser.uid);
                     this.$router.push({ name: 'Home', query: { redirect: '/' } });
                     this.isLoginWithGoogle = true;
                 })
@@ -54,11 +54,12 @@ export default {
         registerWithGoogle(){
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
-                .then((result) => {
-                    console.log(result);
+                .then(() => {
+                    this.createUserSession(firebase.auth().currentUser.uid);
+                    this.createUserAfterRegister();
                     this.$router.push({ name: 'Home', query: { redirect: '/' } });
                     this.isLoginWithGoogle = true;
-                    this.createUserAfterRegister();
+                    
                 })
                 .catch((err) => {
                     console.log(err)
@@ -84,6 +85,29 @@ export default {
                     profile_picture: user.providerData[0].photoURL,
                 })
             }
+        },
+        createUserSession(uid){
+            firebase
+            .firestore()
+            .collection('users').where('userID', '==', uid).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id + " => " + doc.data())
+                    localStorage.setItem("docID", doc.id);
+                    localStorage.setItem("userID", uid);
+                    localStorage.setItem("namaLengkap", doc.data().nama_lengkap);
+                    localStorage.setItem("profilePicture", doc.data().profile_picture);
+                    localStorage.setItem("email", doc.data().email);
+                    localStorage.setItem("jenisKelamin", doc.data().jenis_kelamin);
+                    localStorage.setItem("provinsi", doc.data().provinsi);
+                    localStorage.setItem("kota", doc.data().kota);
+                    localStorage.setItem("tanggalLahir", doc.data().tanggal_lahir);
+                    localStorage.setItem("telpon", doc.data().telfon);
+                    localStorage.setItem('role', doc.data().role);
+                    localStorage.setItem('savedEvent', doc.data().savedEvent);
+                    localStorage.setItem('joinedEvent', doc.data().joinedEvent);
+                    localStorage.setItem('registeredEvent', doc.data().registeredEvent);
+                })
+            }) 
         },
     }
 }

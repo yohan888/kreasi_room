@@ -77,10 +77,34 @@
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               Loading...
             </button>
-              
+            <button v-if="isLoginWithEmail" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Reset Password
+            </button>
             </div>
           </div>
     </form>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                   <form @submit.prevent="forgetPassword">
+                  <div class="modal-body">
+
+                      <input type="email" class="form-control form-control-lg" v-model="resetEmail">
+
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
   </div>
 </div>
 <br>
@@ -184,6 +208,9 @@ export default {
       kota: [],
       previewPicture: '',
       newImage: null,
+      isLoginWithGoogle: false,
+      isLoginWithEmail: false,
+      resetEmail: '',
       data:{
         namaLengkap: '',
         email: '',
@@ -207,7 +234,16 @@ export default {
     this.data.provinsi = localStorage.getItem('provinsi');
     this.data.kota = localStorage.getItem('kota');
     this.data.tanggalLahir = localStorage.getItem('tanggalLahir');
-    this.data.telpon = localStorage.getItem('telpon');    
+    this.data.telpon = localStorage.getItem('telpon');   
+    
+    var loginMethod = firebase.auth().currentUser.providerData[0].providerId;
+    if(loginMethod === "google.com"){
+      this.isLoginWithGoogle = true;
+      this.isLoginWithEmail = false;
+    }else{
+      this.isLoginWithGoogle = false;
+      this.isLoginWithEmail = true;
+    } 
   },
   methods:{
     onFileChange(e){
@@ -278,6 +314,18 @@ export default {
         );
       }  
     }, 
+    forgetPassword(){
+      firebase
+        .auth()
+        .sendPasswordResetEmail(this.resetEmail)
+        .then(() => {
+            alert('Check your registered email to reset the password!');
+            this.resertEmail= '';
+
+        }).catch((error) => {
+          alert(error)
+        })
+    }
   }
 }
 </script>
