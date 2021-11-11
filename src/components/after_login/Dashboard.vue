@@ -37,13 +37,14 @@
                         <form @submit.prevent="searchEvent">
                             <div class="input-container"> 
                                 <i class="fas fa-search icon"></i>
-                                <input class="input-field" id="email" type="text" placeholder="Cari Event" name="event">
+                                <input class="input-field" id="email" type="text" placeholder="Cari Event" name="event" @change="cari">
                             </div>
                         </form>
                     </div>
                     <div class="col-sm-auto ms-auto">
-                        <select class="form-select" name="" id="">
-                            <option value="">Terbaru</option>
+                        <select class="form-select" v-model="sortBy" id="" @change="sort">
+                            <option value="Terbaru">Terbaru</option>
+                            <option value="Terlama">Terlama</option>
                         </select>
                         
                     </div>
@@ -129,11 +130,24 @@ export default {
     components:{
         EventTerbaru
     },
-    setup() {
-        
+    data() {
+        return{
+            sortBy: '',
+        }
     },
     mounted(){
         
+    },
+    methods:{
+        sort(){
+            if(this.sortBy == "Terlama"){
+                console.log();
+            }else if(this.sortBy == "Terbaru"){
+                console.log();
+            }else if(this.sortBy == "Nama"){
+                console.log();
+            }
+        }
     }
 }
 </script>
