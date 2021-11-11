@@ -7,13 +7,23 @@
             <img class="imageDetailEvent" :src="this.gambarEvent">
         </div>
         <div class="col-md mt-2" style="text-align: left;">
-            <div class="custom-btn">
-                <button class="btn btn-lg me-2 btn-tipe">{{ this.topik }}</button>
-
-                <h2 class="fas fa-heart custom-like me-4"></h2>
-                <h2 class="fas fa-share-alt-square custom-share"></h2>
+            <!-- <div class="custom-btn "> -->
+                <div class="row " style="width: 100%">
+                    <div class="col-auto d-flex justify-content-start ">
+                        <button class="btn btn-lg me-2 btn-tipe">{{ this.topik }}</button>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h2 class="fas fa-heart custom-like me-4"></h2>
+                        <h2 class="fas fa-share-alt-square custom-share"></h2>
+                    </div>
+                </div>
+                
+                
+                <!-- <div class=" bg-secondary">
+               
+                </div> -->
                 <br><br>
-            </div>
+            <!-- </div> -->
             <div class="row">
                 <div class="col">
                 <i class="fas fa-calendar-alt custom-icon-kalender"></i>
@@ -44,14 +54,15 @@
                     <span style="color:#B2B5B8;"> {{ this.penyelenggara.emailPenyelenggara }}</span>
                 </div>
                 <div class="col-md-1" style="text-align: right;">
-                    <h4><i class="fas fa-envelope"></i></h4>
+                    <h4><a v-bind:href="'mailto:' + this.penyelenggara.emailPenyelenggara"><i class="fas fa-envelope"></i></a></h4>
                 </div>
                
             </div>
             <hr size="4">
 
             <h6 style="color:#B2B5B8;"><i class="fas fa-file-alt"> Deskripsi</i></h6>
-            <p>{{ this.deskripsi }}</p>
+            <p v-if="this.deskripsi.length < 200">{{ this.deskripsi }}</p>
+            <p v-else>{{ this.deskripsi.substring(0, 199)+"..." }}</p>
             <center>
                 <!-- <a href="#"> Baca Selengkapnya</a> -->
                 <a href="#" data-bs-toggle="modal" data-bs-target="#ketentuanModal">
@@ -65,7 +76,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">Baca Selengkapnya</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="text-align: left">
                             {{ this.deskripsi }}
                         </div>
                         <div class="modal-footer">
@@ -216,7 +227,7 @@ export default {
 .btn-tipe{
     background-color:#0A3D62;
     color:white;
-    width: 130px;
+    width: auto;
     height: 50px;
     border-radius: 10px;
 }

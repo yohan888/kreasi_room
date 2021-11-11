@@ -14,7 +14,7 @@
                         <img :src="e.poster" class="card-img-top posterEvent" alt="...">
                         <div class="card-body">
                             <h1 class="card-text judulEvent">{{ e.judul }}</h1>
-                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.penyelenggara }}</p>
+                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
                             <p v-else class="card-text instansiEvent">Tidak ada data</p>
                         </div>
                         </template>
@@ -106,7 +106,7 @@ export default ({
                     this.event.push({
                         eventID: doc.data().eventID,
                         judul: doc.data().judulEvent,
-                        penyelenggara: doc.data().penyelenggara,
+                        instansi: doc.data().instansi,
                         poster: doc.data().gambarEvent
                     });
                     
@@ -162,6 +162,9 @@ export default ({
     p{ 
         font-size: 13.5pt; 
         color: #B2B5B8; 
+    }
+    a{
+        text-decoration: none;
     }
     #more {
         display: none;

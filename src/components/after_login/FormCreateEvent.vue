@@ -10,23 +10,30 @@
             <form @submit.prevent="createEvent" style="text-align: left">
                 <div class="mb-3">
                     <label for="poster" class="form-label" >Poster Event</label>
-                    <input class="form-control" type="file" accept=".jpg, .png" name="poster" id="poster" @change="onFileChange">
+                    <input class="form-control" type="file" accept=".jpg, .png" name="poster" id="poster" @change="onFileChange" required>
                 </div>
                 <div class="mb-3">
                     <label for="judulEvent" class="form-label">Judul Event</label>
-                    <input type="text" class="form-control" id="judulEvent" v-model="form.judulEvent">
+                    <input type="text" class="form-control" id="judulEvent" v-model="form.judulEvent" required>
                 </div>
                 <div class="row mb-3">
-                    <!-- <div class="col">
-                        <label for="penyelenggara" class="form-label">Penyelenggara</label>
-                        <input type="text" class="form-control" id="penyelenggara" disabled v-model="form.idPenyelenggara">
-                    </div> -->
+                    <div class="col">
+                        <label for="penyelenggara" class="form-label">Instansi</label>
+                        <input type="text" class="form-control" id="penyelenggara" v-model="form.instansi" required>
+                    </div>
                     <div class="col">
                        <label for="tipe" class="form-label">Topik</label>
-                        <select name="tipe" id="tipe" class="form-select" v-model="form.topik">
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
+                        <select name="tipe" id="tipe" class="form-select" v-model="form.topik" required>
+                            <option value="Artificial Intelligence">Artificial Intelligence</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Ekonomi">Ekonomi</option>
+                            <option value="Hukum">Hukum</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Programing">Programing</option>
+                            <option value="Psikologi">Psikologi</option>
+                            <option value="Science">Science</option>
+                            <option value="Sejarah">Sejarah</option>
+                            <option value="Teknologi">Teknologi</option>
                         </select>
                     </div>
                 </div>
@@ -54,12 +61,12 @@
                     <div class="row">
                         <div class="col">
                             <label for="mulaiEvent" class="form-label" >Tanggal dan Waktu Mulai</label>
-                            <input type="datetime-local" v-model="form.mulai" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent">
+                            <input type="datetime-local" v-model="form.mulai" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent" required>
                             <div id="mulaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                         <div class="col">
                             <label for="selesaiEvent" class="form-label" >Tanggal dan Waktu Selesai</label>
-                            <input type="datetime-local" v-model="form.selesai" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent">
+                            <input type="datetime-local" v-model="form.selesai" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent" required>
                             <div id="selesaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                     </div>
@@ -67,14 +74,14 @@
                 
                 <div class="mb-3">
                     <label for="deskripsi" class="form-label" >Deskripsi Event</label>
-                    <textarea class="form-control" v-model="form.deskripsi" type="text" name="deskripsi" id="deskripsi"></textarea>
+                    <textarea class="form-control" v-model="form.deskripsi" type="text" name="deskripsi" id="deskripsi" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="mode" class="form-label" >Siapa yang akan melihat  postinganmu?</label>
                     <br>
                     <div class="wrapper">
-                        <input type="radio" v-model="form.mode" name="mode" value="Privat" id="privat" checked>
-                        <input type="radio" v-model="form.mode" name="mode" value="Umum" id="umum">
+                        <input type="radio" v-model="form.mode" name="mode" value="Privat" id="privat" >
+                        <input type="radio" v-model="form.mode" name="mode" value="Umum" id="umum" checked>
                         <label for="privat" class="option privat">
                             <!-- <div class="dot"></div> -->
                             <span>Privat</span>
@@ -120,7 +127,8 @@ export default {
                 gambarEvent: '',
                 deskripsi: '',
                 mode: '',
-                video: ''
+                video: '',
+                instansi: '',
             }
         }
     },
@@ -157,7 +165,8 @@ export default {
                 deskripsi: this.form.deskripsi,
                 mode: this.form.mode,
                 video: this.form.video,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                instansi: this.form.instansi
             })
             .then((docRef) => {
                 if(this.newImage !== null){
