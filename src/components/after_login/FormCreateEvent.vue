@@ -17,10 +17,10 @@
                     <input type="text" class="form-control" id="judulEvent" v-model="form.judulEvent">
                 </div>
                 <div class="row mb-3">
-                    <div class="col">
+                    <!-- <div class="col">
                         <label for="penyelenggara" class="form-label">Penyelenggara</label>
-                        <input type="text" class="form-control" id="penyelenggara" v-model="form.penyelenggara">
-                    </div>
+                        <input type="text" class="form-control" id="penyelenggara" disabled v-model="form.idPenyelenggara">
+                    </div> -->
                     <div class="col">
                        <label for="tipe" class="form-label">Topik</label>
                         <select name="tipe" id="tipe" class="form-select" v-model="form.topik">
@@ -111,6 +111,7 @@ export default {
             form:{
                 eventID: '',
                 judulEvent: '',
+                idPenyelenggara: '',
                 penyelenggara: '',
                 topik: '',
                 lokasi: '',
@@ -127,6 +128,8 @@ export default {
         if(localStorage.getItem("role") == "USER"){
             this.$router.push({ name: 'Home', query: { redirect: '/' } });
         }  
+        this.form.penyelenggara = localStorage.getItem("namaLengkap");
+        this.form.idPenyelenggara = localStorage.getItem("userID");
     },
     methods:{
         onFileChange(e){
@@ -145,7 +148,7 @@ export default {
                 eventID: this.form.eventID,
                 userID: localStorage.getItem('userID'),
                 judulEvent: this.form.judulEvent,
-                penyelenggara: this.form.penyelenggara,
+                penyelenggara: this.form.idPenyelenggara,
                 topik: this.form.topik,
                 lokasi: this.form.lokasi,
                 mulai: this.form.mulai,

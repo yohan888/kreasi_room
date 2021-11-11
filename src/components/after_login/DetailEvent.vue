@@ -1,15 +1,15 @@
 <template>
 <center>
 <div class="container" >
-    <h4 class="col custom-detailevent"><b> Detail Event</b></h4>
+    <h4 class="col custom-detailevent mt-3"><b> Detail Event "{{ this.judul }}"</b></h4>
     <div class="row d-flex justify-content-center">
         <div class="col-md mt-3">
-            <img class="imageDetailEvent" src="../../assets/images/img-tentang.jpg">
+            <img class="imageDetailEvent" :src="this.gambarEvent">
         </div>
         <div class="col-md mt-2" style="text-align: left;">
             <div class="custom-btn">
-                <button class="btn btn-lg me-2 btn-tipe">Tipe</button>
-                <button class="btn btn-lg btn-katerogi">Katerogi</button>
+                <button class="btn btn-lg me-2 btn-tipe">{{ this.topik }}</button>
+
                 <h2 class="fas fa-heart custom-like me-4"></h2>
                 <h2 class="fas fa-share-alt-square custom-share"></h2>
                 <br><br>
@@ -22,7 +22,7 @@
                 <h6 class="mt-1 custom-tanggal">Tanggal</h6>
             </div>
             </div>
-                <h5 style="color:#0A3D62;"><b>Jumat, 23 Oktober 2021</b></h5>
+                <h5 style="color:#0A3D62;"><b>{{ this.tanggal }}</b></h5>
             <div class="row">
                 <div class="col">
                 <i class="fas fa-clock custom-icon-waktu"></i>
@@ -31,31 +31,27 @@
                 <h6 class="mt-1 custom-waktu">Waktu</h6>
             </div>
             </div>
-                <h5 style="color:#0A3D62;"><b>09.00 - 12.00 WIB</b></h5>
+                <h5 style="color:#0A3D62;"><b>{{ this.arrayMulai[1] }} - {{ this.arraySelesai[1] }}</b></h5>
             <hr size="5">
 
             <h6 style="color:#B2B5B8;"><b>Penyelenggara Event</b></h6>
             <div class="row">
                 <div class="col-sm-auto">
-                    <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
+                    <img class="imagePenyelenggara rounded-circle" :src="this.penyelenggara.profilePicture">
                 </div>
                 <div class="col" style="text-align: left;">
-                    <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                    <span style="color:#B2B5B8;"> Michella@gmail.com</span>
+                    <span style="color:#0A3D62;"><b> {{ this.penyelenggara.namaPenyelenggara }}</b></span> <br>
+                    <span style="color:#B2B5B8;"> {{ this.penyelenggara.emailPenyelenggara }}</span>
                 </div>
                 <div class="col-md-1" style="text-align: right;">
                     <h4><i class="fas fa-envelope"></i></h4>
                 </div>
-                <div class="col-md-1" style="text-align: right;">
-                    <h4><i class="fab fa-whatsapp"></i></h4>
-                </div>
+               
             </div>
             <hr size="4">
 
             <h6 style="color:#B2B5B8;"><i class="fas fa-file-alt"> Deskripsi</i></h6>
-            <p> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia magnam velit eos repellat sed nulla, 
-                officiis nostrum? Provident excepturi necessitatibus quidem numquam repudiandae iste error eaque. 
-                Sint sequi amet minus.</p>
+            <p>{{ this.deskripsi }}</p>
             <center>
                 <!-- <a href="#"> Baca Selengkapnya</a> -->
                 <a href="#" data-bs-toggle="modal" data-bs-target="#ketentuanModal">
@@ -70,7 +66,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. In quas iusto dolorum, enim accusamus placeat corporis doloremque quidem fugiat facilis at officia id odio ab ea, excepturi aut numquam minus!
+                            {{ this.deskripsi }}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -122,6 +118,74 @@
 </div>
 </center>
 </template>
+
+<script>
+import firebase from 'firebase';
+export default {
+    data(){
+        return{
+            eventID: '',
+            judul: '',
+            topik: '',
+            gambarEvent: '',
+            mulai: '',
+            arrayMulai: [],
+            selesai: '',
+            arraySelesai: [],
+            idPenyelenggara: '',
+            deskripsi: '',
+            penyelenggara:{
+                namaPenyelenggara: '',
+                emailPenyelenggara: '',
+                profilePicture: ''
+            },
+            tanggal: '',
+        }
+    },
+    mounted(){
+        this.eventID = this.$route.params.eventID;
+        firebase
+            .firestore()
+            .collection('events')
+            .where('eventID', '==', this.eventID)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    this.judul = doc.data().judulEvent;
+                    this.topik = doc.data().topik;
+                    this.gambarEvent = doc.data().gambarEvent;
+                    this.mulai = doc.data().mulai;
+                    this.selesai = doc.data().selesai;
+                    this.idPenyelenggara = doc.data().penyelenggara;
+                    this.deskripsi = doc.data().deskripsi; 
+                })
+
+        this.arrayMulai = this.mulai.split("T");
+        this.arraySelesai = this.selesai.split("T");
+        this.tanggal = new Date(this.arrayMulai[0]);
+        this.tanggal = this.tanggal.toLocaleDateString('id-ID', 
+        {
+            weekday: 'long', // long, short, narrow
+            day: 'numeric', // numeric, 2-digit
+            year: 'numeric', // numeric, 2-digit
+            month: 'long', // numeric, 2-digit, long, short, narrow
+        })
+                firebase
+                .firestore()
+                .collection('users')
+                .where('userID', '==', this.idPenyelenggara)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.penyelenggara.namaPenyelenggara = doc.data().nama_lengkap;
+                        this.penyelenggara.emailPenyelenggara = doc.data().email;
+                        this.penyelenggara.profilePicture = doc.data().profile_picture;
+                    })
+                })
+            }) 
+    }
+}
+</script>
 
 <style scoped>
 .custom-icon-kalender{

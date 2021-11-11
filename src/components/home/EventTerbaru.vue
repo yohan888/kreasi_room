@@ -5,14 +5,21 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         <div class="row">
             <div class="col" v-for="e in event" :key="e.eventID">
-                <div class="card">
-                    <img :src="e.poster" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">{{ e.judul }}</h1>
-                        <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.penyelenggara }}</p>
-                        <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                <router-link :to="{ path: '/detail/'+e.eventID }">
+                    <div class="card">
+                        <template v-if="isLoading">
+                            <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
+                        </template>
+                        <template v-else>
+                        <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.penyelenggara }}</p>
+                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                        </div>
+                        </template>
                     </div>
-                </div>
+                </router-link>
                 <br>
             </div>
             <!-- <div class="col">
@@ -84,10 +91,13 @@ export default ({
     data(){
         return{
             event: [],
+            isLoaded: false,
+            isLoading: false,
         }
     },
     mounted(){
-        
+        this.isLoading = true;
+        this.isLoaded = false;
             firebase
             .firestore()
             .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'asc').limit(6).get()
@@ -102,11 +112,13 @@ export default ({
                     
                 })
             }) 
-
-        console.log(this.event)
+        this.loaded();
     },
     methods:{
-        
+        loaded(){
+            this.isLoaded = true;
+            this.isLoading = false;
+        },
         myFunction() {
           var dots = document.getElementById("dots");
           var moreText = document.getElementById("more");
@@ -128,10 +140,17 @@ export default ({
 
 
 <style scoped>
+    .loading {
+        background: transparent url('https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif') center no-repeat;
+        height: 400px;
+        width: 400px;
+    }
     #more {display: none;}
-    /* .posterEvent{ 
+    .posterEvent{ 
+        width: 100%;
+        height: 250px;
         object-fit: cover;
-    } */
+    }
     .container{ 
         text-align: left; 
     }
