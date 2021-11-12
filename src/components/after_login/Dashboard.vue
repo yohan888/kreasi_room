@@ -37,31 +37,266 @@
                         <form @submit.prevent="searchEvent">
                             <div class="input-container"> 
                                 <i class="fas fa-search icon"></i>
-                                <input class="input-field" id="email" type="text" placeholder="Cari Event" name="event" @change="cari">
+                                <input class="input-field" id="email" type="text" placeholder="Cari Event" name="event">
                             </div>
                         </form>
                     </div>
                     <div class="col-sm-auto ms-auto">
                         <select class="form-select" v-model="sortBy" id="" @change="sort">
-                            <option value="Terbaru">Terbaru</option>
+                            <option value="Terbaru" selected>Terbaru</option>
                             <option value="Terlama">Terlama</option>
+                            <option value="Nama">Nama</option>
                         </select>
                         
                     </div>
                     <div class="col-sm-auto">
-                        <select class="form-select" name="" id="">
-                            <option value="">Filter</option>
-                        </select>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Filter
+                        </button>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Filter Berdasarkan Topik</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form @submit.prevent="filtering">
+                                    <div class="modal-body">
+                                    
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Artificial Intelligence" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Artificial Intelligence
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Data Science" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Data Science
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Ekonomi" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Ekonomi
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Hukum" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Hukum
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Machine Learning" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Machine Learning
+                                            </label>
+                                        </div>
+                                         <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Programing" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Programing
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Psikologi" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Psikologi
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Science" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Science
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Sejarah" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Sejarah
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input v-model="filter" class="form-check-input" type="checkbox" value="Teknologi" id="flexCheckChecked" checked>
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Teknologi
+                                            </label>
+                                        </div>
+                                    </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                                </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         <div>
-            <EventTerbaru/>
+            <div class="container"> 
+            <br><br><br>
+            <h1>Event Terbaru</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
+            <div v-else class="row">
+                <div class="col" v-for="e in event" :key="e.eventID">
+                    <router-link :to="{ path: '/detail/'+e.eventID }">
+                        <div class="card">
+                            <template v-if="isLoading">
+                                <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
+                            </template>
+                            <template v-else>
+                            <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            <div class="card-body">
+                                <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                                <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                            </div>
+                            </template>
+                        </div>
+                    </router-link>
+                    <br>
+                </div>
+                <!-- <div class="col">
+                    <div class="card">
+                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">Judul Acara</h1>
+                            <p class="card-text instansiEvent">Nama Instansi</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">Judul Acara</h1>
+                            <p class="card-text instansiEvent">Nama Instansi</p>
+                        </div>
+                    </div>
+                    <br>
+                </div> -->
+            </div>
+            
+            <span id="dots"></span>
+            <span id="more">
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">Judul Acara</h1>
+                            <p class="card-text instansiEvent">Nama Instansi</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">Judul Acara</h1>
+                            <p class="card-text instansiEvent">Nama Instansi</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">Judul Acara</h1>
+                            <p class="card-text instansiEvent">Nama Instansi</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            </span>
+            <center><button v-on:click="myFunction()" id="myBtn" class='btn btn-primary' style=" color:white; border-radius: 10px;">Read more</button></center>
+            <br><br><br>
+        </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+#more {display: none;}
+    .posterEvent{ 
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    .container{ 
+        text-align: left; 
+    }
+    h1{ 
+        font-size: 18pt;
+        color: #0A3D62; 
+        font-weight: 900;
+    }
+    p{ 
+        font-size: 13.5pt; 
+        color: #B2B5B8; 
+    }
+    a{
+        text-decoration: none;
+    }
+    #more {
+        display: none;
+    }
+    .card{
+        width: 416px;
+        border-radius: 18px;
+    }
+    .judulEvent{ 
+        font-size: 13.5pt;
+        font-weight: 900;
+        color: #0A3D62;
+    }
+    .instansiEvent{ 
+        font-size: 10.5pt;
+        color: rgba(10, 61, 98, 0.6);
+    }
+    @media screen and (max-width: 1400px) {
+        .card{ 
+            width: 356px; 
+        }
+    }
+    @media screen and (max-width: 1200px) {
+        .card{ 
+            width: 285px; 
+        }
+    }
+    @media screen and (max-width: 992px) {
+        .card{ 
+            width: 215px;
+        }
+    }
+    @media screen and (max-width: 768px) {
+        h1, p{ 
+            text-align: center;
+        }
+        .judulEvent, .instansiEvent{ 
+            text-align: left; 
+        }
+        .card{ 
+            width: 335px;
+            display: block; margin-left: auto; margin-right: auto; 
+        }
+    }
+.loading {
+        background: transparent url('https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif') center no-repeat;
+        height: 400px;
+        width: 400px;
+    }
 .search-bar{
     background-color: white;
     padding: 20px;
@@ -124,29 +359,124 @@
 </style>
 
 <script>
-import EventTerbaru from '../home/EventTerbaru.vue'
-// import firebase from 'firebase'
+import firebase from 'firebase'
 export default {
-    components:{
-        EventTerbaru
-    },
     data() {
         return{
-            sortBy: '',
+            event: [],
+            isLoaded: false,
+            isLoading: false,
+            sortBy: 'Terbaru',
+            filter: [],
         }
     },
     mounted(){
-        
+        this.isLoaded = false;
+        this.isLoading = true;
+        firebase
+        .firestore()
+        .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'desc').limit(6).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                this.event.push({
+                    eventID: doc.data().eventID,
+                    judul: doc.data().judulEvent,
+                    instansi: doc.data().instansi,
+                    poster: doc.data().gambarEvent
+                });    
+            })
+        }) 
+        this.loaded();
     },
     methods:{
+        filtering(){
+            if(this.filter.length > 0){
+                for (let index = 0; index < this.filter.length; index++) {
+                    this.event.splice(0);
+                    firebase
+                    .firestore()
+                    .collection('events').where('topik', '==', this.filter[index]).orderBy('createdAt', 'desc').limit(6).get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            this.event.push({
+                                eventID: doc.data().eventID,
+                                judul: doc.data().judulEvent,
+                                instansi: doc.data().instansi,
+                                poster: doc.data().gambarEvent
+                            });    
+                        })
+                    })      
+                }
+            }else{
+                this.sort();
+            }
+        },
         sort(){
             if(this.sortBy == "Terlama"){
-                console.log();
+                this.event.splice(0);
+                firebase
+                .firestore()
+                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'asc').limit(6).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.event.push({
+                            eventID: doc.data().eventID,
+                            judul: doc.data().judulEvent,
+                            instansi: doc.data().instansi,
+                            poster: doc.data().gambarEvent
+                        });    
+                    })
+                }) 
             }else if(this.sortBy == "Terbaru"){
-                console.log();
+                this.event.splice(0);
+                firebase
+                .firestore()
+                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'desc').limit(6).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.event.push({
+                            eventID: doc.data().eventID,
+                            judul: doc.data().judulEvent,
+                            instansi: doc.data().instansi,
+                            poster: doc.data().gambarEvent
+                        });    
+                    })
+                })
             }else if(this.sortBy == "Nama"){
-                console.log();
+                this.event.splice(0);
+                firebase
+                .firestore()
+                .collection('events').where('mode', '==', 'Umum').orderBy('judulEvent', 'desc').limit(6).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.event.push({
+                            eventID: doc.data().eventID,
+                            judul: doc.data().judulEvent,
+                            instansi: doc.data().instansi,
+                            poster: doc.data().gambarEvent
+                        });    
+                    })
+                })
             }
+        },
+        myFunction() {
+            var dots = document.getElementById("dots");
+            var moreText = document.getElementById("more");
+            var btnText = document.getElementById("myBtn");
+
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "Read more"; 
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "Show less"; 
+                moreText.style.display = "inline";
+            }
+        },
+        loaded(){
+            this.isLoaded = true;
+            this.isLoading = false;
         }
     }
 }
