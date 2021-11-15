@@ -95,7 +95,7 @@
     <div v-if="eventSerupa.length == 0"><h1> Belum ada data</h1></div>
     <div v-else class="row custom-row mt-4">
             <div class="col" v-for="e in eventSerupa" :key="e.eventID">
-                <router-link :to="{ path: '/detail/'+e.eventID }">
+                    <router-link :to="{ path: '/detail/'+e.eventID }" @click.native="$router.go()">
                     <div class="card" >
                         <img :src="e.poster" class="card-img-top posterEvent" alt="...">
                         <div class="card-body">
@@ -103,12 +103,11 @@
                             <p class="card-text instansiEvent">{{ e.instansi }}</p>
                         </div>
                     </div>
-                </router-link>
+                </router-link>  
                 <br>
             </div>
 
         </div>
-
 
 </div>
 </center>
