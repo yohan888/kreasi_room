@@ -4,7 +4,7 @@
       <img class="card-img-top" src="../../assets/images/rectangle.png" alt="Card image cap">
       <div class="card-body">
         <center>
-        <div class="row d-flex align-items-end" style="text-align: left;">
+        <div class="row d-flex align-items-end row2" style="text-align: left;">
           <div class="col" >
             <template v-if="profile_picture == ''">
               <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
@@ -35,9 +35,130 @@
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div v-if="registeredEvent.length !== 0" class="row">
+                <div class="col" v-for="(e) in registeredEvent" :key="e.eventID">
+                    <div class="card">
+                        <template>
+                            <router-link :to="{ path: '/detail/'+e.eventID }">
+                                <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            </router-link>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <router-link :to="{ path: '/detail/'+e.eventID }">
+                                            <h1 class=" judulEvent">{{ e.judul }}</h1>
+                                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                                        </router-link>
+                                    </div>
+
+                                </div>           
+                            </div>
+                        </template>    
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div v-else>
+              <br>
+              <h1>Belum ada data</h1>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <br>
+          
+          <div v-if="savedEvent !== 0" class="row">
+                <div class="col" v-for="(e) in savedEvent" :key="e.eventID">
+                    <div class="card">
+                        <template>
+                            <router-link :to="{ path: '/detail/'+e.eventID }">
+                                <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            </router-link>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <router-link :to="{ path: '/detail/'+e.eventID }">
+                                            <h1 class=" judulEvent">{{ e.judul }}</h1>
+                                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                                        </router-link>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                      <form>
+                                            <label class="custom-checkbox show-password">
+                                                <div v-if="itemsContains(e.eventID)">
+                                                    <input type="checkbox" v-on:click="unsave(e.eventID)" style="display: none" checked>
+                                                    <i class="far fa-bookmark unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-bookmark checked " style="font-size: 2rem"></i>
+                                                </div>
+                                                <div v-else>
+                                                    <input type="checkbox" v-on:click="save(e.eventID)" style="display: none">
+                                                    <i class="far fa-bookmark unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-bookmark checked " style="font-size: 2rem"></i>
+                                                </div>
+                                            </label>
+                                        </form>         
+                                    </div>
+                                </div>           
+                            </div>
+                        </template>    
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div v-else>
+              <h1>Belum ada data</h1>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <br>
+          
+          <div v-if="favoriteEvent !== 0" class="row">
+                <div class="col" v-for="(e) in favoriteEvent" :key="e.eventID">
+                    <div class="card">
+                        <template>
+                            <router-link :to="{ path: '/detail/'+e.eventID }">
+                                <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            </router-link>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <router-link :to="{ path: '/detail/'+e.eventID }">
+                                            <h1 class=" judulEvent">{{ e.judul }}</h1>
+                                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                                        </router-link>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                      <div class="col-sm-auto">
+                                      <form>
+                                            <label class="custom-checkbox show-password">
+                                                <div v-if="itemsContains2(e.eventID)">
+                                                    <input type="checkbox" v-on:click="unfavorite(e.eventID)" style="display: none" checked>
+                                                    <i class="far fa-heart unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-heart checked " style="font-size: 2rem"></i>
+                                                </div>
+                                                <div v-else>
+                                                    <input type="checkbox" v-on:click="favorite(e.eventID)" style="display: none">
+                                                    <i class="far fa-heart unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-heart checked " style="font-size: 2rem"></i>
+                                                </div>
+                                            </label>
+                                        </form>         
+                                    </div>
+                                    </div>
+                                </div>           
+                            </div>
+                        </template>    
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div v-else>
+              <h1>Belum ada data</h1>
+            </div>
+        </div>
       </div>
 
     </div>
@@ -45,12 +166,53 @@
 </template>
 
 <style scoped>
-.card, .card-body{
-  border-radius: 15px;
-}
-.row{
-  width: 75%;
-}
+.custom-checkbox .checked{
+        display: none;
+    }
+    .custom-checkbox input[type="checkbox"]:checked~.checked {
+        display: inline-block;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked~.unchecked {
+        display: none;
+    }
+    .input-container {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .show-password{
+        background-color: transparent;
+        color: #0A3D62;
+        padding: 15px;
+    }
+.posterEvent{ 
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    h1{ 
+        font-size: 18pt;
+        color: #0A3D62; 
+        font-weight: 900;
+    }
+    p{ 
+        font-size: 13.5pt; 
+        color: #B2B5B8; 
+    }
+    a{
+        text-decoration: none;
+    }
+    .card{
+        width: 416px;
+        border-radius: 18px;
+    }
+    .card-body{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
 .btn-custom{
   background-color: transparent;
   color: #0A3D62;
@@ -69,6 +231,9 @@
   border: 2px solid white;
   /* margin-left: 5rem; */
 }
+.row2{
+  width: 75%;
+}
 .card-body{
   text-align: left;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -83,25 +248,38 @@
   border-left: none;
   border-right: none;
 }
-@media screen and (max-width: 768px) {
-    .row{
-      width: 100%;
-    
+
+@media screen and (max-width: 1400px) {
+        .card{ 
+            width: 356px; 
+        }
     }
-    .col, .col-sm-auto{
-      text-align: center;
+    @media screen and (max-width: 1200px) {
+        .card{ 
+            width: 285px; 
+        }
     }
-    .btn-custom{
-      margin-top: 1rem;
+    @media screen and (max-width: 992px) {
+        .card{ 
+            width: 215px;
+        }
     }
-    .card-img-top{
-      height: 150px;
+    @media screen and (max-width: 768px) {
+        h1, p{ 
+            text-align: center;
+        }
+        .judulEvent, .instansiEvent{ 
+            text-align: left; 
+        }
+        .card{ 
+            width: 335px;
+            display: block; margin-left: auto; margin-right: auto; 
+        }
     }
-}
 </style>
 
 <script>
-// import firebase from 'firebase'
+import firebase from 'firebase'
 export default {
     data(){
         return{
@@ -110,35 +288,179 @@ export default {
             namaLengkap: '',
             profile_picture: '',
             isLoginWithGoogle: false,
-            data: null
+            data: null,
+            savedEventID: null,
+            favoriteEventID: null,
+            registeredEventID: null,
+            savedEvent: [],
+            favoriteEvent: [],
+            registeredEvent: [],
+        }
+    },
+    methods:{
+      save(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            this.savedEventID.push(id);
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                savedEvent: fieldValue.arrayUnion(id)
+            })
+            .then(() => {
+              localStorage.setItem('savedEvent', this.savedEventID);
+              window.location.reload();
+            })
+        },
+        unsave(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            for(var i = 0; i < this.savedEventID.length; i++){                       
+                if ( this.savedEventID[i] === id) { 
+                    this.savedEventID.splice(i, 1); 
+                    i--; 
+                }
+            }
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                savedEvent: fieldValue.arrayRemove(id)
+            })
+            .then(() => {
+              localStorage.setItem('savedEvent', this.savedEventID);
+              window.location.reload()
+            })
+        },
+        itemsContains(n) {
+            if(this.savedEventID != null){
+                return this.savedEventID.indexOf(n) > -1
+            }
+        },
+        itemsContains2(n){
+            if(this.favoriteEventID !== null){
+                return this.favoriteEventID.indexOf(n) > -1
+            }
+            
+        },
+        unfavorite(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            for(var i = 0; i < this.favoriteEventID.length; i++){                       
+                if ( this.favoriteEventID[i] === id) { 
+                    this.favoriteEventID.splice(i, 1); 
+                    i--; 
+                }
+            }
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                favoriteEvent: fieldValue.arrayRemove(id)
+            })
+            .then(() => {
+              localStorage.setItem('favoriteEvent', this.favoriteEventID);
+              window.location.reload()
+            })
+        },
+        favorite(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            this.favoriteEventID.push(id);
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                favoriteEvent: fieldValue.arrayUnion(id)
+            })
+            .then(() => {
+              localStorage.setItem('favoriteEvent', this.favoriteEventID);
+              window.location.reload()
+            })
         }
     },
     mounted(){
-      // const user = firebase.auth().currentUser;
-      // console.log(user.providerData[0]);
-      // if(user.providerData[0].providerId == 'google.com'){
-      //   this.isLoginWithGoogle = true;
-      // }
-
       this.namaLengkap = localStorage.getItem('namaLengkap');
       this.profile_picture = localStorage.getItem('profilePicture');
       this.email = localStorage.getItem('email');
-      // firebase.auth().onAuthStateChanged((user) => {
-      //   if (user) {
-      //     this.userID = user.uid;
-      //     this.email = user.email;
-      //     firebase
-      //     .firestore()
-      //     .collection('users').where('userID', '==', this.userID).get().then((querySnapshot) => {
-      //       querySnapshot.forEach((doc) => {
-      //         console.log(doc.id, ' => ', doc.data())
-      //         this.namaLengkap = doc.data().nama_lengkap
-      //         this.profile_picture = doc.data().profile_picture
-      //         this.email = doc.data().email
+      // this.savedEventID = localStorage.getItem('savedEvent').split(',');
+      // this.favoriteEventID = localStorage.getItem('favoriteEvent').split(',');
+
+      firebase
+        .firestore()
+        .collection('users').where('userID', '==', localStorage.getItem("userID")).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => { 
+                this.savedEventID = doc.data().savedEvent; 
+                this.favoriteEventID = doc.data().favoriteEvent; 
+                this.registeredEventID = doc.data().registeredEvent;
+
+                for (let index = 0; index < this.savedEventID.length; index++) {
+                  firebase
+                  .firestore()
+                  .collection('events').where('eventID', '==', this.savedEventID[index]).get()
+                  .then((querySnapshot) => {
+                      querySnapshot.forEach((doc) => {
+                          this.savedEvent.push({
+                              eventID: doc.data().eventID,
+                              judul: doc.data().judulEvent,
+                              instansi: doc.data().instansi,
+                              poster: doc.data().gambarEvent
+                          });    
+                      })
+                  })  
+                }
+                for (let index = 0; index < this.favoriteEventID.length; index++) {
+                  firebase
+                  .firestore()
+                  .collection('events').where('eventID', '==', this.favoriteEventID[index]).get()
+                  .then((querySnapshot) => {
+                      querySnapshot.forEach((doc) => {
+                          this.favoriteEvent.push({
+                              eventID: doc.data().eventID,
+                              judul: doc.data().judulEvent,
+                              instansi: doc.data().instansi,
+                              poster: doc.data().gambarEvent
+                          });    
+                      })
+                  }) 
+                }
+                for (let index = 0; index < this.registeredEventID.length; index++) {
+                  firebase
+                  .firestore()
+                  .collection('events').where('eventID', '==', this.registeredEventID[index]).get()
+                  .then((querySnapshot) => {
+                      querySnapshot.forEach((doc) => {
+                          this.registeredEvent.push({
+                              eventID: doc.data().eventID,
+                              judul: doc.data().judulEvent,
+                              instansi: doc.data().instansi,
+                              poster: doc.data().gambarEvent
+                          });    
+                      })
+                  })  
+                }
+            })
+        }) 
+
+      // firebase
+      //   .firestore()
+      //   .collection('users').where('userID', '==', localStorage.getItem("userID")).get()
+      //   .then((querySnapshot) => {
+      //       querySnapshot.forEach((doc) => { 
+                
+                
       //       })
-      //     })
-      //   }
-      // });
+      //   })
+
+      
+
+      
     }
 }
 </script>

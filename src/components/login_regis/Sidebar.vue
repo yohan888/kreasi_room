@@ -106,6 +106,7 @@ export default {
                     localStorage.setItem('savedEvent', doc.data().savedEvent);
                     localStorage.setItem('joinedEvent', doc.data().joinedEvent);
                     localStorage.setItem('registeredEvent', doc.data().registeredEvent);
+                    localStorage.setItem('favoriteEvent', doc.data().favoriteEvent);
                 })
             }) 
         },

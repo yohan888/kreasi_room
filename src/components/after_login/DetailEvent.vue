@@ -13,8 +13,22 @@
                         <button class="btn btn-lg me-2 btn-tipe">{{ this.topik }}</button>
                     </div>
                     <div class="col d-flex justify-content-end">
-                        <h2 class="fas fa-heart custom-like me-4"></h2>
-                        <h2 class="fas fa-share-alt-square custom-share"></h2>
+                        <form>
+                            <label class="custom-checkbox show-password">
+                                <div v-if="itemsContains(this.eventID)">
+                                    <input type="checkbox" v-on:click="unfavorite(eventID)" style="display: none" checked>
+                                    <i class="far fa-heart unchecked" style="font-size: 2rem"></i>
+                                    <i class="fas fa-heart checked " style="font-size: 2rem"></i>
+                                </div>
+                                <div v-else>
+                                    <input type="checkbox" v-on:click="favorite(eventID)" style="display: none">
+                                    <i class="far fa-heart unchecked" style="font-size: 2rem"></i>
+                                    <i class="fas fa-heart checked " style="font-size: 2rem"></i>
+                                </div>
+                            </label>
+                            <h2 class="fas fa-share-alt-square custom-share"></h2>
+                        </form>   
+                        
                     </div>
                 </div>
                 
@@ -86,7 +100,9 @@
                     </div>
                 </div>
             </center>
-            <button class="btn btn-daftar"> Daftar</button>
+            <router-link :to="{ path: '/join/'+this.eventID }">
+                <button class="btn btn-daftar"> Daftar</button>
+            </router-link>
 
         </div>
     </div><br><br><br>
@@ -118,6 +134,7 @@ import firebase from 'firebase';
 export default {
     data(){
         return{
+            userID: '',
             eventID: '',
             judul: '',
             topik: '',
@@ -134,11 +151,61 @@ export default {
                 profilePicture: ''
             },
             tanggal: '',
-            eventSerupa: []
+            eventSerupa: [],
+            favoriteEvent: null
         }
     },
-
+    methods:{
+        itemsContains(n){
+            if(this.favoriteEvent !== null){
+                return this.favoriteEvent.indexOf(n) > -1
+            }
+            
+        },
+        unfavorite(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            for(var i = 0; i < this.favoriteEvent.length; i++){                       
+                if ( this.favoriteEvent[i] === id) { 
+                    this.favoriteEvent.splice(i, 1); 
+                    i--; 
+                }
+            }
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                favoriteEvent: fieldValue.arrayRemove(id)
+            })
+            localStorage.setItem('favoriteEvent', this.favoriteEvent);
+            console.log("Setelah unsave : ", this.favoriteEvent)
+        },
+        favorite(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            this.favoriteEvent.push(id);
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                favoriteEvent: fieldValue.arrayUnion(id)
+            })
+            localStorage.setItem('savedEvent', this.favoriteEvent);
+            console.log("Setelah save : ", this.favoriteEvent)
+        }
+    },
     mounted(){
+        this.userID = localStorage.getItem("userID");
+        firebase
+        .firestore()
+        .collection('users').where('userID', '==', this.userID).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => { 
+                this.favoriteEvent = doc.data().favoriteEvent; 
+            })
+        }) 
         this.eventID = this.$route.params.eventID;
         firebase
             .firestore()
@@ -200,16 +267,35 @@ export default {
                         }
                         
                     })
-                }) 
+                })
+                 
             }) 
-
-        
-        
     }
 }
 </script>
 
 <style scoped>
+.custom-checkbox .checked{
+        display: none;
+    }
+    .custom-checkbox input[type="checkbox"]:checked~.checked {
+        display: inline-block;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked~.unchecked {
+        display: none;
+    }
+    .input-container {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .show-password{
+        background-color: transparent;
+        color: #0A3D62;
+        padding: 15px;
+    }
 .custom-icon-kalender{
     color: #0A3D62;
 }

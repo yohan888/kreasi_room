@@ -17,11 +17,11 @@
     <div class="col">
       <div class="row d-flex justify-content-start">
             <div class="" style="width: 60px">
-              <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
+              <img class="imagePenyelenggara rounded-circle" :src="penyelenggara.profilePicture">
             </div>
             <div class="col" style="text-align: left;">
-                <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                <span style="color:#B2B5B8;"> Michella@gmail.com</span>
+                <span style="color:#0A3D62;"><b>{{ this.penyelenggara.namaPenyelenggara }}</b></span> <br>
+                <span style="color:#B2B5B8;">{{ this.penyelenggara.emailPenyelenggara }}</span>
             </div>
             <div class="col-auto ms-auto">
                 <div class="custom-btn">
@@ -32,13 +32,9 @@
 
         <div class="row mt-3">
             <div class="col-auto custom-judulVideo">
-                <h5 style="color:#0A3D62;"><b>Judul Video</b></h5>
-                    <p style="color:#B2B5B8;">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                      Labore dolorem maiores totam repudiandae, 
-                      enim optio illo laboriosam ullam fugit praesentium rem nobis voluptatum rerum ea natus eos laborum esse fuga.    
-                    </p>
-                    <p style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. At amet, 
-                      lectus eget sodales ac. 
+                <h5 style="color:#0A3D62;"><b>{{ this.judul }}</b></h5>
+                    <p style="color:#B2B5B8;">
+                      {{ this.deskripsi }} 
                     </p>
             </div>
         </div>  
@@ -69,88 +65,58 @@
       </div>
     </div>
   </div>
-
+<br>
 </div>
-<!-- <div class="container">
-  <div class="col">
-      <div class="row">
-            <div class="col-sm-auto">
-              <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-            </div>
-            <div class="col" style="text-align: left;">
-                <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                <span style="color:#B2B5B8;"> Michella@gmail.com</span>
-            </div>
-            <div class="col-md-9">
-                <div class="custom-btn">
-                    <button class="btn btn-lg me-2 btn-like">Like</button>
-                    <button class="btn btn-lg btn-bagikan">Bagikan</button>
-                </div>
-            </div>
-
-        <div class="row">
-            <div class="col-md-8 custom-judulVideo">
-                <h5>Judul Video</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                      Labore dolorem maiores totam repudiandae, 
-                      enim optio illo laboriosam ullam fugit praesentium rem nobis voluptatum rerum ea natus eos laborum esse fuga.    
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. At amet, 
-                      lectus eget sodales ac. 
-                    </p>
-            </div>
-        </div>  
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-      <div class="col">
-        
-        <div class="card" style="width: 30%;">
-          <div class="card-body">
-              <h5 class="card-title custom-title-card"><b>Pertanyaan</b></h5>
-              <hr>
-              <div class="row">
-                  <div class="col-sm-auto">
-                    <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-                  </div>
-                  <div class="col" style="text-align: left;">
-                    <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                    <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
-                  </div>
-              </div>
-              <div class="row" style="margin-top:10%;">
-                  <div class="col-sm-auto">
-                    <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-                  </div>
-                  <div class="col" style="text-align: left;">
-                    <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                    <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
-                  </div>
-              </div>
-              <div class="row" style="margin-top:10%;">
-                  <div class="col-sm-auto">
-                      <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
-                  </div>
-                  <div class="col" style="text-align: left;">
-                      <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                      <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
-                  </div>
-              </div>
-              <div class="col" style="margin-top:30%"><hr>
-                <div class="form">
-                  <input type="text" name="normal_input" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan">
-                </div>
-              </div>
-          </div>
-        </div>
-      </div>
-  </div>-->
-
-
-
 </template>
+
+<script>
+import firebase from 'firebase';
+
+export default {
+  data(){
+    return{
+            eventID: '',
+            judul: '',
+            idPenyelenggara: '',
+            deskripsi: '',
+            penyelenggara:{
+                namaPenyelenggara: '',
+                emailPenyelenggara: '',
+                profilePicture: ''
+            },
+            tanggal: '',
+            eventSerupa: []
+        }
+    },
+  mounted(){
+    this.eventID = this.$route.params.eventID;
+        firebase
+            .firestore()
+            .collection('events')
+            .where('eventID', '==', this.eventID)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    this.judul = doc.data().judulEvent;
+                    this.idPenyelenggara = doc.data().penyelenggara;
+                    this.deskripsi = doc.data().deskripsi; 
+                })
+                firebase
+                .firestore()
+                .collection('users')
+                .where('userID', '==', this.idPenyelenggara)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.penyelenggara.namaPenyelenggara = doc.data().nama_lengkap;
+                        this.penyelenggara.emailPenyelenggara = doc.data().email;
+                        this.penyelenggara.profilePicture = doc.data().profile_picture;
+                    })
+                }) 
+            }) 
+  }
+}
+</script>
 
 <style scoped>
 

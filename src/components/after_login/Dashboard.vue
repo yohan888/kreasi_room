@@ -146,21 +146,44 @@
             <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
             <div v-else class="row">
                 <div class="col" v-for="(e) in event" :key="e.eventID">
-                    <router-link :to="{ path: '/detail/'+e.eventID }">
-                        <div class="card">
-                            <template v-if="isLoading">
-                                <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
-                            </template>
-                            <template v-else>
-                            <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                    <div class="card">
+                        <template v-if="isLoading">
+                            <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
+                        </template>
+
+                        <template v-else>
+                            <router-link :to="{ path: '/detail/'+e.eventID }">
+                                <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            </router-link>
                             <div class="card-body">
-                                <h1 class="card-text judulEvent">{{ e.judul }}</h1>
-                                <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
-                                <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <router-link :to="{ path: '/detail/'+e.eventID }">
+                                            <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                                        </router-link>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <form>
+                                            <label class="custom-checkbox show-password">
+                                                <div v-if="itemsContains(e.eventID)">
+                                                    <input type="checkbox" v-on:click="unsave(e.eventID)" style="display: none" checked>
+                                                    <i class="far fa-bookmark unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-bookmark checked " style="font-size: 2rem"></i>
+                                                </div>
+                                                <div v-else>
+                                                    <input type="checkbox" v-on:click="save(e.eventID)" style="display: none">
+                                                    <i class="far fa-bookmark unchecked" style="font-size: 2rem"></i>
+                                                    <i class="fas fa-bookmark checked " style="font-size: 2rem"></i>
+                                                </div>
+                                            </label>
+                                        </form>                                            
+                                    </div>
+                                </div>           
                             </div>
-                            </template>
-                        </div>
-                    </router-link>
+                        </template>    
+                    </div>
                     <br>
                 </div>
             </div>
@@ -172,7 +195,28 @@
 </template>
 
 <style scoped>
-#more {display: none;}
+    .custom-checkbox .checked{
+        display: none;
+    }
+    .custom-checkbox input[type="checkbox"]:checked~.checked {
+        display: inline-block;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked~.unchecked {
+        display: none;
+    }
+    .input-container {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .show-password{
+        background-color: transparent;
+        color: #0A3D62;
+        padding: 15px;
+    }
+    #more {display: none;}
     .posterEvent{ 
         width: 100%;
         height: 250px;
@@ -312,11 +356,24 @@ export default {
             isLoading: false,
             sortBy: 'Terbaru',
             filter: [],
+            userID: localStorage.getItem("userID"),
+            savedEvent: null,
         }
     },
     mounted(){
         this.isLoaded = false;
         this.isLoading = true;
+        // this.savedEvent = localStorage.getItem("savedEvent").split(',');
+
+        firebase
+        .firestore()
+        .collection('users').where('userID', '==', this.userID).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => { 
+                this.savedEvent = doc.data().savedEvent; 
+            })
+        }) 
+
         firebase
         .firestore()
         .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'desc').limit(6).get()
@@ -330,9 +387,49 @@ export default {
                 });    
             })
         }) 
+
+
         this.loaded();
     },
     methods:{
+        save(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            this.savedEvent.push(id);
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                savedEvent: fieldValue.arrayUnion(id)
+            })
+            localStorage.setItem('savedEvent', this.savedEvent);
+            console.log("Setelah save : ", this.savedEvent)
+        },
+        unsave(id){
+            const fieldValue = firebase.firestore.FieldValue;
+            var docID = localStorage.getItem("docID");
+            for(var i = 0; i < this.savedEvent.length; i++){                       
+                if ( this.savedEvent[i] === id) { 
+                    this.savedEvent.splice(i, 1); 
+                    i--; 
+                }
+            }
+            firebase
+            .firestore()
+            .collection("users")
+            .doc(docID)
+            .update({
+                savedEvent: fieldValue.arrayRemove(id)
+            })
+            localStorage.setItem('savedEvent', this.savedEvent);
+            console.log("Setelah unsave : ", this.savedEvent)
+        },
+        itemsContains(n) {
+            if(this.savedEvent != null){
+                return this.savedEvent.indexOf(n) > -1
+            }
+        },
         filtering(){
             if(this.filter.length > 0){
                 for (let index = 0; index < this.filter.length; index++) {
