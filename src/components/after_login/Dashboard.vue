@@ -21,6 +21,7 @@
                     <p class="lead isi">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. At amet, lectus eget sodales ac. Pellentesque nam faucibus elementum sed elementum, nunc nec.
                     </p>
+                    <br><br><br>
                 </div>
                 <div class="col-md-auto">
                 </div>
@@ -140,11 +141,11 @@
         <div>
             <div class="container"> 
             <br><br><br>
-            <h1>Event Terbaru</h1>
+            <h1>Event</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
             <div v-else class="row">
-                <div class="col" v-for="e in event" :key="e.eventID">
+                <div class="col" v-for="(e) in event" :key="e.eventID">
                     <router-link :to="{ path: '/detail/'+e.eventID }">
                         <div class="card">
                             <template v-if="isLoading">
@@ -162,65 +163,8 @@
                     </router-link>
                     <br>
                 </div>
-                <!-- <div class="col">
-                    <div class="card">
-                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">Judul Acara</h1>
-                            <p class="card-text instansiEvent">Nama Instansi</p>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">Judul Acara</h1>
-                            <p class="card-text instansiEvent">Nama Instansi</p>
-                        </div>
-                    </div>
-                    <br>
-                </div> -->
             </div>
-            
-            <span id="dots"></span>
-            <span id="more">
-
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">Judul Acara</h1>
-                            <p class="card-text instansiEvent">Nama Instansi</p>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">Judul Acara</h1>
-                            <p class="card-text instansiEvent">Nama Instansi</p>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">Judul Acara</h1>
-                            <p class="card-text instansiEvent">Nama Instansi</p>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-            </div>
-            </span>
-            <center><button v-on:click="myFunction()" id="myBtn" class='btn btn-primary' style=" color:white; border-radius: 10px;">Read more</button></center>
+           
             <br><br><br>
         </div>
         </div>
@@ -316,7 +260,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     /* height: 100%; */
-    height: 40vh;
+    height: auto;
     /* width: 100%; */
 }
 
@@ -349,7 +293,7 @@
 }
 @media screen and (max-width: 768px) {
     .jumbotron{
-        height: 100vh;
+        height: auto;
     }
     .carousel1 {
         height: 250px;
@@ -457,21 +401,6 @@ export default {
                         });    
                     })
                 })
-            }
-        },
-        myFunction() {
-            var dots = document.getElementById("dots");
-            var moreText = document.getElementById("more");
-            var btnText = document.getElementById("myBtn");
-
-            if (dots.style.display === "none") {
-                dots.style.display = "inline";
-                btnText.innerHTML = "Read more"; 
-                moreText.style.display = "none";
-            } else {
-                dots.style.display = "none";
-                btnText.innerHTML = "Show less"; 
-                moreText.style.display = "inline";
             }
         },
         loaded(){

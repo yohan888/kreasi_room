@@ -92,37 +92,21 @@
     </div><br><br><br>
 
     <h4 class="col custom-event"><b>Event Serupa</b></h4>
-    <div class="row custom-row mt-4">
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
+    <div v-if="eventSerupa.length == 0"><h1> Belum ada data</h1></div>
+    <div v-else class="row custom-row mt-4">
+            <div class="col" v-for="e in eventSerupa" :key="e.eventID">
+                <router-link :to="{ path: '/detail/'+e.eventID }">
+                    <div class="card" >
+                        <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                        <div class="card-body">
+                            <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                            <p class="card-text instansiEvent">{{ e.instansi }}</p>
+                        </div>
                     </div>
-                </div>
+                </router-link>
                 <br>
             </div>
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
-                </div>
-                <br>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
-                </div>
-                <br>
-            </div>
+
         </div>
 
 
@@ -151,8 +135,10 @@ export default {
                 profilePicture: ''
             },
             tanggal: '',
+            eventSerupa: []
         }
     },
+
     mounted(){
         this.eventID = this.$route.params.eventID;
         firebase
@@ -171,16 +157,15 @@ export default {
                     this.deskripsi = doc.data().deskripsi; 
                 })
 
-        this.arrayMulai = this.mulai.split("T");
-        this.arraySelesai = this.selesai.split("T");
-        this.tanggal = new Date(this.arrayMulai[0]);
-        this.tanggal = this.tanggal.toLocaleDateString('id-ID', 
-        {
-            weekday: 'long', // long, short, narrow
-            day: 'numeric', // numeric, 2-digit
-            year: 'numeric', // numeric, 2-digit
-            month: 'long', // numeric, 2-digit, long, short, narrow
-        })
+                this.arrayMulai = this.mulai.split("T");
+                this.arraySelesai = this.selesai.split("T");
+                this.tanggal = new Date(this.arrayMulai[0]);
+                this.tanggal = this.tanggal.toLocaleDateString('id-ID', {
+                    weekday: 'long', // long, short, narrow
+                    day: 'numeric', // numeric, 2-digit
+                    year: 'numeric', // numeric, 2-digit
+                    month: 'long', // numeric, 2-digit, long, short, narrow
+                })
                 firebase
                 .firestore()
                 .collection('users')
@@ -193,7 +178,34 @@ export default {
                         this.penyelenggara.profilePicture = doc.data().profile_picture;
                     })
                 })
+
+                firebase
+                .firestore()
+                .collection('events')
+                // .where('eventID', '!=', this.eventID)
+                .where('mode', '==', 'Umum')
+                .where('topik', '==', this.topik)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        if(this.eventID == doc.data().eventID){
+                            console.log("serupa");
+                        }else{
+                            
+                            this.eventSerupa.push({
+                                eventID: doc.data().eventID,
+                                judul: doc.data().judulEvent,
+                                instansi: doc.data().instansi,
+                                poster: doc.data().gambarEvent
+                            }); 
+                        }
+                        
+                    })
+                }) 
             }) 
+
+        
+        
     }
 }
 </script>

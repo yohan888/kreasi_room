@@ -3,82 +3,51 @@
         <br><br><br>
         <h1>Event Terbaru</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div class="row">
-            <div class="col" v-for="e in event" :key="e.eventID">
-                <router-link :to="{ path: '/detail/'+e.eventID }">
-                    <div class="card">
-                        <template v-if="isLoading">
-                            <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
-                        </template>
-                        <template v-else>
-                        <img :src="e.poster" class="card-img-top posterEvent" alt="...">
-                        <div class="card-body">
-                            <h1 class="card-text judulEvent">{{ e.judul }}</h1>
-                            <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
-                            <p v-else class="card-text instansiEvent">Tidak ada data</p>
+        <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
+            <div v-else class="row">
+                <div class="col" v-for="(e, index) in event" :key="e.eventID">
+                    <router-link v-if="index < 3" :to="{ path: '/detail/'+e.eventID }">
+                        <div class="card">
+                            <template v-if="isLoading">
+                                <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
+                            </template>
+                            <template v-else>
+                            <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            <div class="card-body">
+                                <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                                <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                            </div>
+                            </template>
                         </div>
-                        </template>
-                    </div>
-                </router-link>
-                <br>
-            </div>
-            <!-- <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
+                    </router-link>
+                    <br>
                 </div>
-                <br>
             </div>
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
-                </div>
-                <br>
-            </div> -->
-        </div>
 
         <span id="dots"></span>
         <span id="more">
 
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
+        <div v-if="event.length > 3" class="row">
+                <div class="col" v-for="(e) in event.slice(3)" :key="e.eventID">
+                    <router-link :to="{ path: '/detail/'+e.eventID }">
+                        <div class="card">
+                            <template v-if="isLoading">
+                                <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
+                            </template>
+                            <template v-else>
+                            <img :src="e.poster" class="card-img-top posterEvent" alt="...">
+                            <div class="card-body">
+                                <h1 class="card-text judulEvent">{{ e.judul }}</h1>
+                                <p v-if="e.penyelenggara !== ''" class="card-text instansiEvent">{{ e.instansi }}</p>
+                                <p v-else class="card-text instansiEvent">Tidak ada data</p>
+                            </div>
+                            </template>
+                        </div>
+                    </router-link>
+                    <br>
                 </div>
-                <br>
             </div>
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
-                </div>
-                <br>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <img src="../../assets/images/img-eventterbaru.png" class="card-img-top posterEvent" alt="...">
-                    <div class="card-body">
-                        <h1 class="card-text judulEvent">Judul Acara</h1>
-                        <p class="card-text instansiEvent">Nama Instansi</p>
-                    </div>
-                </div>
-                <br>
-            </div>
-        </div>
         </span>
         <center><button v-on:click="myFunction()" id="myBtn" class='btn btn-primary' style=" color:white; border-radius: 10px;">Read more</button></center>
         <br><br><br>
