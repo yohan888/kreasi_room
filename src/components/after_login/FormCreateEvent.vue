@@ -16,6 +16,10 @@
                     <label for="judulEvent" class="form-label">Judul Event</label>
                     <input type="text" class="form-control" id="judulEvent" v-model="form.judulEvent" required>
                 </div>
+                <div class="mb-3">
+                    <label for="videoEvent" class="form-label">Video Event</label>
+                    <input type="text" class="form-control" id="videoEvent" v-model="form.videoEvent" required>
+                </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="penyelenggara" class="form-label">Instansi</label>
@@ -23,7 +27,7 @@
                     </div>
                     <div class="col">
                        <label for="tipe" class="form-label">Topik</label>
-                        <select name="tipe" id="tipe" class="form-select" v-model="form.topik" required>
+                        <select name="tipe" id="tipe" class="form-select" v-model="form.topik">
                             <option value="Artificial Intelligence">Artificial Intelligence</option>
                             <option value="Data Science">Data Science</option>
                             <option value="Ekonomi">Ekonomi</option>
@@ -118,6 +122,7 @@ export default {
             form:{
                 eventID: '',
                 judulEvent: '',
+                videoEvent: '',
                 idPenyelenggara: '',
                 penyelenggara: '',
                 topik: '',
@@ -127,7 +132,6 @@ export default {
                 gambarEvent: '',
                 deskripsi: '',
                 mode: '',
-                video: '',
                 instansi: '',
             }
         }
@@ -149,6 +153,14 @@ export default {
             const btnLoding = document.querySelector(".btn-loading"); 
             btnLoding.classList.toggle("d-none");
             btnKirim.classList.toggle("d-none");
+
+            var videoID = '';
+            if(this.form.videoEvent.includes('https://www.youtube.com/watch?v=')){
+                videoID = this.form.videoEvent.replace('https://www.youtube.com/watch?v=', '');
+            }else if(this.form.videoEvent.includes('https://youtu.be/')){
+                videoID = this.form.videoEvent.replace('https://youtu.be/', '');
+            }
+
             firebase
             .firestore()
             .collection("events")
@@ -156,6 +168,7 @@ export default {
                 eventID: this.form.eventID,
                 userID: localStorage.getItem('userID'),
                 judulEvent: this.form.judulEvent,
+                videoEvent: videoID,
                 penyelenggara: this.form.idPenyelenggara,
                 topik: this.form.topik,
                 lokasi: this.form.lokasi,
@@ -164,7 +177,6 @@ export default {
                 gambarEvent: this.form.gambarEvent,
                 deskripsi: this.form.deskripsi,
                 mode: this.form.mode,
-                video: this.form.video,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 instansi: this.form.instansi
             })

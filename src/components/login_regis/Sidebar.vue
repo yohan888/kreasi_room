@@ -6,15 +6,21 @@
         </div>
         <h4 class="text-white mt-4" style="text-align: left; font-weight: bold">Mulai gratis dan dapatkan lebih banyak event</h4>
         <template v-if="routeName === 'Login'">
-            <button class="btn btn-light btn-custom mt-4" v-on:click="loginWithGoogle" style="color: #0A3D62">
-                <i class="fab fa-google"></i>&emsp;
-                Masuk dengan Google
+            <button class="btn btn-light btn-custom mt-4 btn-kirim" v-on:click="loginWithGoogle" style="color: #0A3D62">
+                <i class="fab fa-google"></i>&emsp;Masuk dengan Google
+            </button>
+            <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
             </button>
         </template>
         <template v-else-if="routeName === 'Register'">
-            <button class="btn btn-light btn-custom mt-4" v-on:click="registerWithGoogle" style="color: #0A3D62">
-                <i class="fab fa-google"></i>&emsp;
-                Daftar dengan Google
+            <button class="btn btn-light btn-custom mt-4 btn-kirim" v-on:click="registerWithGoogle" style="color: #0A3D62">
+                <i class="fab fa-google"></i>&emsp;Daftar dengan Google
+            </button>
+            <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
             </button>
         </template>
     </div>
@@ -39,26 +45,65 @@ export default {
     },
     methods:{
         loginWithGoogle(){
+            const btnKirim = document.querySelector(".btn-kirim");
+            const btnLoding = document.querySelector(".btn-loading"); 
+            btnLoding.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+
+            
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(() => {
+                    let listEmail = [];
                     firebase
                     .firestore()
                     .collection("users")
-                    .where('email', '==', firebase.auth().currentUser.email)
                     .get()
                     .then((querySnapshot) => {
-                        if(querySnapshot.doc == null){
+                        querySnapshot.forEach((doc) => { 
+                            listEmail.push(doc.data().email);
+                            
+                        })
+                        if(listEmail.includes(firebase.auth().currentUser.email)){
+                            this.createUserSession(firebase.auth().currentUser.uid);
+                        } else{
                             this.createUserAfterRegister();
                         }
+                        btnLoding.classList.toggle("d-none");
+                        btnKirim.classList.toggle("d-none");
                     })
-                    // this.createUserSession(firebase.auth().currentUser.uid);
+
+                    
+                    // if(listEmail.includes(firebase.auth().currentUser.email)){
+                    //     this.createUserSession(firebase.auth().currentUser.uid);
+                    // } else{
+                    //     this.createUserAfterRegister();
+                    // }
+                    // btnLoding.classList.toggle("d-none");
+                    // btnKirim.classList.toggle("d-none");
                     // this.$router.push({ name: 'Home', query: { redirect: '/' } });
                     // this.isLoginWithGoogle = true;
                 })
                 .catch((err) => {
                     console.log(err)
                 })
+                // .finally(() => {
+                //     // if(listEmail.includes('mariowijaya31@gmail.com')){
+                //     //     // this.createUserSession(firebase.auth().currentUser.uid);
+                //     //     console.log("ada");
+                //     // }else{
+                //     //     console.log("tidak " + firebase.auth().currentUser.email);
+                //     //     console.log(listEmail);
+                //     //     console.log(listEmail.includes('mariowijaya31@gmail.com'));
+                //     //     // this.createUserAfterRegister();
+                //     // }
+                //     btnLoding.classList.toggle("d-none");
+                //     btnKirim.classList.toggle("d-none");
+                // })
+
+            
+
+            
         },
 
         registerWithGoogle(){
@@ -126,6 +171,7 @@ export default {
                     localStorage.setItem('favoriteEvent', doc.data().favoriteEvent);
                 })
             }) 
+ 
             this.$router.push({ name: 'Home', query: { redirect: '/' } });
         },
     }

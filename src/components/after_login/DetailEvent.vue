@@ -100,10 +100,14 @@
                     </div>
                 </div>
             </center>
-            <router-link :to="{ path: '/join/'+this.eventID }">
-                <button class="btn btn-daftar"> Daftar</button>
-            </router-link>
-
+            <div v-if="dateNow > mulai && dateNow < selesai">
+                <router-link :to="{ path: '/join/'+this.eventID }">
+                    <button class="btn btn-daftar"> Daftar</button>
+                </router-link>
+            </div>
+            <div v-else>
+                <button class="btn btn-daftar" disabled> Daftar</button>
+            </div>
         </div>
     </div><br><br><br>
 
@@ -134,6 +138,7 @@ import firebase from 'firebase';
 export default {
     data(){
         return{
+            dateNow: '',
             userID: '',
             eventID: '',
             judul: '',
@@ -196,7 +201,10 @@ export default {
             console.log("Setelah save : ", this.favoriteEvent)
         }
     },
-    mounted(){
+    beforeMount(){
+        var today = new Date();
+        this.dateNow = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'T'+today.getHours()+":"+today.getMinutes();
+        console.log(this.dateNow);
         this.userID = localStorage.getItem("userID");
         firebase
         .firestore()

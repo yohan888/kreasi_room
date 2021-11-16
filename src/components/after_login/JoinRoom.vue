@@ -2,13 +2,16 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col">
-      <video id='my-video' class='video-js custom-video' controls preload='auto' width='100%' height='90%' poster='MY_VIDEO_POSTER.jpg' data-setup='{}'>
-        <source src='https://drive.google.com/uc?export=download&id=1w_FITkEoRrGmaA9sgTCXQ6joOZIUcWuq' type='video/mp4'>
-        <source src='https://drive.google.com/uc?export=download&id=1w_FITkEoRrGmaA9sgTCXQ6joOZIUcWuq' type='video/webm'>
+      <!-- <video v-if="video.length > 0" id='my-video' class='video-js custom-video' controls preload='auto' width='100%' height='90%' poster='MY_VIDEO_POSTER.jpg' data-setup='{}'>
+        <source :src="video" type='video/mp4'>
+        <source :src="video" type='video/webm'>
         <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that
           <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
         </p>
-      </video> 
+      </video>  -->
+       <iframe v-if="video.length > 0" class='video-js custom-video mb-3' width='100%' height='600px' :src="'https://www.youtube.com/embed/'+video">
+      
+      </iframe> 
     </div>
   </div>
 
@@ -79,6 +82,7 @@ export default {
     return{
       eventID: '',
       judul: '',
+      video: '',
       idPenyelenggara: '',
       deskripsi: '',
       penyelenggara:{
@@ -107,7 +111,7 @@ export default {
       this.showMessage = "";
     }
   },
-  mounted(){
+  beforeMount(){
     this.eventID = this.$route.params.eventID;
     let viewMessage = this;
     const itemsRef = firebase.database().ref("messages");
@@ -158,6 +162,8 @@ export default {
         this.judul = doc.data().judulEvent;
         this.idPenyelenggara = doc.data().penyelenggara;
         this.deskripsi = doc.data().deskripsi; 
+        this.video = doc.data().videoEvent;
+        console.log(this.video);
       })
       firebase
       .firestore()
