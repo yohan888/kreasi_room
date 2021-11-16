@@ -78,7 +78,7 @@
                 
                 <div class="mb-3">
                     <label for="deskripsi" class="form-label" >Deskripsi Event</label>
-                    <textarea class="form-control" v-model="form.deskripsi" type="text" name="deskripsi" id="deskripsi" required></textarea>
+                    <textarea class="form-control" v-model="form.deskripsi" type="text" name="deskripsi" id="deskripsi" required ></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="mode" class="form-label" >Siapa yang akan melihat  postinganmu?</label>

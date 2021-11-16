@@ -62,8 +62,12 @@
            
               <div class="col" style="margin-top:30%"><hr>
                 <div class="form">
-                  <input type="text" v-model="showMessage" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan">
-                  <button class="btn btn-primary" @click="sendMessage">Send</button>
+                  <form @submit.prevent="sendMessage">
+                    <textarea type="text" v-model="showMessage" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan. Tekan Ctrl + Enter untuk baris baru" @keydown.enter="handleEnter" required></textarea>
+                    <div class="d-flex justify-content-end">
+                    <button class="mt-1 btn btn-primary " type="submit">Send</button>
+                    </div>
+                  </form>
                 </div>
               </div>
         </div>
@@ -95,6 +99,15 @@ export default {
     }
   },
   methods:{
+    handleEnter (e) {
+            if (e.ctrlKey){
+                let caret = e.target.selectionStart;
+                e.target.setRangeText("\n", caret, caret, "end");
+                this.form.deskripsi = e.target.value;
+            }else{
+              this.sendMessage();
+            }
+        },
     sendMessage(){
       const message = {
         eventID: this.eventID,
@@ -109,6 +122,12 @@ export default {
       .push(message);
 
       this.showMessage = "";
+    },
+
+    newLine(event){
+      if(event.keyCode == 13 && event.shiftKey){
+        console.log("shift+enter");
+      }
     }
   },
   beforeMount(){
