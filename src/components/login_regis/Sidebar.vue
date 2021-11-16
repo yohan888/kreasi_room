@@ -42,9 +42,19 @@ export default {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(() => {
-                    this.createUserSession(firebase.auth().currentUser.uid);
-                    this.$router.push({ name: 'Home', query: { redirect: '/' } });
-                    this.isLoginWithGoogle = true;
+                    firebase
+                    .firestore()
+                    .collection("users")
+                    .where('email', '==', firebase.auth().currentUser.email)
+                    .get()
+                    .then((querySnapshot) => {
+                        if(querySnapshot.doc == null){
+                            this.createUserAfterRegister();
+                        }
+                    })
+                    // this.createUserSession(firebase.auth().currentUser.uid);
+                    // this.$router.push({ name: 'Home', query: { redirect: '/' } });
+                    // this.isLoginWithGoogle = true;
                 })
                 .catch((err) => {
                     console.log(err)
@@ -66,6 +76,8 @@ export default {
                 })
         },
         createUserAfterRegister(){
+            this.isLoginWithGoogle = true;
+            const fieldValue = firebase.firestore.FieldValue;
             if(this.isLoginWithGoogle){
                 const user = firebase.auth().currentUser;
                 console.log(user.providerData[0]);
@@ -83,8 +95,13 @@ export default {
                     tanggal_lahir: '',
                     role: 'USER',
                     profile_picture: user.providerData[0].photoURL,
+                    favoriteEvent: fieldValue.arrayUnion(""),
+                    savedEvent: fieldValue.arrayUnion(""),
+                    joinedEvent: fieldValue.arrayUnion(""),
+                    registeredEvent: fieldValue.arrayUnion(""),
                 })
             }
+            this.createUserSession(firebase.auth().currentUser.uid);
         },
         createUserSession(uid){
             firebase
@@ -109,6 +126,7 @@ export default {
                     localStorage.setItem('favoriteEvent', doc.data().favoriteEvent);
                 })
             }) 
+            this.$router.push({ name: 'Home', query: { redirect: '/' } });
         },
     }
 }
