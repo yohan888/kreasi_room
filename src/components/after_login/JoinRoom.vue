@@ -152,25 +152,6 @@ export default {
       viewMessage.messages = messages;
     });
 
-    // let viewMessage = this;
-    // const itemsRef = firebase.database().ref("messages");
-    // itemsRef.once('value', function(snapshot) {
-    //   let messages = [];
-    //   snapshot.forEach(function(childSnapshot) {
-    //     var data = childSnapshot.val();
-    //     if(data.eventID == viewMessage.eventID){
-    //       messages.push({ 
-    //         id: childSnapshot.key,
-    //         eventID: data.eventID, 
-    //         namaLengkap: data.nama_lengkap, 
-    //         profilePicture: data.profile_picture,
-    //         text: data.text
-    //       });
-    //     }
-    //   });
-    //   viewMessage.messages = messages;
-    // });
-
     firebase
     .firestore()
     .collection('events')
@@ -197,26 +178,14 @@ export default {
         })
       }) 
     })
-         
-    // let viewMessage = this;
-    // const itemsRef = firebase.database().ref("messages");
-    // itemsRef.on("value", snapshot => {
-    //   let data = snapshot.val();
-    //   let messages = [];
-    //   Object.keys(data).forEach(key => {
-    //     if (data[key].eventID == "XdMBpflAJ5aQXjyM2fWn") {
-    //       messages.push({
-    //         eventID: data[key].eventID,
-    //         namaLengkap: data[key].nama_lengkap,
-    //         profilePicture: data[key].profile_picture,
-    //         text: data[key].text
-    //       });
-    //     }
-
-    //   });
-    //   viewMessage.messages = messages;
-    //   console.log(viewMessage.messages);
-    // });
+    const fieldValue = firebase.firestore.FieldValue;
+    firebase
+    .firestore()
+    .collection('users')
+    .doc(localStorage.getItem('docID'))
+    .update({
+      joinedEvent: fieldValue.arrayUnion(this.eventID)
+    });
 
     
   }

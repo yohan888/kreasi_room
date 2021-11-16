@@ -36,8 +36,9 @@
       </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <div v-if="registeredEvent.length !== 0" class="row">
-                <div class="col" v-for="(e) in registeredEvent" :key="e.eventID">
+            <br>
+          <div v-if="joinedEvent.length !== 0" class="row">
+                <div class="col" v-for="(e) in joinedEvent" :key="e.eventID">
                     <div class="card">
                         <template>
                             <router-link :to="{ path: '/detail/'+e.eventID }">
@@ -291,10 +292,10 @@ export default {
             data: null,
             savedEventID: null,
             favoriteEventID: null,
-            registeredEventID: null,
+            joinedEventID: null,
             savedEvent: [],
             favoriteEvent: [],
-            registeredEvent: [],
+            joinedEvent: [],
         }
     },
     methods:{
@@ -343,8 +344,7 @@ export default {
         itemsContains2(n){
             if(this.favoriteEventID !== null){
                 return this.favoriteEventID.indexOf(n) > -1
-            }
-            
+            } 
         },
         unfavorite(id){
             const fieldValue = firebase.firestore.FieldValue;
@@ -398,7 +398,7 @@ export default {
             querySnapshot.forEach((doc) => { 
                 this.savedEventID = doc.data().savedEvent; 
                 this.favoriteEventID = doc.data().favoriteEvent; 
-                this.registeredEventID = doc.data().registeredEvent;
+                this.joinedEventID = doc.data().joinedEvent;
 
                 for (let index = 0; index < this.savedEventID.length; index++) {
                   firebase
@@ -430,13 +430,13 @@ export default {
                       })
                   }) 
                 }
-                for (let index = 0; index < this.registeredEventID.length; index++) {
+                for (let index = 0; index < this.joinedEventID.length; index++) {
                   firebase
                   .firestore()
-                  .collection('events').where('eventID', '==', this.registeredEventID[index]).get()
+                  .collection('events').where('eventID', '==', this.joinedEventID[index]).get()
                   .then((querySnapshot) => {
                       querySnapshot.forEach((doc) => {
-                          this.registeredEvent.push({
+                          this.joinedEvent.push({
                               eventID: doc.data().eventID,
                               judul: doc.data().judulEvent,
                               instansi: doc.data().instansi,
