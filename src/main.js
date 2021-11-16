@@ -17,6 +17,7 @@ Vue.config.productionTip = false
 const firebaseConfig = {
   apiKey: "AIzaSyAe-_mp4c0PVXUxP-e15LMyKrcmSOMIiiI",
   authDomain: "webeventkreasix.firebaseapp.com",
+  databaseURL: "https://webeventkreasix-default-rtdb.firebaseio.com",
   projectId: "webeventkreasix",
   storageBucket: "webeventkreasix.appspot.com",
   messagingSenderId: "318959559721",

@@ -45,20 +45,22 @@
       <div class="card" style="width: auto;">
         <div class="card-body">
             <h5 class="card-title custom-title-card"><b>Pertanyaan</b></h5>
-            <hr size="4">
-              <div class="row d-flex align-items-center">
-                  <div class="" style="width: 60px">
-                    <img class="imagePenyelenggara rounded-circle" src="../../assets/images/img-tentang.jpg">
+            <hr size="3">
+
+              <div v-for="message  in messages" :key="message.id" class="row custom-row mb-4">
+                  <div class="col-sm-auto">
+                    <img class="imagePenyelenggara rounded-circle" :src="message.profilePicture">
                   </div>
-                  <div class="col" style="text-align: left;">
-                    <span style="color:#0A3D62;"><b> Michella</b></span> <br>
-                    <span style="color:#B2B5B8;">Lorem ipsum dolor sit amet, consectetur adipiscing eli ? </span>
+                  <div class="col-sm" style="text-align: left;">
+                    <span style="color:#0A3D62;"><b>{{ message.namaLengkap }}</b></span> <br>
+                    <span style="color:#B2B5B8;">{{ message.text }}</span>
                   </div>
               </div>
            
               <div class="col" style="margin-top:30%"><hr>
                 <div class="form">
-                  <input type="text" name="normal_input" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan">
+                  <input type="text" v-model="showMessage" id="normal_input" class="form-control" placeholder="Ketik Pertanyaan">
+                  <button class="btn btn-primary" @click="sendMessage">Send</button>
                 </div>
               </div>
         </div>
@@ -75,51 +77,132 @@ import firebase from 'firebase';
 export default {
   data(){
     return{
-            eventID: '',
-            judul: '',
-            idPenyelenggara: '',
-            deskripsi: '',
-            penyelenggara:{
-                namaPenyelenggara: '',
-                emailPenyelenggara: '',
-                profilePicture: ''
-            },
-            tanggal: '',
-            eventSerupa: []
-        }
-    },
+      eventID: '',
+      judul: '',
+      idPenyelenggara: '',
+      deskripsi: '',
+      penyelenggara:{
+        namaPenyelenggara: '',
+        emailPenyelenggara: '',
+        profilePicture: ''
+      },
+      showMessage: "",
+      messages: [],
+    }
+  },
+  methods:{
+    sendMessage(){
+      const message = {
+        eventID: this.eventID,
+        text: this.showMessage,
+        nama_lengkap: localStorage.getItem('namaLengkap'),
+        profile_picture: localStorage.getItem('profilePicture')
+      }
+
+      firebase
+      .database()
+      .ref("messages")
+      .push(message);
+
+      this.showMessage = "";
+    }
+  },
   mounted(){
     this.eventID = this.$route.params.eventID;
-        firebase
-            .firestore()
-            .collection('events')
-            .where('eventID', '==', this.eventID)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    this.judul = doc.data().judulEvent;
-                    this.idPenyelenggara = doc.data().penyelenggara;
-                    this.deskripsi = doc.data().deskripsi; 
-                })
-                firebase
-                .firestore()
-                .collection('users')
-                .where('userID', '==', this.idPenyelenggara)
-                .get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        this.penyelenggara.namaPenyelenggara = doc.data().nama_lengkap;
-                        this.penyelenggara.emailPenyelenggara = doc.data().email;
-                        this.penyelenggara.profilePicture = doc.data().profile_picture;
-                    })
-                }) 
-            }) 
+    let viewMessage = this;
+    const itemsRef = firebase.database().ref("messages");
+    itemsRef.on("value", snapshot => {
+      let data = snapshot.val();
+      let messages = [];
+      Object.keys(data).forEach(key => {
+        if (data[key].eventID == viewMessage.eventID) {
+          messages.push({
+            id: key,
+            eventID: data[key].eventID,
+            namaLengkap: data[key].nama_lengkap,
+            profilePicture: data[key].profile_picture,
+            text: data[key].text
+          });
+        }
+
+      });
+      viewMessage.messages = messages;
+    });
+
+    // let viewMessage = this;
+    // const itemsRef = firebase.database().ref("messages");
+    // itemsRef.once('value', function(snapshot) {
+    //   let messages = [];
+    //   snapshot.forEach(function(childSnapshot) {
+    //     var data = childSnapshot.val();
+    //     if(data.eventID == viewMessage.eventID){
+    //       messages.push({ 
+    //         id: childSnapshot.key,
+    //         eventID: data.eventID, 
+    //         namaLengkap: data.nama_lengkap, 
+    //         profilePicture: data.profile_picture,
+    //         text: data.text
+    //       });
+    //     }
+    //   });
+    //   viewMessage.messages = messages;
+    // });
+
+    firebase
+    .firestore()
+    .collection('events')
+    .where('eventID', '==', this.eventID)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        this.judul = doc.data().judulEvent;
+        this.idPenyelenggara = doc.data().penyelenggara;
+        this.deskripsi = doc.data().deskripsi; 
+      })
+      firebase
+      .firestore()
+      .collection('users')
+      .where('userID', '==', this.idPenyelenggara)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.penyelenggara.namaPenyelenggara = doc.data().nama_lengkap;
+          this.penyelenggara.emailPenyelenggara = doc.data().email;
+          this.penyelenggara.profilePicture = doc.data().profile_picture;
+        })
+      }) 
+    })
+         
+    // let viewMessage = this;
+    // const itemsRef = firebase.database().ref("messages");
+    // itemsRef.on("value", snapshot => {
+    //   let data = snapshot.val();
+    //   let messages = [];
+    //   Object.keys(data).forEach(key => {
+    //     if (data[key].eventID == "XdMBpflAJ5aQXjyM2fWn") {
+    //       messages.push({
+    //         eventID: data[key].eventID,
+    //         namaLengkap: data[key].nama_lengkap,
+    //         profilePicture: data[key].profile_picture,
+    //         text: data[key].text
+    //       });
+    //     }
+
+    //   });
+    //   viewMessage.messages = messages;
+    //   console.log(viewMessage.messages);
+    // });
+
+    
   }
 }
 </script>
 
 <style scoped>
-
+.custom-row{
+  flex-wrap: nowrap;
+  max-width: inherit;
+}
 .custom-video {
   border-radius: 10px;
   background-color: #0a3d62;
