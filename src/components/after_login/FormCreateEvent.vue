@@ -18,8 +18,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="videoEvent" class="form-label">Video Event</label>
-                    <GDriveSelector/>
-                    <!-- <input type="text" class="form-control" id="videoEvent" @change="createEvent" v-model="form.videoEvent" required> -->
+                    &ensp;<button style="color: white" class="btn btn-success" v-on:click.prevent="showPickerDialog()"><i style="color: white" class="fas fa-plus"></i> Tambah</button>
+                    <input v-if="form.videoEvent.length > 0" type="text" class="form-control mt-2" id="videoEvent" v-model="form.videoEvent" disabled required>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
@@ -66,12 +66,12 @@
                     <div class="row">
                         <div class="col">
                             <label for="mulaiEvent" class="form-label" >Tanggal dan Waktu Mulai</label>
-                            <input type="datetime-local" v-model="form.mulai" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent" required>
+                            <input type="datetime-local" v-model="form.mulai" @change="proteksi" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent" required>
                             <div id="mulaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                         <div class="col">
                             <label for="selesaiEvent" class="form-label" >Tanggal dan Waktu Selesai</label>
-                            <input type="datetime-local" v-model="form.selesai" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent" required>
+                            <input type="datetime-local" v-model="form.selesai" @change="proteksi" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent" required>
                             <div id="selesaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                     </div>
@@ -111,10 +111,10 @@
 
     </div>
 </template>
-
+<script src="https://apis.google.com/js/platform.js"></script>
 <script>
-// import Swal from 'sweetalert2'
-// import firebase from 'firebase'
+import Swal from 'sweetalert2'
+import firebase from 'firebase'
 export default {
 
     data(){
@@ -135,7 +135,13 @@ export default {
                 deskripsi: '',
                 mode: '',
                 instansi: '',
-            }
+            },
+            developerKey: 'AIzaSyBXwNNJx5aHyGFYC7fMAbkfk74M-HI1U14',
+            clientId: "444129391255-jm01anjc2f5t49i7945cqibpjk1sdk9a.apps.googleusercontent.com",
+            appId: "444129391255",
+            scope:['https://www.googleapis.com/auth/drive.file'],
+            pickerApiLoaded: false,
+            oauthToken: '',
         }
     },
     mounted(){
@@ -146,16 +152,81 @@ export default {
         this.form.idPenyelenggara = localStorage.getItem("userID");
     },
     methods:{
+        proteksi(){
+            const btn = document.querySelector(".btn-kirim");
+            if(this.form.mulai !== '' && this.form.selesai !== ''){
+                if(this.form.mulai > this.form.selesai){
+                    alert("Tanggal selesai tidak boleh lebih kecil");
+                    btn.disabled = true;
+                }else{
+                    btn.disabled = false;
+                }
+            }
+        },
+        loadPicker(){
+           gapi.load('auth', {'callback': this.onAuthApiLoad});
+           gapi.load('picker', {'callback': this.onPickerApiLoad});
+        },
+        onAuthApiLoad(){
+            window.gapi.auth.authorize({
+                'client_id': this.clientId,
+                'scope': this.scope,
+                'immediate': false
+            },this.handleAuthResult);
+            
+        },
+        onPickerApiLoad(){
+            this.pickerApiLoaded = true;
+            this.createPicker();
+            // console.log('SAMPAI SINI');
+        },
+        handleAuthResult(authResult) {
+            console.log(authResult)
+            if (authResult && !authResult.error) {
+                // console.log('sampai dalam if');
+                this.oauthToken = authResult.access_token;
+                this.createPicker();
+                
+            }
+            // console.log('sampai luar if');
+        },
+        createPicker() {
+            if (this.pickerApiLoaded && this.oauthToken) {
+                console.log('sampai dalam if');
+                var view = new google.picker.View(google.picker.ViewId.DOCS);
+                view.setMimeTypes("video/mp4,video/ogg,video/m4v,video/mkv");
+                var picker = new google.picker.PickerBuilder()
+                    .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                    .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                    .setAppId(this.appId.API_KEY)
+                    .setOAuthToken(this.oauthToken)
+                    .addView(view)
+                    .addView(new google.picker.DocsUploadView())
+                    .setDeveloperKey(this.developerKey)
+                    .setCallback(this.pickerCallback)
+                    .build();
+                picker.setVisible(true);
+            }
+        },
+        pickerCallback(data) {
+            if (data.action == google.picker.Action.PICKED) {
+                this.form.videoEvent = data.docs[0].id;
+                // alert('The user selected: ' + this.videoEvent);
+            }
+        },
+        showPickerDialog(){
+            this.loadPicker();
+        },
         onFileChange(e){
             this.newImage = e.target.files[0];
             this.previewPicture = URL.createObjectURL(this.newImage);
         },
         createEvent(){
             
-            // const btnKirim = document.querySelector(".btn-kirim");
-            // const btnLoding = document.querySelector(".btn-loading"); 
-            // btnLoding.classList.toggle("d-none");
-            // btnKirim.classList.toggle("d-none");
+            const btnKirim = document.querySelector(".btn-kirim");
+            const btnLoding = document.querySelector(".btn-loading"); 
+            btnLoding.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
 
             // var videoID = '';
             // if(this.form.videoEvent.includes('https://www.youtube.com/watch?v=')){
@@ -166,67 +237,66 @@ export default {
             //     videoID = this.form.videoEvent.replace('https://www.youtube.com/watch?v=', '').substr(0, 5);
             // }
 
-            // alert(videoID)
 
-            // firebase
-            // .firestore()
-            // .collection("events")
-            // .add({
-            //     eventID: this.form.eventID,
-            //     userID: localStorage.getItem('userID'),
-            //     judulEvent: this.form.judulEvent,
-            //     videoEvent: videoID,
-            //     penyelenggara: this.form.idPenyelenggara,
-            //     topik: this.form.topik,
-            //     lokasi: this.form.lokasi,
-            //     mulai: this.form.mulai,
-            //     selesai: this.form.selesai,
-            //     gambarEvent: this.form.gambarEvent,
-            //     deskripsi: this.form.deskripsi,
-            //     mode: this.form.mode,
-            //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            //     instansi: this.form.instansi,
-            //     jumlahView: 0,
-            //     jumlahLike: 0,
-            //     jumlahDaftar: 0
-            // })
-            // .then((docRef) => {
-            //     if(this.newImage !== null){
-            //         const storageRef =
-            //         firebase
-            //         .storage()
-            //         .ref(docRef.id)
-            //         .put(this.newImage);
+            firebase
+            .firestore()
+            .collection("events")
+            .add({
+                eventID: this.form.eventID,
+                userID: localStorage.getItem('userID'),
+                judulEvent: this.form.judulEvent,
+                videoEvent: this.form.videoEvent,
+                penyelenggara: this.form.idPenyelenggara,
+                topik: this.form.topik,
+                lokasi: this.form.lokasi,
+                mulai: this.form.mulai,
+                selesai: this.form.selesai,
+                gambarEvent: this.form.gambarEvent,
+                deskripsi: this.form.deskripsi,
+                mode: this.form.mode,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                instansi: this.form.instansi,
+                jumlahView: 0,
+                jumlahLike: 0,
+                jumlahDaftar: 0
+            })
+            .then((docRef) => {
+                if(this.newImage !== null){
+                    const storageRef =
+                    firebase
+                    .storage()
+                    .ref(docRef.id)
+                    .put(this.newImage);
                 
-            //         storageRef.on(
-            //             'state_changed', snapshot=>{ 
-            //                 this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
-            //             }, error=>{
-            //                 console.log("Error di : " + error.message)
-            //             }, ()=>{
-            //                 storageRef.snapshot.ref.getDownloadURL()
-            //                 .then((url)=>{
-            //                     firebase
-            //                     .firestore()
-            //                     .collection('events')
-            //                     .doc(docRef.id)
-            //                     .update({
-            //                         eventID: docRef.id,
-            //                         gambarEvent: url,
-            //                     })
+                    storageRef.on(
+                        'state_changed', snapshot=>{ 
+                            this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
+                        }, error=>{
+                            console.log("Error di : " + error.message)
+                        }, ()=>{
+                            storageRef.snapshot.ref.getDownloadURL()
+                            .then((url)=>{
+                                firebase
+                                .firestore()
+                                .collection('events')
+                                .doc(docRef.id)
+                                .update({
+                                    eventID: docRef.id,
+                                    gambarEvent: url,
+                                })
                                 
-            //                     Swal.fire({
-            //                         icon: 'success',
-            //                         title: 'Berhasil Buat Event'
-            //                     })  
-            //                     btnLoding.classList.toggle("d-none");
-            //                     btnKirim.classList.toggle("d-none");
-            //                     this.$router.push({ name: 'Dashboard', query: { redirect: '/dashboard' } });
-            //                 });
-            //             }
-            //         );
-            //     } 
-            // });
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil Buat Event'
+                                })  
+                                btnLoding.classList.toggle("d-none");
+                                btnKirim.classList.toggle("d-none");
+                                this.$router.push({ name: 'Dashboard', query: { redirect: '/dashboard' } });
+                            });
+                        }
+                    );
+                } 
+            });
             
             
         }

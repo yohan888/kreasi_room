@@ -29,7 +29,7 @@ export default {
 <style scoped>
     
     .hero{
-        margin-top: 10vh;
+        margin-top: 1.5rem;
                 width: 80vw;
                 background-image: linear-gradient(rgba(255,255,255), rgba(255,255,255)), 
                     url();

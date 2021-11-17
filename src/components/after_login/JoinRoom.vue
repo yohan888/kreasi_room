@@ -5,11 +5,12 @@
       <!-- <video v-if="video.length > 0" id='my-video' class='video-js custom-video' controls preload='auto' width='100%' height='90%' poster='MY_VIDEO_POSTER.jpg' data-setup='{}'>
         <source :src="video" type='video/mp4'>
         <source :src="video" type='video/webm'>
+        <source :src="video" type='video/ogg'>
         <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that
           <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
         </p>
       </video>  -->
-       <iframe v-if="video.length > 0" class='video-js custom-video mb-3' width='100%' height='600px' :src="'https://www.youtube.com/embed/'+video">
+       <iframe v-if="video.length > 0" class='video-js custom-video mb-3' width='100%' height='600px' :src="video">
       
       </iframe> 
     </div>
@@ -222,7 +223,8 @@ export default {
         this.judul = doc.data().judulEvent;
         this.idPenyelenggara = doc.data().penyelenggara;
         this.deskripsi = doc.data().deskripsi; 
-        this.video = doc.data().videoEvent;
+        // this.video = 'https://drive.google.com/uc?export=download&id='+doc.data().videoEvent;
+        this.video = 'https://drive.google.com/file/d/'+doc.data().videoEvent+'/preview';
         this.jumlahDaftar = doc.data().jumlahDaftar;
         this.jumlahLike = doc.data().jumlahLike;
         console.log(this.video);
