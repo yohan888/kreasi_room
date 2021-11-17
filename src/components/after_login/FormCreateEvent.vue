@@ -18,7 +18,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="videoEvent" class="form-label">Video Event</label>
-                    <input type="text" class="form-control" id="videoEvent" v-model="form.videoEvent" required>
+                    <GDriveSelector/>
+                    <!-- <input type="text" class="form-control" id="videoEvent" @change="createEvent" v-model="form.videoEvent" required> -->
                 </div>
                 <div class="row mb-3">
                     <div class="col">
@@ -112,9 +113,10 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import firebase from 'firebase'
+// import Swal from 'sweetalert2'
+// import firebase from 'firebase'
 export default {
+
     data(){
         return{
             newImage: '',
@@ -149,74 +151,82 @@ export default {
             this.previewPicture = URL.createObjectURL(this.newImage);
         },
         createEvent(){
-            const btnKirim = document.querySelector(".btn-kirim");
-            const btnLoding = document.querySelector(".btn-loading"); 
-            btnLoding.classList.toggle("d-none");
-            btnKirim.classList.toggle("d-none");
+            
+            // const btnKirim = document.querySelector(".btn-kirim");
+            // const btnLoding = document.querySelector(".btn-loading"); 
+            // btnLoding.classList.toggle("d-none");
+            // btnKirim.classList.toggle("d-none");
 
-            var videoID = '';
-            if(this.form.videoEvent.includes('https://www.youtube.com/watch?v=')){
-                videoID = this.form.videoEvent.replace('https://www.youtube.com/watch?v=', '');
-            }else if(this.form.videoEvent.includes('https://youtu.be/')){
-                videoID = this.form.videoEvent.replace('https://youtu.be/', '');
-            }
+            // var videoID = '';
+            // if(this.form.videoEvent.includes('https://www.youtube.com/watch?v=')){
+            //     videoID = this.form.videoEvent.replace('https://www.youtube.com/watch?v=', '');
+            // }else if(this.form.videoEvent.includes('https://youtu.be/')){
+            //     videoID = this.form.videoEvent.replace('https://youtu.be/', '');
+            // }else if(this.form.videoEvent.includes('&ab_channel=')){
+            //     videoID = this.form.videoEvent.replace('https://www.youtube.com/watch?v=', '').substr(0, 5);
+            // }
 
-            firebase
-            .firestore()
-            .collection("events")
-            .add({
-                eventID: this.form.eventID,
-                userID: localStorage.getItem('userID'),
-                judulEvent: this.form.judulEvent,
-                videoEvent: videoID,
-                penyelenggara: this.form.idPenyelenggara,
-                topik: this.form.topik,
-                lokasi: this.form.lokasi,
-                mulai: this.form.mulai,
-                selesai: this.form.selesai,
-                gambarEvent: this.form.gambarEvent,
-                deskripsi: this.form.deskripsi,
-                mode: this.form.mode,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                instansi: this.form.instansi
-            })
-            .then((docRef) => {
-                if(this.newImage !== null){
-                    const storageRef =
-                    firebase
-                    .storage()
-                    .ref(docRef.id)
-                    .put(this.newImage);
+            // alert(videoID)
+
+            // firebase
+            // .firestore()
+            // .collection("events")
+            // .add({
+            //     eventID: this.form.eventID,
+            //     userID: localStorage.getItem('userID'),
+            //     judulEvent: this.form.judulEvent,
+            //     videoEvent: videoID,
+            //     penyelenggara: this.form.idPenyelenggara,
+            //     topik: this.form.topik,
+            //     lokasi: this.form.lokasi,
+            //     mulai: this.form.mulai,
+            //     selesai: this.form.selesai,
+            //     gambarEvent: this.form.gambarEvent,
+            //     deskripsi: this.form.deskripsi,
+            //     mode: this.form.mode,
+            //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            //     instansi: this.form.instansi,
+            //     jumlahView: 0,
+            //     jumlahLike: 0,
+            //     jumlahDaftar: 0
+            // })
+            // .then((docRef) => {
+            //     if(this.newImage !== null){
+            //         const storageRef =
+            //         firebase
+            //         .storage()
+            //         .ref(docRef.id)
+            //         .put(this.newImage);
                 
-                    storageRef.on(
-                        'state_changed', snapshot=>{ 
-                            this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
-                        }, error=>{
-                            console.log("Error di : " + error.message)
-                        }, ()=>{
-                            storageRef.snapshot.ref.getDownloadURL()
-                            .then((url)=>{
-                                firebase
-                                .firestore()
-                                .collection('events')
-                                .doc(docRef.id)
-                                .update({
-                                    eventID: docRef.id,
-                                    gambarEvent: url,
-                                })
+            //         storageRef.on(
+            //             'state_changed', snapshot=>{ 
+            //                 this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100; 
+            //             }, error=>{
+            //                 console.log("Error di : " + error.message)
+            //             }, ()=>{
+            //                 storageRef.snapshot.ref.getDownloadURL()
+            //                 .then((url)=>{
+            //                     firebase
+            //                     .firestore()
+            //                     .collection('events')
+            //                     .doc(docRef.id)
+            //                     .update({
+            //                         eventID: docRef.id,
+            //                         gambarEvent: url,
+            //                     })
                                 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil Buat Event'
-                                })  
-                                btnLoding.classList.toggle("d-none");
-                                btnKirim.classList.toggle("d-none");
-                                this.$router.push({ name: 'Dashboard', query: { redirect: '/dashboard' } });
-                            });
-                        }
-                    );
-                } 
-            });
+            //                     Swal.fire({
+            //                         icon: 'success',
+            //                         title: 'Berhasil Buat Event'
+            //                     })  
+            //                     btnLoding.classList.toggle("d-none");
+            //                     btnKirim.classList.toggle("d-none");
+            //                     this.$router.push({ name: 'Dashboard', query: { redirect: '/dashboard' } });
+            //                 });
+            //             }
+            //         );
+            //     } 
+            // });
             
             
         }

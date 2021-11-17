@@ -28,7 +28,18 @@
             </div>
             <div class="col-auto ms-auto">
                 <div class="custom-btn">
-                    <button class="btn btn-lg me-2 btn-like"><i class="fas fa-thumbs-up"></i> Like</button>
+                    <label class="custom-checkbox like-dislike">
+                        <div v-if="itemsContains(this.eventID)">
+                            <input type="checkbox" id='like' v-on:change="like" style="display: none" checked>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up checked" ><span class="like"> Like</span></i>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down unchecked " ><span class="like"> Dislike</span></i>
+                        </div>  
+                        <div v-else>
+                            <input type="checkbox" id='like' v-on:change="like" style="display: none">
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up checked" ><span class="like"> Like</span></i>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down unchecked " ><span class="like"> Dislike</span></i>
+                        </div>   
+                    </label>
                     <button class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt"></i> Bagikan</button>
                 </div>
             </div>
@@ -87,8 +98,12 @@ export default {
       eventID: '',
       judul: '',
       video: '',
+      isLiked: false,
       idPenyelenggara: '',
       deskripsi: '',
+      jumlahDaftar: 0,
+      jumlahLike: 0,
+      likedEvent: [],
       penyelenggara:{
         namaPenyelenggara: '',
         emailPenyelenggara: '',
@@ -99,6 +114,50 @@ export default {
     }
   },
   methods:{
+    itemsContains(n){
+      if(this.likedEvent !== null){
+        return this.likedEvent.indexOf(n) > -1
+      }
+    },
+    like(){
+      const cb = document.getElementById('like');
+      const fieldValue = firebase.firestore.FieldValue;
+      if(!cb.checked){
+        const increment = firebase.firestore.FieldValue.increment(1);
+        firebase
+        .firestore()
+        .collection('events')
+        .doc(this.eventID)
+        .update({
+          jumlahLike: increment
+        })
+
+        firebase
+        .firestore()
+        .collection('users')
+        .doc(localStorage.getItem('docID'))
+        .update({
+          likedEvent: fieldValue.arrayUnion(this.eventID)
+        })
+      }else{
+        const decrement = firebase.firestore.FieldValue.increment(-1);
+        firebase
+        .firestore()
+        .collection('events')
+        .doc(this.eventID)
+        .update({
+          jumlahLike: decrement
+        });
+
+        firebase
+        .firestore()
+        .collection('users')
+        .doc(localStorage.getItem('docID'))
+        .update({
+          likedEvent: fieldValue.arrayRemove(this.eventID)
+        })
+      }
+    },
     handleEnter (e) {
             if (e.ctrlKey){
                 let caret = e.target.selectionStart;
@@ -132,6 +191,7 @@ export default {
   },
   beforeMount(){
     this.eventID = this.$route.params.eventID;
+    
     let viewMessage = this;
     const itemsRef = firebase.database().ref("messages");
     itemsRef.on("value", snapshot => {
@@ -163,6 +223,8 @@ export default {
         this.idPenyelenggara = doc.data().penyelenggara;
         this.deskripsi = doc.data().deskripsi; 
         this.video = doc.data().videoEvent;
+        this.jumlahDaftar = doc.data().jumlahDaftar;
+        this.jumlahLike = doc.data().jumlahLike;
         console.log(this.video);
       })
       firebase
@@ -176,7 +238,14 @@ export default {
           this.penyelenggara.emailPenyelenggara = doc.data().email;
           this.penyelenggara.profilePicture = doc.data().profile_picture;
         })
-      }) 
+      })
+      firebase
+      .firestore()
+      .collection('events')
+      .doc(this.eventID)
+      .update({
+        jumlahDaftar: parseInt(this.jumlahDaftar) + 1
+      }); 
     })
     const fieldValue = firebase.firestore.FieldValue;
     firebase
@@ -193,6 +262,33 @@ export default {
 </script>
 
 <style scoped>
+    .like{
+      font-family: 'Poppins', sans-serif;
+      
+    }
+    .custom-checkbox .checked{
+        display: none;
+    }
+    .custom-checkbox input[type="checkbox"]:checked~.checked {
+        display: inline-block;
+        
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked~.unchecked {
+        display: none;
+        
+    }
+    .input-container {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .like-dislike{
+        background-color: transparent;
+        color: #0A3D62;
+        padding: 15px;
+    }
 .custom-row{
   flex-wrap: nowrap;
   max-width: inherit;
@@ -215,6 +311,7 @@ export default {
   border-radius: 10px;
   margin: 10px;
   color: #0a3d62;
+  height: 3rem;
 }
 .custom-judulVideo {
   text-align: left;

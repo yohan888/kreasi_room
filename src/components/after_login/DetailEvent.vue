@@ -150,6 +150,7 @@ export default {
             arraySelesai: [],
             idPenyelenggara: '',
             deskripsi: '',
+            jumlahView: 0,
             penyelenggara:{
                 namaPenyelenggara: '',
                 emailPenyelenggara: '',
@@ -204,7 +205,7 @@ export default {
     beforeMount(){
         var today = new Date();
         this.dateNow = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'T'+today.getHours()+":"+today.getMinutes();
-        console.log(this.dateNow);
+        
         this.userID = localStorage.getItem("userID");
         firebase
         .firestore()
@@ -215,6 +216,7 @@ export default {
             })
         }) 
         this.eventID = this.$route.params.eventID;
+        
         firebase
             .firestore()
             .collection('events')
@@ -229,8 +231,16 @@ export default {
                     this.selesai = doc.data().selesai;
                     this.idPenyelenggara = doc.data().penyelenggara;
                     this.deskripsi = doc.data().deskripsi; 
+                    this.jumlahView = doc.data().jumlahView;
+                    console.log(this.dateNow + " - " + this.mulai);
                 })
-
+                firebase
+                .firestore()
+                .collection('events')
+                .doc(this.eventID)
+                .update({
+                    jumlahView: this.jumlahView + 1
+                });
                 this.arrayMulai = this.mulai.split("T");
                 this.arraySelesai = this.selesai.split("T");
                 this.tanggal = new Date(this.arrayMulai[0]);
@@ -252,6 +262,8 @@ export default {
                         this.penyelenggara.profilePicture = doc.data().profile_picture;
                     })
                 })
+
+                
 
                 firebase
                 .firestore()
@@ -283,7 +295,7 @@ export default {
 </script>
 
 <style scoped>
-.custom-checkbox .checked{
+    .custom-checkbox .checked{
         display: none;
     }
     .custom-checkbox input[type="checkbox"]:checked~.checked {
