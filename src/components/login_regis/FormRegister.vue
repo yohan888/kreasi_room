@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import firebase from "firebase";
 import Swal from 'sweetalert2'
 
