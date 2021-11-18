@@ -31,7 +31,7 @@
             </div>
 
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
                 <label style="font-size: 9pt; color: gray" class="form-check-label" for="exampleCheck1">
                     Saya menyetujui 
                     <button type="button" class="syarat_ketentuan" data-bs-toggle="modal" data-bs-target="#exampleModal">

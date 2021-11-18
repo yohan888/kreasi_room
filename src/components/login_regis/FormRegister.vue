@@ -25,7 +25,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" v-model="form.email" required>
+                        <input type="email" class="form-control" id="email" @change="checkEmail" v-model="form.email" required>
                     </div>
                     
                     
@@ -37,7 +37,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="phone" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="phone" v-model="form.telp" required>
+                        <input type="telp" class="form-control" id="phone" v-model="form.telp" @keypress="isNumber($event)" placeholder="081234567890" required>
                     </div>
                     <div class="mb-4">
                         <label for="kota" class="form-label">Kota</label>
@@ -55,7 +55,8 @@
                     <router-link to="/"><button class="btn mt-4" style="background-color: transparent; color: #0A3D62; border: 1px solid #0A3D62">Kembali</button></router-link>
                 </div>
                 <div class="col">
-                    <button type="submit" class="btn mt-4">Daftar</button>
+                    <input v-if="isEmailExist" type="submit" id="btn-submit" class="btn mt-4" value="Daftar" disabled>
+                    <input v-else type="submit" id="btn-submit" class="btn mt-4" value="Daftar">
                 </div>
             </div>
         </form>
@@ -72,8 +73,9 @@ export default {
     data(){
         return{
             userID: '',
-
+            check: '',
             password: '',
+            isEmailExist: false,
             confirmPassword: '',
             form:{
                 email: '',
@@ -89,8 +91,14 @@ export default {
     },
     
     methods: {
-        test(){
-            alert(this.form.jenisKelamin);
+        isNumber(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                return true;
+            }
         },
         showPassword(){
             var x = document.getElementById("password");
@@ -128,6 +136,29 @@ export default {
                     console.log(err.message);
                 }); 
         },
+        checkEmail(){
+            // const btn = document.querySelector(".btn-submit");
+            firebase
+            .firestore()
+            .collection('users')
+            .where('email', '==', this.form.email)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    this.check = doc.id;
+                })
+                if(this.check == ''){
+                    // btn.disabled = false;
+                    this.isEmailExist = false;
+                }else{
+                    alert("Email sudah ada");
+                    this.isEmailExist = true;
+                    this.form.email = '';
+                    this.check = '';
+                }
+                
+            })
+        },
         createUserAfterRegister(){
             const fieldValue = firebase.firestore.FieldValue;
             firebase
@@ -138,8 +169,8 @@ export default {
                     email: this.form.email,
                     nama_lengkap: this.form.namaLengkap,
                     jenis_kelamin: this.form.jenisKelamin,
-                    provinsi: this.form.provinsiUser,
-                    kota: this.form.kotaUser,
+                    provinsi: this.form.provinsi,
+                    kota: this.form.kota,
                     telfon: this.form.telp,
                     tanggal_lahir: this.form.tanggalLahir,
                     role: 'USER',
@@ -147,35 +178,13 @@ export default {
                     savedEvent: fieldValue.arrayUnion(""),
                     joinedEvent: fieldValue.arrayUnion(""),
                     registeredEvent: fieldValue.arrayUnion(""),
+                    likedEvent: fieldValue.arrayUnion(""),
                 })
         },
-        setProvinsi(provinsi){
-            this.provinsi = provinsi;
-        },
-        setKota(kota){
-            this.kota = kota;
-        },
-        setNamaProvinsi(provinsi){
-            this.form.provinsiUser = provinsi;
-        },
-        getKota(){
-            axios
-            .get('https://dev.farizdotid.com/api/daerahindonesia/provinsi/'+this.idProvinsi)
-            .then((response) => this.setNamaProvinsi(response.data.nama))
-            .catch((error) => console.log(error));
-
-            axios
-            .get('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + this.idProvinsi)
-            .then((response) => this.setKota(response.data.kota_kabupaten))
-            .catch((error) => console.log(error));
-        }
         
     },
     mounted(){
-        axios
-        .get('https://dev.farizdotid.com/api/daerahindonesia/provinsi')
-        .then((response) => this.setProvinsi(response.data.provinsi))
-        .catch((error) => console.log(error));
+
 
         
     },

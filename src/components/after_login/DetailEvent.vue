@@ -158,12 +158,12 @@ export default {
             },
             tanggal: '',
             eventSerupa: [],
-            favoriteEvent: null
+            favoriteEvent: []
         }
     },
     methods:{
         itemsContains(n){
-            if(this.favoriteEvent !== null){
+            if(this.favoriteEvent.length > 1){
                 return this.favoriteEvent.indexOf(n) > -1
             }
             
@@ -212,7 +212,7 @@ export default {
         .collection('users').where('userID', '==', this.userID).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => { 
-                this.favoriteEvent = doc.data().favoriteEvent; 
+                this.favoriteEvent.push(doc.data().favoriteEvent); 
             })
         }) 
         this.eventID = this.$route.params.eventID;
