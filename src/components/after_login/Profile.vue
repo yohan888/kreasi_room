@@ -37,7 +37,10 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <br>
-          <div v-if="joinedEvent.length !== 0" class="row">
+            <div v-if="isLoading">
+            <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
+          </div>
+          <div v-else-if="joinedEvent.length !== 0" class="row">
                 <div class="col" v-for="(e) in joinedEvent" :key="e.eventID">
                     <div class="card">
                         <template>
@@ -68,8 +71,10 @@
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
           <br>
-          
-          <div v-if="savedEvent !== 0" class="row">
+          <div v-if="isLoading">
+            <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
+          </div>
+          <div v-else-if="savedEvent !== 0" class="row">
                 <div class="col" v-for="(e) in savedEvent" :key="e.eventID">
                     <div class="card">
                         <template>
@@ -114,8 +119,10 @@
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
           <br>
-          
-          <div v-if="favoriteEvent !== 0" class="row">
+          <div v-if="isLoading">
+            <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
+          </div>
+          <div v-else-if="favoriteEvent !== 0" class="row">
                 <div class="col" v-for="(e) in favoriteEvent" :key="e.eventID">
                     <div class="card">
                         <template>
@@ -284,6 +291,7 @@ import firebase from 'firebase'
 export default {
     data(){
         return{
+            isLoading: true,
             userID: '',
             email: '',
             namaLengkap: '',
@@ -443,6 +451,7 @@ export default {
                               poster: doc.data().gambarEvent
                           });    
                       })
+                      this.isLoading = false;
                   })  
                 }
             })
@@ -459,7 +468,7 @@ export default {
       //   })
 
       
-
+        
       
     }
 }

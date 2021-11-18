@@ -1,6 +1,12 @@
 <template>
 <center>
 <div class="container" >
+    <div v-if="isLoading">
+        <img class="mt-5" src="../../assets/images/loading.gif" alt="">
+    </div>
+    <div v-else>
+
+    
     <h4 class="col custom-detailevent mt-3"><b> Detail Event "{{ this.judul }}"</b></h4>
     <div class="row d-flex justify-content-center">
         <div class="col-md mt-3">
@@ -43,19 +49,19 @@
                 <i class="fas fa-calendar-alt custom-icon-kalender"></i>
             </div>
             <div class="col">
-                <h6 class="mt-1 custom-tanggal">Tanggal</h6>
+                <h6 class="mt-1 custom-tanggal">Tanggal Mulai</h6>
             </div>
             </div>
-                <h5 style="color:#0A3D62;"><b>{{ this.tanggal }}</b></h5>
+                <h5 style="color:#0A3D62;"><b>{{ this.tanggal }} - {{ this.arrayMulai[1] }}</b></h5>
             <div class="row">
                 <div class="col">
-                <i class="fas fa-clock custom-icon-waktu"></i>
+                <i class="fas fa-calendar-alt custom-icon-kalender"></i>
             </div>
             <div class="col">
-                <h6 class="mt-1 custom-waktu">Waktu</h6>
+                <h6 class="mt-1 custom-waktu">Tanggal Selesai</h6>
             </div>
             </div>
-                <h5 style="color:#0A3D62;"><b>{{ this.arrayMulai[1] }} - {{ this.arraySelesai[1] }}</b></h5>
+                <h5 style="color:#0A3D62;"><b>{{ this.tanggalSelesai }} - {{ this.arraySelesai[1] }}</b></h5>
             <hr size="5">
 
             <h6 style="color:#B2B5B8;"><b>Penyelenggara Event</b></h6>
@@ -128,7 +134,7 @@
             </div>
 
         </div>
-
+</div>
 </div>
 </center>
 </template>
@@ -138,6 +144,7 @@ import firebase from 'firebase';
 export default {
     data(){
         return{
+            isLoading: true,
             dateNow: '',
             userID: '',
             eventID: '',
@@ -157,6 +164,7 @@ export default {
                 profilePicture: ''
             },
             tanggal: '',
+            tanggalSelesai: '',
             eventSerupa: [],
             favoriteEvent: []
         }
@@ -205,7 +213,7 @@ export default {
     beforeMount(){
         var today = new Date();
         this.dateNow = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+'T'+today.getHours()+":"+today.getMinutes();
-        
+        console.log("Skrg" + this.dateNow);
         this.userID = localStorage.getItem("userID");
         firebase
         .firestore()
@@ -244,12 +252,22 @@ export default {
                 this.arrayMulai = this.mulai.split("T");
                 this.arraySelesai = this.selesai.split("T");
                 this.tanggal = new Date(this.arrayMulai[0]);
+                this.tanggalSelesai = new Date(this.arraySelesai[0]);
+
                 this.tanggal = this.tanggal.toLocaleDateString('id-ID', {
                     weekday: 'long', // long, short, narrow
                     day: 'numeric', // numeric, 2-digit
                     year: 'numeric', // numeric, 2-digit
                     month: 'long', // numeric, 2-digit, long, short, narrow
                 })
+
+                this.tanggalSelesai = this.tanggalSelesai.toLocaleDateString('id-ID', {
+                    weekday: 'long', // long, short, narrow
+                    day: 'numeric', // numeric, 2-digit
+                    year: 'numeric', // numeric, 2-digit
+                    month: 'long', // numeric, 2-digit, long, short, narrow
+                })
+
                 firebase
                 .firestore()
                 .collection('users')
@@ -287,6 +305,7 @@ export default {
                         }
                         
                     })
+                    this.isLoading = false;
                 })
                  
             }) 

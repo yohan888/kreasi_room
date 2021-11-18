@@ -3,7 +3,7 @@
         <div id="page-content-wrapper">
             <div class="container">
                 <div v-if="isLoading">
-                    <img class="mt-5" src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" alt="">
+                    <img class="mt-5" src="../../assets/images/loading.gif" alt="">
                 </div>
                 <div v-if="listEvent.length > 0 && !isLoading">
                     <div v-for="e in listEvent" :key="e.id" class="mt-3 row custom-card">
@@ -18,7 +18,7 @@
                                 <router-link :to="{ path: '/join/' + e.eventID }">Lihat Detail</router-link>
                             </div>
                             <div class="col d-flex align-items-center justify-content-end">
-                                <button class="btn btn-danger" v-on:click="deleteEvent(e.eventID)" ><i class="far fa-trash-alt"></i> Delete</button>
+                                <button class="btn btn-danger" v-on:click="deleteEvent(e.id)" ><i class="far fa-trash-alt"></i> Delete</button>
                             </div>
                         <!-- </div> -->
                     </div>
@@ -33,7 +33,7 @@
 
 <script>
 import firebase from 'firebase'
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
 export default {
     data(){
         return{
@@ -43,18 +43,22 @@ export default {
     },
     methods:{
         deleteEvent(id){
+            console.log(id)
             firebase
             .firestore()
             .collection('events')
             .doc(id)
-            .delete();
+            .delete()
+            .then(() => {
+                location.reload();
+            });
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil Hapus Event'
-            }) 
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Berhasil Hapus Event'
+            // }) 
 
-            location.reload();
+            
         }
     },
     beforeMount() {

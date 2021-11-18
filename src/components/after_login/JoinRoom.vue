@@ -1,5 +1,9 @@
 <template>
 <div class="container mt-5">
+  <div v-if="isLoading">
+    <img class="mt-5" src="../../assets/images/loading.gif" alt="">
+  </div>
+  <div v-else>
   <div class="row">
     <div class="col">
       <!-- <video v-if="video.length > 0" id='my-video' class='video-js custom-video' controls preload='auto' width='100%' height='90%' poster='MY_VIDEO_POSTER.jpg' data-setup='{}'>
@@ -89,6 +93,7 @@
   </div>
 <br>
 </div>
+</div>
 </template>
 
 <script>
@@ -97,6 +102,7 @@ import firebase from 'firebase';
 export default {
   data(){
     return{
+      isLoading: true,
       eventID: '',
       judul: '',
       video: '',
@@ -258,6 +264,8 @@ export default {
     .doc(localStorage.getItem('docID'))
     .update({
       joinedEvent: fieldValue.arrayUnion(this.eventID)
+    }).then(() => {
+      this.isLoading = false;
     });
 
     

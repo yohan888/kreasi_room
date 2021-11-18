@@ -1,6 +1,9 @@
 <template>
     <div class="container">
-        <div v-if="eventDibuat.length > 0">
+        <div v-if="isLoading">
+            <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
+          </div>
+        <div v-else-if="eventDibuat.length > 0">
             <div v-for="e in eventDibuat" :key="e.eventID" class="mt-3 row custom-card">
                 <!-- <div class=""> -->
                     <div class="col-auto" style="height: 10rem">
@@ -33,6 +36,7 @@ export default {
     data(){
         return{
             eventDibuat: [],
+            isLoading: true,
         }
     },
     methods:{
@@ -69,6 +73,7 @@ export default {
                     jumlahView: doc.data().jumlahView
                 })
             })
+            this.isLoading = false;
         })
     }
 }

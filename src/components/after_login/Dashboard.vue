@@ -35,12 +35,12 @@
     <div class="container search-bar">
                 <div class="row">
                     <div class="col-md-auto">
-                        <form @submit.prevent="searchEvent">
+                        <!-- <form> -->
                             <div class="input-container"> 
                                 <i class="fas fa-search icon"></i>
-                                <input class="input-field" id="email" type="text" placeholder="Cari Event" name="event">
+                                <input class="input-field" id="email" type="text" placeholder="Cari Event" v-model="search" @change="searchEvent">
                             </div>
-                        </form>
+                        <!-- </form> -->
                     </div>
                     <div class="col-sm-auto ms-auto">
                         <select class="form-select" v-model="sortBy" id="" @change="sort">
@@ -143,12 +143,16 @@
             <br><br><br>
             <h1>Event</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
+            <div v-if="isLoading">
+                <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
+            </div>
+            <div v-else-if="event.length == 0">
+                <h1> Belum ada data</h1>
+            </div>
             <div v-else class="row">
                 <div class="col" v-for="(e) in event" :key="e.eventID">
                     <div class="card">
                         <template v-if="isLoading">
-                            <img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif" alt="">
                         </template>
 
                         <template v-else>
@@ -352,8 +356,8 @@ export default {
     data() {
         return{
             event: [],
-            isLoaded: false,
-            isLoading: false,
+            search: '',
+            isLoading: true,
             sortBy: 'Terbaru',
             filter: [],
             userID: localStorage.getItem("userID"),
@@ -361,9 +365,7 @@ export default {
         }
     },
     mounted(){
-        this.isLoaded = false;
         this.isLoading = true;
-        // this.savedEvent = localStorage.getItem("savedEvent").split(',');
 
         firebase
         .firestore()
@@ -386,10 +388,9 @@ export default {
                     poster: doc.data().gambarEvent
                 });    
             })
+            this.isLoading = false;
         }) 
-
-
-        this.loaded();
+        
     },
     methods:{
         save(id){
@@ -457,7 +458,7 @@ export default {
                 this.event.splice(0);
                 firebase
                 .firestore()
-                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'asc').limit(6).get()
+                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'asc').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         this.event.push({
@@ -472,7 +473,7 @@ export default {
                 this.event.splice(0);
                 firebase
                 .firestore()
-                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'desc').limit(6).get()
+                .collection('events').where('mode', '==', 'Umum').orderBy('createdAt', 'desc').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         this.event.push({
@@ -487,7 +488,7 @@ export default {
                 this.event.splice(0);
                 firebase
                 .firestore()
-                .collection('events').where('mode', '==', 'Umum').orderBy('judulEvent', 'desc').limit(6).get()
+                .collection('events').where('mode', '==', 'Umum').orderBy('judulEvent', 'asc').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         this.event.push({
@@ -495,7 +496,7 @@ export default {
                             judul: doc.data().judulEvent,
                             instansi: doc.data().instansi,
                             poster: doc.data().gambarEvent
-                        });    
+                        }); 
                     })
                 })
             }
@@ -503,6 +504,26 @@ export default {
         loaded(){
             this.isLoaded = true;
             this.isLoading = false;
+        },
+        searchEvent(){
+            this.event.splice(0);
+            if(this.search !== ''){
+                firebase
+                .firestore()
+                .collection('events').where('mode', '==', 'Umum').where('judulEvent', '==', this.search).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        this.event.push({
+                            eventID: doc.data().eventID,
+                            judul: doc.data().judulEvent,
+                            instansi: doc.data().instansi,
+                            poster: doc.data().gambarEvent
+                        }); 
+                    })
+                })
+            }else{
+                this.sort();
+            }
         }
     }
 }
