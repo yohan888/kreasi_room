@@ -17,8 +17,8 @@
       <div class="col profileUser">
         <input class="form-control namaUser" v-model="data.namaLengkap" disabled>
         <div class="profileAction">
-          <label for="image" class="custom-label changeProfile">Ubah Profile</label>
-          <input type="file" id="image" accept=".jpg, .png" @change="onFileChange" class="ubahProfile"> | <a href="#" class="hapusProfile">Hapus profile</a>
+          <label for="image" class="custom-label changeProfile">Ubah Foto Profile</label>
+          <input type="file" id="image" accept=".jpg, .png" @change="onFileChange" class="ubahProfile">
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@
                 <div class="col mt-4">
                   <router-link class="btn btn-default" to="/profile"><b>Back</b></router-link>
                   <!-- <button type="reset" >Back</button> -->
-                  <button type="submit" class="btn btn-simpan">Simpan</button>
+                  <input type="submit" class="btn btn-primary btn-kirim" value="Simpan">
                   <button class="btn btn-primary btn-loading d-none" type="button" disabled>
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   Loading...
@@ -133,112 +133,6 @@
 
 <br><br><br><br><br><br><br>
 
-<!-- <div class="row mt-3">
-  <div class="col-xs-12 col-sm-9">
-    <form class="form-horizontal" @submit.prevent="updateProfile">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2>Edit Profile</h2>
-        </div>
-        <div class="panel-body">
-          <div class="preview col-sm-10">
-              <img class="profile-avatar" v-if="previewPicture" :src="previewPicture">
-              <img v-else :src="data.profilePicture" class="img-circle profile-avatar" alt="User avatar">
-            </div>
-            <input type="file" id="image" accept=".jpg, .png" @change="onFileChange"> 
-            
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" v-model="data.email" disabled>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-2 control-label">jenis Kelamin</label>
-            <div class="col-sm-10">
-              <select class="form-control" v-model="data.jenisKelamin">
-                <option selected="" value="Pria">Pria</option>
-                <option value="Wanita">Wanita</option>
-              </select>
-            </div>
-          </div>
-
-           <div class="form-group">
-            <label class="col-sm-2 control-label">Provinsi</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" v-model="data.provinsi" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Kota</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" v-model="data.kota" required>
-            </div>
-          </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Nama Lengkap</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" v-model="data.namaLengkap" required>
-            </div>
-          </div>
-        </div>
-
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Tanggal Lahir</label>
-            <div class="col-sm-10">
-              <input type="date" v-model="data.tanggalLahir"  class="form-control" required>
-            </div>
-          </div>
-        </div>
-
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Telpon</label>
-            <div class="col-sm-10">
-              <input type="text" v-model="data.telpon" class="form-control" required>
-            </div>
-          </div>  
-
-          <div class="form-group">
-            <div class="col-sm-10 mt-3 col-sm-offset-2">
-              <router-link class="btn btn-default" to="/profile">Back</router-link>
-              <button type="submit" class="btn btn-primary btn-kirim">  Edit</button>
-              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Loading...
-            </button>
-            <button v-if="isLoginWithEmail" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              Reset Password
-            </button>
-            </div>
-          </div>
-    </form>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                   <form @submit.prevent="forgetPassword">
-                  <div class="modal-body">
-
-                      <input type="email" class="form-control form-control-lg" v-model="resetEmail">
-
-
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-  </div>
-</div>
-<br> -->
 </form>
 </div>
 </template>
@@ -633,7 +527,40 @@ export default {
               });
             }
         );
-      }  
+      }else{
+        firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(this.docID)
+                  .update({
+                      email: this.data.email,
+                      jenis_kelamin: this.data.jenisKelamin,
+                      kota: this.data.kota,
+                      provinsi: this.data.provinsi,
+                      nama_lengkap: this.data.namaLengkap,
+                      profile_picture: this.data.profilePicture,
+                      tanggal_lahir: this.data.tanggalLahir,
+                      telfon: this.data.telpon
+                  })
+                  
+                      localStorage.setItem("docID", this.docID);
+                      localStorage.setItem("namaLengkap", this.data.namaLengkap);
+                      localStorage.setItem("profilePicture", this.data.profilePicture);
+                      localStorage.setItem("email", this.data.email);
+                      localStorage.setItem("jenisKelamin", this.data.jenisKelamin);
+                      localStorage.setItem("provinsi", this.data.provinsi);
+                      localStorage.setItem("kota", this.data.kota);
+                      localStorage.setItem("tanggalLahir", this.data.tanggalLahir);
+                      localStorage.setItem("telpon", this.data.telpon);
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Berhasil Edit'
+                })  
+                  btnLoding.classList.toggle("d-none");
+                  btnKirim.classList.toggle("d-none");
+                  this.$router.push({ name: 'Profile', query: { redirect: '/profile' } });
+      } 
     }, 
     forgetPassword(){
       firebase
