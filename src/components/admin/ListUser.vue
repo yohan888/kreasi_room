@@ -11,7 +11,10 @@
                             <td>Role</td>
                         </tr>
                     </thead>
-                    <tbody v-if="user.length > 0">
+                    <div v-if="isLoading">
+                        <img class="mt-5" src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" alt="">
+                    </div>
+                    <tbody v-if="user.length > 0 && !isLoading">
                         <tr v-for="(u,index) in user" :key="u.id">
                             <td>{{ index+1 }}</td>
                             <td>{{ u.nama }}</td>
@@ -41,9 +44,11 @@ export default {
         return{
             user: [],
             role: '',
+            isLoading: false,
         }
     },
     beforeMount() {
+        this.isLoading = true;
         firebase
         .firestore()
         .collection('users')
@@ -56,6 +61,8 @@ export default {
                     email: doc.data().email,
                     role: doc.data().role
                 })
+
+                this.isLoading = false;
             })
         })
     },

@@ -2,7 +2,10 @@
     <div id="wrapper" class="wrapper-content"> 
         <div id="page-content-wrapper">
             <div class="container">
-                <div v-if="listEvent.length > 0">
+                <div v-if="isLoading">
+                    <img class="mt-5" src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" alt="">
+                </div>
+                <div v-if="listEvent.length > 0 && !isLoading">
                     <div v-for="e in listEvent" :key="e.id" class="mt-3 row custom-card">
                         <!-- <div class=""> -->
                             <div class="col-auto" style="height: 10rem">
@@ -20,7 +23,7 @@
                         <!-- </div> -->
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if="listEvent.length == 0 && !isLoading">
                     <h1 class="mt-3">Belum ada data</h1>
                 </div>
             </div>
@@ -34,7 +37,8 @@ import Swal from 'sweetalert2'
 export default {
     data(){
         return{
-            listEvent: []
+            listEvent: [],
+            isLoading: false,
         }
     },
     methods:{
@@ -54,6 +58,7 @@ export default {
         }
     },
     beforeMount() {
+        this.isLoading = true;
         firebase
         .firestore()
         .collection('events')
@@ -67,6 +72,7 @@ export default {
                     judul: doc.data().judulEvent,
                     instansi: doc.data().instansi,
                 })
+                this.isLoading = false;
             })
         })
     },
