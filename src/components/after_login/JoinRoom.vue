@@ -10,9 +10,10 @@
           <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
         </p>
       </video>  -->
-       <iframe v-if="video.length > 0" class='video-js custom-video mb-3' width='100%' height='600px' :src="video">
-      
+       <iframe v-if="video.length > 0" class='video-js custom-video ' width='100%' height='600px' :src="video">
+        
       </iframe> 
+      <p style="text-align: right; color: red; font-size: 10pt">*Silahkan ganti browser jika video tidak dapat diputar!</p>
     </div>
   </div>
 
