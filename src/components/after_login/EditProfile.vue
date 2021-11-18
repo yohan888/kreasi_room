@@ -10,6 +10,7 @@
           <p class="borderProfile"></p> -->
           <div class="preview col-sm-10">
               <img class="profileImg" v-if="previewPicture" :src="previewPicture">
+              <img v-else-if="data.profilePicture == ''" src="../../assets/images/img-tentang.jpg" class="profileImg" alt="User avatar">
               <img v-else :src="data.profilePicture" class="profileImg" alt="User avatar">
             </div>
             <!-- <input type="file" id="image" accept=".jpg, .png" @change="onFileChange">  -->
@@ -19,8 +20,8 @@
         <div class="profileAction">
           <label for="image" class="custom-label changeProfile">Ubah Foto Profile</label>
           <input type="file" id="image" accept=".jpg, .png" @change="onFileChange" class="ubahProfile">
-         | <button v-if="isLoginWithEmail" type="button" class="custom-label" style="color: #B2B5B8; background-color: transparent; border-color: transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                  Reset Password
+          <button v-if="isLoginWithEmail" type="button" class="custom-label" style="color: #B2B5B8; background-color: transparent; border-color: transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                |  Reset Password
                 </button>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -58,9 +59,9 @@
           <li class="nav-item" role="presentation">
             <a class="nav-link informasiPribadi mt-3" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Informasi Pribadi</a>
           </li>
-          <li class="nav-item" role="presentation">
+          <!-- <li class="nav-item" role="presentation">
             <a href="#" class="nav-link pengaturanAkun mt-2" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Request Event Organizer</a>
-          </li>
+          </li> -->
         </ul>
 
       </div>
@@ -124,7 +125,7 @@
               <div class="form-group mt-4">
                 <label class="col control-label">Telpon</label>
                 <div class="col">
-                  <input type="text" v-model="data.telpon" class="form-control mt-2" required>
+                  <input type="text" v-model="data.telpon" @keypress="isNumber($event)" class="form-control mt-2" required>
                 </div>
               </div>  
 
@@ -489,6 +490,15 @@ export default {
     } 
   },
   methods:{
+    isNumber(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();
+            } else {
+                return true;
+            }
+        },
     forgotPassword(){
             firebase
                 .auth()

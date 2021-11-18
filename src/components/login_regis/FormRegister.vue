@@ -175,6 +175,7 @@ export default {
                     tanggal_lahir: this.form.tanggalLahir,
                     role: 'USER',
                     profile_picture: '',
+                    favoriteEvent: fieldValue.arrayUnion(""),
                     savedEvent: fieldValue.arrayUnion(""),
                     joinedEvent: fieldValue.arrayUnion(""),
                     registeredEvent: fieldValue.arrayUnion(""),
