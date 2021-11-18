@@ -30,19 +30,49 @@
                 </label>
             </div>
 
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
-                <label style="font-size: 9pt; color: gray" class="form-check-label" for="exampleCheck1">
-                    Saya menyetujui 
-                    <button type="button" class="syarat_ketentuan" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        syarat
-                    </button> 
-                    dan 
-                    <button type="button" class="syarat_ketentuan" data-bs-toggle="modal" data-bs-target="#ketentuanModal">
-                        ketentuan
-                    </button>
-                </label>
-                
+            <div class="form-check d-flex justify-content-between">
+                <div>
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+                    <label style="font-size: 9pt; color: gray" class="form-check-label" for="exampleCheck1">
+                        Saya menyetujui 
+                        <button type="button" class="syarat_ketentuan" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            syarat
+                        </button> 
+                        dan 
+                        <button type="button" class="syarat_ketentuan" data-bs-toggle="modal" data-bs-target="#ketentuanModal">
+                            ketentuan
+                        </button>
+                    </label>
+                </div>
+                <!-- Button trigger modal -->
+                <button style="background-color: transparent; border-color: transparent; font-size: 9pt;" type="button" data-bs-toggle="modal" data-bs-target="#forgotPassword">
+                Lupa Password?
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="forgotPassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form @submit.prevent="forgotPassword">
+                        <div class="modal-body">
+                            <label for="form-label">Email</label>
+                            <input class="form-control" type="email" v-model="resetEmail">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Kirim</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+
+
+
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -76,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-
+                
             </div>
             <div class="row">
                 <div class="col">
@@ -96,6 +126,7 @@ import firebase from "firebase";
 export default {
     data(){
         return{
+            resetEmail: '',
             form: {
                 email: '',
                 password: '',
@@ -111,7 +142,18 @@ export default {
                 x.type = "password";
             }
         },
+        forgotPassword(){
+            firebase
+                .auth()
+                .sendPasswordResetEmail(this.resetEmail)
+                .then(() => {
+                    alert('Check your registered email to reset the password!');
+                    this.resetEmail= '';
 
+                }).catch((error) => {
+                alert(error)
+                })
+        },
         login(){
             if(this.form.email == 'admin@email.com' && this.form.password == 'admin'){
                 this.$router.push({ name: 'DashboardAdmin', query: { redirect: '/dashboard-admin' } });

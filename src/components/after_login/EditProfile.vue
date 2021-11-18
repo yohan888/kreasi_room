@@ -19,6 +19,31 @@
         <div class="profileAction">
           <label for="image" class="custom-label changeProfile">Ubah Foto Profile</label>
           <input type="file" id="image" accept=".jpg, .png" @change="onFileChange" class="ubahProfile">
+         | <button v-if="isLoginWithEmail" type="button" class="custom-label" style="color: #B2B5B8; background-color: transparent; border-color: transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Reset Password
+                </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reset Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                        <form @submit.prevent="forgotPassword">
+                          <div class="modal-body">
+                              <label for="" class="form-label">Email</label>
+                              <input class="form-control" type="email" v-model="resetEmail">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </form>
+
+                    </div>
+                  </div>
+                </div>
         </div>
       </div>
     </div>
@@ -112,9 +137,7 @@
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   Loading...
                 </button>
-                <button v-if="isLoginWithEmail" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                  Reset Password
-                </button>
+                
                 </div>
               </div>
         
@@ -466,6 +489,18 @@ export default {
     } 
   },
   methods:{
+    forgotPassword(){
+            firebase
+                .auth()
+                .sendPasswordResetEmail(this.resetEmail)
+                .then(() => {
+                    alert('Check your registered email to reset the password!');
+                    this.resetEmail= '';
+
+                }).catch((error) => {
+                alert(error)
+                })
+        },
     onFileChange(e){
       this.newImage = e.target.files[0];
       this.previewPicture = URL.createObjectURL(this.newImage);
@@ -567,18 +602,7 @@ export default {
                   this.$router.push({ name: 'Profile', query: { redirect: '/profile' } });
       } 
     }, 
-    forgetPassword(){
-      firebase
-        .auth()
-        .sendPasswordResetEmail(this.resetEmail)
-        .then(() => {
-            alert('Check your registered email to reset the password!');
-            this.resertEmail= '';
-
-        }).catch((error) => {
-          alert(error)
-        })
-    }
+    
   }
 }
 </script>
