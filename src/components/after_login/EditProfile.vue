@@ -267,9 +267,7 @@
     margin-left: 5em;
   }
   .namaUser{
-    margin-left: 0em;
-    margin-top: 1.5em;
-    text-align: center;
+    margin-top: 0.7em;
   }
   .profileAction{
     margin-top: -0.5em;
@@ -288,13 +286,19 @@
     display: block; margin-left: auto; margin-right: auto;
   }
   .profilePicture{
-    text-align: center;
+    /* text-align: center;
     display: block; margin-left: auto; margin-right: auto;
-    width: 100%;
+    width: 100%; */
+    margin-left: 9.8em;
   }
   .profileUser{
     margin-left: 0em;
     margin-top: -2em;
+    text-align: center;
+  }
+  .namaUser{
+    margin-left: 0em;
+    margin-top: 1.5em;
     text-align: center;
   }
   .cardMenu{
@@ -310,6 +314,7 @@
     text-align: center;
     display: block; margin-left: auto; margin-right: auto;
     width: 100%;
+    margin-left: 0em;
   }
   .profileUser{
     margin-left: 0em;
