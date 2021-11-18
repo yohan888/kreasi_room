@@ -22,6 +22,11 @@
               <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
             </li>
           </template>
+          <template v-if="isAdmin">
+            <li class="nav-item me-5">
+              <router-link class="nav-link" to="/dashboard-admin">Admin</router-link>
+            </li>
+          </template>
       </ul>
       <template v-if="user.loggedIn">
         <router-link to="/profile"><button class="btn btn-outline-light me-2">Profile</button></router-link>
@@ -44,7 +49,8 @@ import firebase from "firebase";
 export default {
   data(){
     return{
-      userID: ''
+      userID: '',
+      isAdmin: localStorage.getItem('isAdmin')
     }
   },
   computed: {

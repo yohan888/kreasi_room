@@ -31,14 +31,14 @@
                 <div class="custom-btn">
                     <label class="custom-checkbox like-dislike">
                         <div v-if="itemsContains(this.eventID)">
-                            <input type="checkbox" id='like' v-on:change="like" style="display: none" checked>
-                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up checked" ><span class="like"> Like</span></i>
-                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down unchecked " ><span class="like"> Dislike</span></i>
+                            <input type="checkbox" id='like' v-on:change="like" style="display: none" >
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up unchecked" ><span class="like"> Like</span></i>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down checked " ><span class="like"> Dislike</span></i>
                         </div>  
                         <div v-else>
                             <input type="checkbox" id='like' v-on:change="like" style="display: none">
-                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up checked" ><span class="like"> Like</span></i>
-                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down unchecked " ><span class="like"> Dislike</span></i>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-up unchecked" ><span class="like"> Like</span></i>
+                            <i class="btn btn-lg btn-bagikan far fa-thumbs-down checked " ><span class="like"> Dislike</span></i>
                         </div>   
                     </label>
                     <button class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt"></i> Bagikan</button>
@@ -123,7 +123,7 @@ export default {
     like(){
       const cb = document.getElementById('like');
       const fieldValue = firebase.firestore.FieldValue;
-      if(!cb.checked){
+      if(cb.checked){
         const increment = firebase.firestore.FieldValue.increment(1);
         firebase
         .firestore()
@@ -192,7 +192,8 @@ export default {
   },
   beforeMount(){
     this.eventID = this.$route.params.eventID;
-    
+    this.likedEvent = localStorage.getItem('likedEvent').split(',');
+    console.log(this.likedEvent)
     let viewMessage = this;
     const itemsRef = firebase.database().ref("messages");
     itemsRef.on("value", snapshot => {

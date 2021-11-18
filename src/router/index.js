@@ -12,6 +12,30 @@ const routes = [
     component: Home
   },
   {
+    path: '/dashboard-admin',
+    name: 'DashboardAdmin',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import('../views/admin/DashboardAdmin.vue')
+  },
+  {
+    path: '/list-user',
+    name: 'ListUser',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import('../views/admin/ListUser.vue')
+  },
+  {
+    path: '/list-event',
+    name: 'ListEvent',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import('../views/admin/ListEvent.vue')
+  },
+  {
     path: '/masuk',
     name: 'Login',
     // route level code-splitting

@@ -19,6 +19,11 @@
                       <router-link class="nav-link"  aria-current="page" to="/buat-event">Buat Event</router-link>
                     </li>
                   </template>
+                  <template v-if="isAdmin">
+                    <li class="nav-item me-5" style="padding-top: 0.5rem">
+                      <router-link class="nav-link" to="/dashboard-admin">Admin</router-link>
+                    </li>
+                  </template>
                   <!-- <li class="nav-item me-5">
                     
                   </li> -->
@@ -31,7 +36,17 @@
                   </template>
                   <template v-else>
                     <li class="nav-item">
-                      <router-link class="nav-link" to="/profile"><img class="profile-picture" :src="profile_picture"></router-link>
+                      <div class="dropdown">
+                        <button class="profile-dropdown dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img class="profile-picture" :src="profile_picture">
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><router-link class="dropdown-item" to="/profile">Profile</router-link></li>
+                          <li><a class="dropdown-item" @click.prevent="signOut">Keluar</a></li>
+                          
+                        </ul>
+                      </div>
+                      <!-- <router-link class="nav-link" to="/profile"><img class="profile-picture" :src="profile_picture"></router-link> -->
                     </li>
                     
                   </template>
@@ -51,7 +66,8 @@ export default {
     return{
       userID: '',
       role: '',
-      profile_picture: ''
+      profile_picture: '',
+      isAdmin: localStorage.getItem('isAdmin')
     }
   },
   computed: {
@@ -109,6 +125,10 @@ export default {
 a{
   text-decoration: none;
   color: inherit;
+}
+.profile-dropdown{
+  background-color: transparent;
+  border-color: transparent;
 }
 .profile-picture{
   width: 2.5rem;
