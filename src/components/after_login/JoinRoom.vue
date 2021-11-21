@@ -35,9 +35,36 @@
                                         <i class="btn btn-lg btn-bagikan far fa-thumbs-down checked " ><span class="like"> Dislike</span></i>
                                     </div>   
                                 </label>
-                                <button class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt"></i> Bagikan</button>
+                                <!-- <button type="button" class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt" data-bs-toggle="modal" data-bs-target="#exampleModal"></i> Bagikan</button> -->
+                                <button type="text" value="StuffYaWantCopied" id="copyInp" class="btn btn-lg btn-bagikan"  data-bs-toggle="modal" data-bs-target="#exampleModal"><a onclick=".select()" style="cursor:cell;">
+                                    <i class="fas fa-share-alt"></i> Bagikan </a>
+                                </button> 
+                                
                             </div>
                         </div>
+                        <!-- MODAL -->
+                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Syarat</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                    <div class="modal-body">
+                                        <input 
+                                            v-on:focus="$event.target.select()" 
+                                            ref="myinput" 
+                                            readonly 
+                                            :value="text"/>
+                                        <button @click="copy">Copy</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- TUTUP -->
                         <div class="row mt-3">
                             <div class="col-auto custom-judulVideo">
                                 <h5 style="color:#0A3D62;"><b>{{ this.judul }}</b></h5>
@@ -85,8 +112,9 @@
 import firebase from 'firebase';
 
 export default {
-    data(){
+    data: function (){
         return{
+            text: window.location.href,
             isLoading: true,
             eventID: '',
             judul: '',
@@ -107,6 +135,10 @@ export default {
           }
     },
     methods:{
+        copy() {
+      this.$refs.myinput.focus();
+      document.execCommand('copy');
+    },
         itemsContains(n){
             if(this.likedEvent !== null){
                 return this.likedEvent.indexOf(n) > -1

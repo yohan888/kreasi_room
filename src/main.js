@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -11,7 +12,7 @@ import * as firebase from "firebase";
 import store from "./store/store";
 
 
-
+Vue.use(VueClipboard);
 Vue.config.productionTip = false
 
 const firebaseConfig = {
