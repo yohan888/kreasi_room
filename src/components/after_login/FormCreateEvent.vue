@@ -67,12 +67,12 @@
                         <div class="col">
                             <label for="mulaiEvent" class="form-label" >Tanggal dan Waktu Mulai</label>
                             <input type="datetime-local" v-model="form.mulai" @change="proteksi" class="form-control" name="mulaiEvent" id="mulaiEvent" aria-describedby="mulaiEvent" required>
-                            <div id="mulaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
+                            <div id="mulaiEvent" class="form-text" style="color:red">*Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                         <div class="col">
                             <label for="selesaiEvent" class="form-label" >Tanggal dan Waktu Selesai</label>
                             <input type="datetime-local" v-model="form.selesai" @change="proteksi" class="form-control" name="selesaiEvent" id="selesaiEvent" aria-describedby="selesaiEvent" required>
-                            <div id="selesaiEvent" class="form-text">Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
+                            <div id="selesaiEvent" class="form-text" style="color:red">*Gunakan Google Chrome untuk pengalaman yang lebih baik.</div>
                         </div>
                     </div>
                 </div>
@@ -287,7 +287,8 @@ export default {
                                 
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Berhasil Buat Event'
+                                    title: 'Berhasil Buat Event',
+                                    confirmButtonColor: '#3085d6',
                                 })  
                                 btnLoding.classList.toggle("d-none");
                                 btnKirim.classList.toggle("d-none");

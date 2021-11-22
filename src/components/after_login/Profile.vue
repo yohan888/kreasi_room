@@ -15,7 +15,7 @@
             <h5 class="card-title mt-2">{{ namaLengkap }}</h5>
             <p class="card-text">{{ email }}</p>
           </div>
-          <div class="col-sm-auto">
+          <div class="col-sm-auto button-edit-profile">
             <router-link class="btn btn-custom" to="/edit-profile">Edit Profile</router-link>
           </div>
         </div>
@@ -282,6 +282,13 @@
         .card{ 
             width: 335px;
             display: block; margin-left: auto; margin-right: auto; 
+        }
+        .profile-picture, .card-title, .button-edit-profile{
+            display: block; margin-left: auto; margin-right: auto;
+            text-align: center;
+        }
+        .button-edit-profile{
+            margin-top: 1em;
         }
     }
 </style>

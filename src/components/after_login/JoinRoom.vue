@@ -37,7 +37,7 @@
                                     </div>   
                                 </label>
                                 <!-- <button type="button" class="btn btn-lg btn-bagikan"><i class="fas fa-share-alt" data-bs-toggle="modal" data-bs-target="#exampleModal"></i> Bagikan</button> -->
-                                <button type="text" value="StuffYaWantCopied" id="copyInp" class="btn btn-lg btn-bagikan"  data-bs-toggle="modal" data-bs-target="#exampleModal"><a onclick=".select()" style="cursor:cell;">
+                                <button type="text" value="StuffYaWantCopied" id="copyInp" class="btn btn-lg btn-bagikan"  data-bs-toggle="modal" data-bs-target="#exampleModal"><a onclick=".select()">
                                     <i class="fas fa-share-alt"></i> Bagikan </a>
                                 </button> 
                                 
@@ -48,16 +48,18 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Syarat</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Bagikan</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                      </div>
                                     <div class="modal-body">
+                                        <center>
                                         <input 
                                             v-on:focus="$event.target.select()" 
                                             ref="myinput" 
                                             readonly 
-                                            :value="text"/>
-                                        <button @click="copy">Copy</button>
+                                            :value="text" style="font-size:20px"/><br>
+                                        <button @click="copy" class="share-link">Copy</button>
+                                        </center>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -139,9 +141,9 @@ export default {
     },
     methods:{
         copy() {
-      this.$refs.myinput.focus();
-      document.execCommand('copy');
-    },
+            this.$refs.myinput.focus();
+            document.execCommand('copy');
+        },
         itemsContains(n){
             if(this.likedEvent !== null){
                 return this.likedEvent.indexOf(n) > -1
@@ -295,6 +297,19 @@ export default {
       font-family: 'Poppins', sans-serif;
       
     }
+    .share-link{
+        background-color:#0A3D62; 
+        border-radius:10px; 
+        width:5em; 
+        height:2em; 
+        font-size:20px; 
+        color:white; 
+        border:none; 
+        margin-top:5px
+    }
+    .share-link:hover{
+        background-color:#072b45;
+    }
     .custom-checkbox .checked{
         display: none;
     }
@@ -302,7 +317,6 @@ export default {
         display: inline-block;
         
     }
-
     .custom-checkbox input[type="checkbox"]:checked~.unchecked {
         display: none;
         

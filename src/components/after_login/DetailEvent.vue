@@ -16,7 +16,7 @@
             <!-- <div class="custom-btn "> -->
                 <div class="row " style="width: 100%">
                     <div class="col-auto d-flex justify-content-start ">
-                        <button class="btn btn-lg me-2 btn-tipe">{{ this.topik }}</button>
+                        <a class="btn-lg me-2 btn-tipe">{{ this.topik }}</a>
                     </div>
                     <div class="col d-flex justify-content-end">
                         <form>
@@ -32,11 +32,34 @@
                                     <i class="fas fa-heart checked " style="font-size: 2rem"></i>
                                 </div>
                             </label>
-                            <h2 class="fas fa-share-alt-square custom-share"></h2>
+                            <a onclick=".select()" type="submit" value="StuffYaWantCopied" id="copyInp" data-bs-toggle="modal" data-bs-target="#exampleModal"><h2 class="fas fa-share-alt custom-share"></h2></a>
                         </form>   
-                        
                     </div>
                 </div>
+                <!-- MODAL -->
+                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Bagikan</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                    <div class="modal-body">
+                                        <center>
+                                        <input 
+                                            v-on:focus="$event.target.select()" 
+                                            ref="myinput" 
+                                            readonly 
+                                            :value="text" style="font-size:20px"/><br>
+                                        <button @click="copy" class="share-link">Copy</button>
+                                        </center>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 
                 
                 <!-- <div class=" bg-secondary">
@@ -145,6 +168,7 @@ import firebase from 'firebase';
 export default {
     data(){
         return{
+            text: window.location.href,
             isLoading: true,
             dateNow: '',
             userID: '',
@@ -171,11 +195,14 @@ export default {
         }
     },
     methods:{
+        copy() {
+            this.$refs.myinput.focus();
+            document.execCommand('copy');
+        },
         itemsContains(n){
             if(this.favoriteEvent.length > 1){
                 return this.favoriteEvent.indexOf(n) > -1
             }
-            
         },
         unfavorite(id){
             const fieldValue = firebase.firestore.FieldValue;
@@ -336,6 +363,19 @@ export default {
         color: #0A3D62;
         padding: 15px;
     }
+    .share-link{
+        background-color:#0A3D62; 
+        border-radius:10px; 
+        width:5em; 
+        height:2em; 
+        font-size:20px; 
+        color:white; 
+        border:none; 
+        margin-top:5px
+    }
+    .share-link:hover{
+        background-color:#072b45;
+    }
 .custom-icon-kalender{
     color: #0A3D62;
 }
@@ -350,6 +390,12 @@ export default {
     margin-left: -100%;
     color: #B2B5B8;
 }
+.fa-envelope{
+    color: red;
+}
+.fa-envelope:hover{
+    color: #b30000;
+}
 /* CSS bagian Detail Event */
 .custom-detailevent{
     text-align: left;
@@ -363,6 +409,7 @@ export default {
     }
 .btn-tipe{
     background-color:#0A3D62;
+    text-decoration: none;
     color:white;
     width: auto;
     height: 50px;
@@ -390,6 +437,7 @@ export default {
 }
 .custom-share{
     margin-right: -30px;
+    color: #0A3D62;
 }
 .custom-like{
     margin-left: 200px;
@@ -429,7 +477,7 @@ export default {
 .btn-tipe{
     background-color:#0A3D62;
     color:white;
-    width: 80px;
+    width: auto;
     height: 50px;
     border-radius: 10px;
     margin-left: 38px;

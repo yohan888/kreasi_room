@@ -17,7 +17,7 @@
                     <div class="col-12 col-sm-10 col-lg-8">
                         <div class="accordion faq-accordian" id="faqAccordion">
                             <div class="card border-0 wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
-                                <div class="card-header" id="headingOne">
+                                <div class="card-header" id="headingOne" style="border:1px solid #0A3D62; border-radius:20px">
                                     <h6 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Bagaimana cara menjadi penyelenggara event?<span class="lni-chevron-up"></span></h6>
                                 </div>
                                 <div class="collapse" id="collapseOne" aria-labelledby="headingOne" data-parent="#faqAccordion">
@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                             <div class="card border-0 wow fadeInUp" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInUp;">
-                                <div class="card-header" id="headingTwo">
+                                <div class="card-header" id="headingTwo" style="border:1px solid #0A3D62; border-radius:20px">
                                     <h6 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">Bagaimana cara upload video ke room?<span class="lni-chevron-up"></span></h6>
                                 </div>
                                 <div class="collapse" id="collapseTwo" aria-labelledby="headingTwo" data-parent="#faqAccordion">
