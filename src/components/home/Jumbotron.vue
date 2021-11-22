@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="lead isi">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. At amet, lectus eget sodales ac. Pellentesque nam faucibus elementum sed elementum, nunc nec.
+                        Kami menyediakan wadah bagi kamu untuk mengembangkan diri dan berproses bersama dengan mengikuti berbagai macam webinar yang sesuai minat kamu.
                     </p>
                 </div>
                 <div class="col-md-auto">

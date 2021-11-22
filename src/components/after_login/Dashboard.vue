@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="lead isi">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. At amet, lectus eget sodales ac. Pellentesque nam faucibus elementum sed elementum, nunc nec.
+                        Kami menyediakan wadah bagi kamu untuk mengembangkan diri dan berproses bersama dengan mengikuti berbagai macam webinar yang sesuai minat kamu.
                     </p>
                     <br><br><br>
                 </div>
@@ -142,7 +142,7 @@
             <div class="container"> 
             <br><br><br>
             <h1>Event</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Kami menampilkan event yang baru saja dibuat belakangan ini.</p>
             <div v-if="isLoading">
                 <center><img class="mt-5" src="../../assets/images/loading.gif" alt=""></center>
             </div>

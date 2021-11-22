@@ -4,19 +4,19 @@
 
     <div class="row d-flex justify-content-center">
         <div class="col-md mt-3">
-            <img class="imageTentang" src="../../assets/images/img-tentang.jpg">
+            <img class="imageTentang" src="../../assets/images/img-tentang.png">
         </div>
         <div class="col-md mt-3" style="text-align: left;">
-            <h1>Apa itu (Nama Website)?</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi volutpat at quam amet.</p>
+            <h1>Apa itu Kreasi Room?</h1>
+            <p>Wadah untuk kamu mengembangkan diri dengan menghadiri beberapa event menarik di sekitar kamu. Dengan fitur :</p>
 
             <div class="row align-items-center">
                 <div class="col-auto">
                     <i class="fas fa-chalkboard-teacher iconTentang"></i>
                 </div>
                 <div class="col d-flex flex-column">
-                    <div class="p-2 pt-0 pb-0 title">Judul</div>
-                    <div class="p-2 pt-0 pb-0 text" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi volutpat at quam amet.
+                    <div class="p-2 pt-0 pb-0 title">Ruang Tanya Jawab</div>
+                    <div class="p-2 pt-0 pb-0 text" >Kamu bisa berdiskusi dan berproses bersama di platform ini.
                     </div>
                 </div>
             </div>
@@ -26,8 +26,8 @@
                     <i class="fas fa-cloud iconTentang" aria-hidden="true"></i>
                 </div>
                 <div class="col d-flex flex-column">
-                    <div class="p-2 pt-0 pb-0 title">Judul</div>
-                    <div class="p-2 pt-0 pb-0 text" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi volutpat at quam amet.
+                    <div class="p-2 pt-0 pb-0 title">Penyimpanan Berbasis Awan</div>
+                    <div class="p-2 pt-0 pb-0 text" >90% penyimpanan data berbasis awan yang aman dan tersedia 24 jam.
                     </div>
                 </div>
             </div>
@@ -37,8 +37,8 @@
                     <i class="fas fa-book-open iconTentang" aria-hidden="true"></i>
                 </div>
                 <div class="col d-flex flex-column">
-                    <div class="p-2 pt-0 pb-0 title">Judul</div>
-                    <div class="p-2 pt-0 pb-0 text" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi volutpat at quam amet.
+                    <div class="p-2 pt-0 pb-0 title">Ruang Belajar</div>
+                    <div class="p-2 pt-0 pb-0 text" >Wadah bagi kamu untuk belajar dan mengembangkan diri melalui event yang ada.
                     </div>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                     <i class="fas fa-calendar-alt iconTentang" aria-hidden="true"></i>
                 </div>
                 <div class="col d-flex flex-column">
-                    <div class="p-2 pt-0 pb-0 title">Judul</div>
-                    <div class="p-2 pt-0 pb-0 text" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi volutpat at quam amet.
+                    <div class="p-2 pt-0 pb-0 title">Penyedia Event</div>
+                    <div class="p-2 pt-0 pb-0 text" >Memberikan event-event yang bisa kamu jelajahi dengan fitur filter.
                     </div>
                 </div>
             </div>

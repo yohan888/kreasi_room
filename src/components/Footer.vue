@@ -21,21 +21,23 @@
                   <img src="../assets/images/logo-footer.png">
                   <span style="font-size: 18pt; font-weight: bold">Kreasi Room</span>
               </div>
-              <p style="text-align: justify; font-size: 10pt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, officiis? Voluptas ad veniam at, debitis natus hic quo. Non ut aspernatur optio praesentium dignissimos nobis soluta maxime facere illo fuga.</p>
+              <p style="text-align: justify; font-size: 10pt">
+                Kreasi Room menyediakan wadah bagi kamu untuk mengembangkan diri dan berproses bersama dengan mengikuti berbagai macam webinar yang sesuai minat kamu. 
+              </p>
               <!-- Copywrite Text-->
  
                 <!-- Footer Social Area-->
                 <div class="footer_social_area mt-4">
-                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
-                        <i class="fab fa-facebook-f"></i>
+                    <a href="https://www.kreasix.com/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
+                        <i class="fas fa-globe"></i>
                     </a>
-                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest">
+                    <a href="https://www.linkedin.com/company/kreasix" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype">
+                    <!-- <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype">
                         <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
+                    </a> -->
+                    <a href="https://www.instagram.com/kreasix/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -51,10 +53,10 @@
               <!-- Footer Menu-->
               <div class="footer_menu">
                 <ul>
-                  <li><a href="#">Tentang</a></li>
-                  <li><a href="#">Bantuan</a></li>
-                  <li><a href="#">Ketentuan Layanan</a></li>
-                  <li><a href="#">Kebijakan Pribadi</a></li>
+                  <li><a href="#tentang">Tentang</a></li>
+                  <li><a href="https://webkreasixcom.web.app/">Kreasi X</a></li>
+                  <!-- <li><a href="#">Ketentuan Layanan</a></li>
+                  <li><a href="#">Kebijakan Pribadi</a></li> -->
                 </ul>
               </div>
             </div>
@@ -62,14 +64,12 @@
           <!-- Single Widget-->
           <div class="col-12 col-sm-6 col-lg">
             <div class="single-footer-widget section_padding_0_130">
-              <!-- Widget Title-->
               <h5 class="widget-title">Bantuan</h5>
-              <!-- Footer Menu-->
               <div class="footer_menu">
                 <ul>
-                  <li><a href="#">FAQ</a></li>
-                  <li><a href="#">Fitur Layanan</a></li>
-                  <li><a href="#">Laporan</a></li>
+                  <li><router-link to="/faq">FAQ</router-link></li>
+                  <li><a href="https://webkreasixcom.web.app/layanan-pelanggan">Layanan Pelanggan</a></li>
+                  <!-- <li><a href="#">Laporan</a></li> -->
                 </ul>
               </div>
             </div>
@@ -82,10 +82,10 @@
               <!-- Footer Menu-->
               <div class="footer_menu">
                 <ul>
-                  <li><a href="#">kreasix@gmail.com</a></li>
-                  <li><a href="#">+62 812 - 3456 - 7891</a></li>
-                  <li><a href="#">(003) 00123</a></li>
-                  <li><a href="#">Help Center</a></li>
+                  <li><a href="mailto:james@kreasix.com">james@kreasix.com</a></li>
+                  <li><a href="tel:081391783010">+62813 9178 3010</a></li>
+                  <!-- <li><a href="#">(003) 00123</a></li>
+                  <li><a href="#">Help Center</a></li> -->
                 </ul>
               </div>
             </div>

@@ -7,7 +7,7 @@
         <div class="row d-flex align-items-end row2" style="text-align: left;">
           <div class="col" >
             <template v-if="profile_picture == ''">
-              <img class="profile-picture" src="../../assets/images/img-tentang.jpg">
+              <img class="profile-picture" src="../../assets/images/guest.png">
             </template>
             <template v-else>
               <img class="profile-picture" :src="profile_picture">

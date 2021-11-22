@@ -2,7 +2,7 @@
     <div class="container"> 
         <br><br><br>
         <h1>Event Terbaru</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Kami menampilkan event yang baru saja dibuat belakangan ini.</p>
         <div v-if="event.length == 0"><h1> Belum ada data</h1></div>
             <div v-else class="row">
                 <div class="col" v-for="(e, index) in event" :key="e.eventID">

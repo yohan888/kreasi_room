@@ -31,7 +31,7 @@
                 <ul class="navbar-nav ms-auto">
                   <template v-if="profile_picture == ''">
                     <li class="nav-item">
-                      <router-link class="nav-link" to="/profile"><img class="profile-picture" src="../../assets/images/img-tentang.jpg" alt=""></router-link>
+                      <router-link class="nav-link" to="/profile"><img class="profile-picture" src="../../assets/images/guest.png" alt=""></router-link>
                     </li>
                   </template>
                   <template v-else>

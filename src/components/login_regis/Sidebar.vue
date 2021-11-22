@@ -49,8 +49,7 @@ export default {
             const btnLoding = document.querySelector(".btn-loading"); 
             btnLoding.classList.toggle("d-none");
             btnKirim.classList.toggle("d-none");
-
-            
+  
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(() => {
@@ -72,38 +71,10 @@ export default {
                         btnLoding.classList.toggle("d-none");
                         btnKirim.classList.toggle("d-none");
                     })
-
-                    
-                    // if(listEmail.includes(firebase.auth().currentUser.email)){
-                    //     this.createUserSession(firebase.auth().currentUser.uid);
-                    // } else{
-                    //     this.createUserAfterRegister();
-                    // }
-                    // btnLoding.classList.toggle("d-none");
-                    // btnKirim.classList.toggle("d-none");
-                    // this.$router.push({ name: 'Home', query: { redirect: '/' } });
-                    // this.isLoginWithGoogle = true;
                 })
                 .catch((err) => {
                     console.log(err)
-                })
-                // .finally(() => {
-                //     // if(listEmail.includes('mariowijaya31@gmail.com')){
-                //     //     // this.createUserSession(firebase.auth().currentUser.uid);
-                //     //     console.log("ada");
-                //     // }else{
-                //     //     console.log("tidak " + firebase.auth().currentUser.email);
-                //     //     console.log(listEmail);
-                //     //     console.log(listEmail.includes('mariowijaya31@gmail.com'));
-                //     //     // this.createUserAfterRegister();
-                //     // }
-                //     btnLoding.classList.toggle("d-none");
-                //     btnKirim.classList.toggle("d-none");
-                // })
-
-            
-
-            
+                })  
         },
 
         registerWithGoogle(){

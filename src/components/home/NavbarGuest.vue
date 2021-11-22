@@ -1,8 +1,8 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#4074ac">
   <div class="container">
-    <a href="#" class="me-2"><img src="../../assets/images/logo-footer.png"></a>
-    <a class="navbar-brand" href="#" style="font-size:24pt;">Kreasi Room</a>
+    <router-link to="/" class="me-2"><img src="../../assets/images/logo-footer.png"></router-link>
+    <router-link class="navbar-brand" to="/" style="font-size:24pt;">Kreasi Room</router-link>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -11,10 +11,10 @@
           <li class="nav-item me-5">
             <router-link class="nav-link active" aria-current="page" to="/">Beranda</router-link>
           </li>
-          <li class="nav-item me-5">
+          <li class="nav-item me-5" v-if="this.$route.fullPath !== '/faq'">
             <a class="nav-link" href="#tentang">Tentang</a>
           </li>
-          <li class="nav-item me-5">
+          <li class="nav-item me-5" v-if="this.$route.fullPath !== '/faq'">
             <a class="nav-link" href="#kontak">Kontak</a>
           </li>
           <template v-if="user.loggedIn">

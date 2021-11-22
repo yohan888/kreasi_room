@@ -67,7 +67,8 @@
             <h6 style="color:#B2B5B8;"><b>Penyelenggara Event</b></h6>
             <div class="row">
                 <div class="col-sm-auto">
-                    <img class="imagePenyelenggara rounded-circle" :src="this.penyelenggara.profilePicture">
+                    <img class="imagePenyelenggara rounded-circle" v-if="this.penyelenggara.profilePicture !== ''" :src="this.penyelenggara.profilePicture">
+                    <img class="imagePenyelenggara rounded-circle" v-else src="../../assets/images/guest.png">
                 </div>
                 <div class="col" style="text-align: left;">
                     <span style="color:#0A3D62;"><b> {{ this.penyelenggara.namaPenyelenggara }}</b></span> <br>

@@ -15,7 +15,8 @@
                 <div class="col">
                     <div class="row d-flex justify-content-start">
                         <div class="" style="width: 60px">
-                            <img class="imagePenyelenggara rounded-circle" :src="penyelenggara.profilePicture">
+                            <img class="imagePenyelenggara rounded-circle" v-if="penyelenggara.profilePicture !== ''" :src="penyelenggara.profilePicture">
+                            <img class="imagePenyelenggara rounded-circle" v-else src="../../assets/images/guest.png">
                         </div>
                         <div class="col" style="text-align: left;">
                             <span style="color:#0A3D62;"><b>{{ this.penyelenggara.namaPenyelenggara }}</b></span> <br>
@@ -82,7 +83,9 @@
                             <hr size="3">
                             <div v-for="message  in messages" :key="message.id" class="row custom-row mb-4">
                                 <div class="col-sm-auto">
-                                    <img class="imagePenyelenggara rounded-circle" :src="message.profilePicture">
+                                    <img class="imagePenyelenggara rounded-circle" v-if="message.profilePicture !== ''" :src="message.profilePicture">
+                                    <img class="imagePenyelenggara rounded-circle" v-else src="../../assets/images/guest.png">
+                                    
                                 </div>
                                 <div class="col-sm" style="text-align: left;">
                                     <span style="color:#0A3D62;"><b>{{ message.namaLengkap }}</b></span> <br>
