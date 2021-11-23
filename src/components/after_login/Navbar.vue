@@ -31,7 +31,16 @@
                 <ul class="navbar-nav ms-auto">
                   <template v-if="profile_picture == ''">
                     <li class="nav-item">
-                      <router-link class="nav-link" to="/profile"><img class="profile-picture" src="../../assets/images/guest.png" alt=""></router-link>
+                      <div class="dropdown">
+                        <button class="profile-dropdown dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img class="profile-picture" src="../../assets/images/guest.png" alt="">
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><router-link class="dropdown-item" to="/profile">Profile</router-link></li>
+                          <li><a class="dropdown-item" @click.prevent="signOut">Keluar</a></li>
+                        </ul>
+                      </div>
+                      
                     </li>
                   </template>
                   <template v-else>
@@ -43,7 +52,6 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                           <li><router-link class="dropdown-item" to="/profile">Profile</router-link></li>
                           <li><a class="dropdown-item" @click.prevent="signOut">Keluar</a></li>
-                          
                         </ul>
                       </div>
                       <!-- <router-link class="nav-link" to="/profile"><img class="profile-picture" :src="profile_picture"></router-link> -->

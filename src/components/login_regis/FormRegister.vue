@@ -75,7 +75,7 @@ export default {
             userID: '',
             check: '',
             password: '',
-            isEmailExist: false,
+            isEmailExist: true,
             confirmPassword: '',
             form:{
                 email: '',
@@ -110,7 +110,8 @@ export default {
         },
 
         register(){
-            firebase
+            if(this.isEmailExist){
+                firebase
                 .auth()
                 .createUserWithEmailAndPassword(this.form.email, this.form.password)
                 .then(data => {
@@ -135,6 +136,8 @@ export default {
                 .catch(err => {
                     console.log(err.message);
                 }); 
+            }
+            
         },
         checkEmail(){
             // const btn = document.querySelector(".btn-submit");

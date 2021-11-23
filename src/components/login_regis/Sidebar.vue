@@ -32,7 +32,8 @@ export default {
     data(){
         return{
             routeName: '',
-            isLoginWithGoogle: false
+            isLoginWithGoogle: false,
+            listEmail: []
         }
     },
     computed: {
@@ -42,6 +43,18 @@ export default {
     },
     mounted(){
         this.routeName = this.currentRouteName;
+        firebase
+            .firestore()
+            .collection("users")
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => { 
+                    this.listEmail.push(doc.data().email);                    
+                })
+
+            })
+
+        console.log(this.listEmail);
     },
     methods:{
         loginWithGoogle(){
@@ -53,24 +66,14 @@ export default {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(() => {
-                    let listEmail = [];
-                    firebase
-                    .firestore()
-                    .collection("users")
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => { 
-                            listEmail.push(doc.data().email);
-                            
-                        })
-                        if(listEmail.includes(firebase.auth().currentUser.email)){
-                            this.createUserSession(firebase.auth().currentUser.uid);
-                        } else{
-                            this.createUserAfterRegister();
-                        }
-                        btnLoding.classList.toggle("d-none");
-                        btnKirim.classList.toggle("d-none");
-                    })
+                    if(this.listEmail.includes(firebase.auth().currentUser.email)){
+                        this.createUserSession(firebase.auth().currentUser.uid);
+                    } else{
+                        this.createUserAfterRegister();
+                    }
+                    btnLoding.classList.toggle("d-none");
+                    btnKirim.classList.toggle("d-none");
+                    
                 })
                 .catch((err) => {
                     console.log(err)
@@ -78,14 +81,21 @@ export default {
         },
 
         registerWithGoogle(){
+            const btnKirim = document.querySelector(".btn-kirim");
+            const btnLoding = document.querySelector(".btn-loading"); 
+            btnLoding.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(() => {
-                    this.createUserSession(firebase.auth().currentUser.uid);
-                    this.createUserAfterRegister();
-                    this.$router.push({ name: 'Home', query: { redirect: '/' } });
-                    this.isLoginWithGoogle = true;
-                    
+                    if(this.listEmail.includes(firebase.auth().currentUser.email)){
+                        this.createUserSession(firebase.auth().currentUser.uid);
+                    } else{
+                        this.createUserAfterRegister();
+                    }     
+                    btnLoding.classList.toggle("d-none");
+                    btnKirim.classList.toggle("d-none");               
                 })
                 .catch((err) => {
                     console.log(err)

@@ -42,7 +42,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" style="display: none">
                     <label for="lokasi" class="form-label">Lokasi Event</label>
                     <div class="wrapper">
                         <input type="radio" name="lokasi" v-model="form.lokasi" value="Luring" id="option-1" checked>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 <div class="mb-3 d-flex justify-content-end">
-                    <input class="btn btn-primary btn-kirim" type="submit" value="Posting">
+                    <input class="custom-btn btn-primary btn-kirim" type="submit" value="Posting">
                     <button class="btn btn-primary btn-loading d-none" type="button" disabled>
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     Loading...
@@ -308,6 +308,15 @@ export default {
 <style scoped>
 *{
     color: #0A3D62;
+}
+.custom-btn {
+  background-color: #0A3D62;
+  color: white;
+  padding: 15px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+  border-radius: 15px;
 }
 .poster{
     width: 500px;
