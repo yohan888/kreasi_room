@@ -16,13 +16,14 @@ Vue.use(VueClipboard);
 Vue.config.productionTip = false
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAe-_mp4c0PVXUxP-e15LMyKrcmSOMIiiI",
-  authDomain: "webeventkreasix.firebaseapp.com",
-  databaseURL: "https://webeventkreasix-default-rtdb.firebaseio.com",
-  projectId: "webeventkreasix",
-  storageBucket: "webeventkreasix.appspot.com",
-  messagingSenderId: "318959559721",
-  appId: "1:318959559721:web:8c2979634ce519982f6838"
+  apiKey: "AIzaSyDMKsD0PCcFtinUDc82Etkv7VDbvBWP24I",
+  authDomain: "kreasiroom2.firebaseapp.com",
+  databaseURL: "https://kreasiroom2-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "kreasiroom2",
+  storageBucket: "kreasiroom2.appspot.com",
+  messagingSenderId: "1000844477009",
+  appId: "1:1000844477009:web:a847349bb804c59074ae70",
+  measurementId: "G-PEVS65YZFJ"
 };
 
 // Ini yang di tambahkan
